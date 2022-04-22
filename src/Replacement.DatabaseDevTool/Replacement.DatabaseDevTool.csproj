@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UserSecretsId>1ae00c78-4cfe-4b4e-b830-466314f1c9f5</UserSecretsId>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+		<ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.GenerateStoredProcedure\Brimborium.GenerateStoredProcedure.csproj" />
+		<ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
+		<ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.TypedStoredProcedure\Brimborium.TypedStoredProcedure.csproj" />
+	</ItemGroup>
+
+	
+
+	<ItemGroup>
+		<Compile Include="..\Replacement.Contracts\API\*.cs">
+			<Link>External\Replacement.Contracts\API\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Compile>
+		<Compile Include="..\Replacement.Repository\Service\SqlAccessLocation.cs" Link="External\Replacement.Repository\Service\SqlAccessLocation.cs" />
+		
+	</ItemGroup>
+
+
+</Project>
