@@ -4,7 +4,7 @@ CREATE PROCEDURE [dbo].[ToDoUpsert]
     @UserId uniqueidentifier,
     @Title nvarchar(50),
     @Done bit,
-    @ActivityId uniqueidentifier,
+    @OperationId uniqueidentifier,
     @CreatedAt datetimeoffset,
     @ModifiedAt datetimeoffset,
     @SerialVersion BIGINT
@@ -16,7 +16,7 @@ AS BEGIN
     DECLARE @CurrentUserId uniqueidentifier;
     DECLARE @CurrentTitle nvarchar(50);
     DECLARE @CurrentDone bit;
-    DECLARE @CurrentActivityId uniqueidentifier;
+    DECLARE @CurrentOperationId uniqueidentifier;
     DECLARE @CurrentCreatedAt datetimeoffset;
     DECLARE @CurrentModifiedAt datetimeoffset;
     DECLARE @CurrentSerialVersion BIGINT;
@@ -29,7 +29,7 @@ AS BEGIN
                 @CurrentUserId = [UserId],
                 @CurrentTitle = [Title],
                 @CurrentDone = [Done],
-                @CurrentActivityId = [ActivityId],
+                @CurrentOperationId = [OperationId],
                 @CurrentCreatedAt = [CreatedAt],
                 @CurrentModifiedAt = [ModifiedAt],
                 @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
@@ -54,7 +54,7 @@ AS BEGIN
             [UserId],
             [Title],
             [Done],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt]
         ) Values (
@@ -63,7 +63,7 @@ AS BEGIN
             @UserId,
             @Title,
             @Done,
-            @ActivityId,
+            @OperationId,
             @CreatedAt,
             @ModifiedAt
         );
@@ -74,7 +74,7 @@ AS BEGIN
             [UserId],
             [Title],
             [Done],
-            [ActivityId],
+            [OperationId],
             [ValidFrom],
             [ValidTo]
         ) Values (
@@ -83,7 +83,7 @@ AS BEGIN
             @UserId,
             @Title,
             @Done,
-            @ActivityId,
+            @OperationId,
             @ModifiedAt,
             CAST('3141-05-09T00:00:00Z' as datetimeoffset)
         );
@@ -112,7 +112,7 @@ AS BEGIN
                         [UserId] = @UserId,
                         [Title] = @Title,
                         [Done] = @Done,
-                        [ActivityId] = @ActivityId,
+                        [OperationId] = @OperationId,
                         [CreatedAt] = @CreatedAt,
                         [ModifiedAt] = @ModifiedAt
                     WHERE
@@ -124,7 +124,7 @@ AS BEGIN
                         [ValidTo] = @ModifiedAt
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
-                        AND ([ActivityId] = @ActivityId)
+                        AND ([OperationId] = @OperationId)
                         AND ([Id] = @Id)
                 ;
                 INSERT INTO [history].[ToDoHistory] (
@@ -133,7 +133,7 @@ AS BEGIN
                     [UserId],
                     [Title],
                     [Done],
-                    [ActivityId],
+                    [OperationId],
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
@@ -142,7 +142,7 @@ AS BEGIN
                     @UserId,
                     @Title,
                     @Done,
-                    @ActivityId,
+                    @OperationId,
                     @ModifiedAt,
                     CAST('3141-05-09T00:00:00Z' as datetimeoffset)
                 );
@@ -159,7 +159,7 @@ AS BEGIN
             [UserId],
             [Title],
             [Done],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)

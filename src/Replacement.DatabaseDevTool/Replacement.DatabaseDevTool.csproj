@@ -21,15 +21,13 @@
 		<ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.TypedStoredProcedure\Brimborium.TypedStoredProcedure.csproj" />
 	</ItemGroup>
 
-	
-
 	<ItemGroup>
 		<Compile Include="..\Replacement.Contracts\API\*.cs">
 			<Link>External\Replacement.Contracts\API\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Compile>
 		<Compile Include="..\Replacement.Repository\Service\SqlAccessLocation.cs" Link="External\Replacement.Repository\Service\SqlAccessLocation.cs" />
+		<None Include="..\Replacement.Repository\Service\SqlAccess.Generated.cs" Link="Generated\SqlAccess.Generated.cs" />
 		
 	</ItemGroup>
-
 
 </Project>

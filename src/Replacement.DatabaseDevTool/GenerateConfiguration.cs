@@ -1,10 +1,9 @@
 ﻿using Brimborium.GenerateStoredProcedure;
 
-using System.Collections.Generic;
-using System.Linq;
-
 namespace Replacement.DatabaseDevTool {
     public class GenerateConfiguration : Configuration {
+        public readonly RenderTemplate<TableInfo> SelectPKTempateBody;
+
         public readonly RenderTemplate<TableInfo> SelectPKTempate;
 
         public readonly RenderTemplate<TableInfo> SelectAtTimeTempate;
@@ -30,6 +29,41 @@ namespace Replacement.DatabaseDevTool {
             this.ReplacementTableTemplates = new List<ReplacementTemplate<TableInfo>>();
             var KT = new KnownTemplates();
 
+            this.SelectPKTempateBody = new RenderTemplate<TableInfo>(
+                NameFn: (t) => $"SelectPKTempateBody.{t.GetNameQ()}",
+                Render: (data, ctxt) => {
+                    KnownTemplates.SqlSelect(
+                             data,
+                             ctxt,
+                             top: 1,
+                             columnsBlock: (data, ctxt) => {
+                                 ctxt.AppendList(
+                                     data.Columns,
+                                     (column, ctxt) => {
+                                         ctxt.AppendPartsLine(
+                                             column.GetNameQ(), ","
+                                             );
+                                     });
+                                 ctxt.AppendLine(
+                                     $"{data.ColumnRowversion.GetNameQ()} = CAST({data.ColumnRowversion.GetNameQ()} as BIGINT)");
+                             },
+                             fromBlock: (data, ctxt) => {
+                                 ctxt.AppendLine(data.GetNameQ());
+                             },
+                             whereBlock: (data, ctxt) => {
+                                 ctxt.AppendList(
+                                     data.PrimaryKeyColumns,
+                                     (column, ctxt) => {
+                                         ctxt.AppendPartsLine(
+                                             ctxt.IfNotFirst(" AND "),
+                                             "(",
+                                             column.GetNamePrefixed("@"), " = ", column.GetNameQ(),
+                                             ")"
+                                             );
+                                     });
+                             });
+                });
+
             this.SelectPKTempate = new RenderTemplate<TableInfo>(
                 FileNameFn: RenderTemplateExtentsions.GetFileNameBind<TableInfo>(@"[Schema]\StoredProcedures\[Schema].[Name]SelectPK.sql"),
                 Render: (data, ctxt) => {
@@ -44,41 +78,12 @@ namespace Replacement.DatabaseDevTool {
                                 , KT.ColumnsAsParameter);
                         },
                         bodyBlock: (data, ctxt) => {
-                            KnownTemplates.SqlSelect(
-                                data,
-                                ctxt,
-                                top: null,
-                                columnsBlock: (data, ctxt) => {
-                                    ctxt.AppendList(
-                                        data.Columns,
-                                        (column, ctxt) => {
-                                            ctxt.AppendPartsLine(
-                                                column.GetNameQ(), ","
-                                                );
-                                        });
-                                    ctxt.AppendLine(
-                                        $"{data.ColumnRowversion.GetNameQ()} = CAST({data.ColumnRowversion.GetNameQ()} as BIGINT)");
-                                },
-                                fromBlock: (data, ctxt) => {
-                                    ctxt.AppendLine(data.GetNameQ());
-                                },
-                                whereBlock: (data, ctxt) => {
-                                    ctxt.AppendList(
-                                        data.PrimaryKeyColumns,
-                                        (column, ctxt) => {
-                                            ctxt.AppendPartsLine(
-                                                ctxt.IfNotFirst(" AND "),
-                                                "(",
-                                                column.GetNamePrefixed("@"), " = ", column.GetNameQ(),
-                                                ")"
-                                                );
-                                        });
-                                });
+                            this.SelectPKTempateBody!.Render(data, ctxt);
                         });
-                }
-            );
+                });
 
             this.SelectAtTimeTempate = new RenderTemplate<TableInfo>(
+               NameFn: (t) => $"SelectAtTimeTempate.{t.GetNameQ()}",
                FileNameFn: RenderTemplateExtentsions.GetFileNameBind<TableInfo>(@"[Schema]\StoredProcedures\[Schema].[Name]SelectAtTime.sql"),
                Render: (data, ctxt) => {
                    //List<ColumnInfo> parameters = new List<ColumnInfo>();
@@ -137,8 +142,7 @@ namespace Replacement.DatabaseDevTool {
                                //}) : null
                                );
                        });
-               }
-            );
+               });
 
 
             this.SelectByReferencedPKTempate = new RenderTemplate<ForeignKeyInfo>(
@@ -183,8 +187,7 @@ namespace Replacement.DatabaseDevTool {
                                         });
                                 });
                         });
-                }
-            );
+                });
 
             this.UpdateTempate = new RenderTemplate<TableDataHistory>(
                 FileNameFn: RenderTemplateExtentsions.GetFileNameBind<TableDataHistory>(@"[Schema]\StoredProcedures\[Schema].[Name]Upsert.sql"),
@@ -532,7 +535,7 @@ namespace Replacement.DatabaseDevTool {
 
                             });
 
-                            ctxt.AppendPartsLine("@ActivityId uniqueidentifier,");
+                            ctxt.AppendPartsLine("@OperationId uniqueidentifier,");
                             ctxt.AppendPartsLine("@ModifiedAt datetimeoffset,");
                             if (data.TableData.ColumnRowversion is not null) {
                                 ctxt.AppendPartsLine(
@@ -612,7 +615,7 @@ namespace Replacement.DatabaseDevTool {
                                         whereBlock: (data, ctxt) => {
                                             var ctxtIndented1 = ctxt.GetIndented();
 
-                                            ctxtIndented1.AppendLine("([ActivityId] = @ActivityId)");
+                                            ctxtIndented1.AppendLine("([OperationId] = @OperationId)");
                                             ctxtIndented1.AppendLine("AND ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))");
                                             ctxtIndented1.AppendList(
                                                 data.TableData.PrimaryKeyColumns,
@@ -641,8 +644,7 @@ namespace Replacement.DatabaseDevTool {
                             ctxtIndented1.AppendLine(";");
 
                         });
-                }
-            );
+                });
             //
         }
 
@@ -650,15 +652,13 @@ namespace Replacement.DatabaseDevTool {
             var result = new ConfigurationBound();
 
             var hsExcludeFromCompare = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
-            hsExcludeFromCompare.Add("ActivityId");
+            hsExcludeFromCompare.Add("OperationId");
             hsExcludeFromCompare.Add("CreatedAt");
             hsExcludeFromCompare.Add("ModifiedAt");
             hsExcludeFromCompare.Add("SerialVersion");
 
             foreach (var t in databaseInfo.Tables.Where(
-                t => !string.Equals(t.Name, "Activity")
-                    && !t.Name.EndsWith("History")
-                )) {
+                t => IsADataTable(t))) {
                 foreach (var column in t.Columns) {
                     var excludeFromCompare = hsExcludeFromCompare.Contains(column.Name);
                     column.ExtraInfo["ExcludeFromCompare"] = excludeFromCompare;
@@ -669,25 +669,18 @@ namespace Replacement.DatabaseDevTool {
                 if (tableInfo.ColumnRowversion is not null) {
                     tableInfo.ColumnRowversion.ParameterSqlDataType = "bigint";
                 }
-                //foreach (var columnInfo in tableInfo.Columns) {
-                //    if (columnInfo.Column.DataType.SqlDataType == Microsoft.SqlServer.Management.Smo.SqlDataType.Timestamp) {
-                //        columnInfo.ParameterSqlDataType = "bigint";
-                //    }
-                //}
             }
 
-
             var tablesInsertOnly = databaseInfo.Tables.Where(
-                t => IsActivityTable(t)
+                t => IsOperationTable(t)
                 ).ToList();
 
             var tablesHistory = databaseInfo.Tables.Where(
-                t => !IsActivityTable(t) && IsAHistoryTable(t)
+                t => !IsOperationTable(t) && IsAHistoryTable(t)
                 ).ToList();
-            /* var dictTablesHistory = tablesHistory.ToDictionary(t => $"{t.Schema}.{t.Name}"); */
 
             var tablesUpdate = databaseInfo.Tables.Where(
-                t => !IsActivityTable(t) && !IsAHistoryTable(t)
+                t => !IsOperationTable(t) && !IsAHistoryTable(t)
                 ).ToList();
 
             var tablesUpdatePaired = tablesUpdate.Join(
@@ -754,23 +747,37 @@ namespace Replacement.DatabaseDevTool {
                             t => t.TableData,
                             this.DeletePKTempate)));
 
+            result.AddReplacementBindings(
+                "SelectPKTempateBody",
+                databaseInfo.Tables.Select(
+                    t => new TableBinding(t, SelectPKTempateBody)
+                    ));
 
+            /*
+            result.AddReplacementBindings(
+                "ReplacementTableTemplates",
+                ConfigurationBound.CreateReplacementBinding(
+                    this.ReplacementTableTemplates,
+                    databaseInfo.Tables));
+            */
             result.ReplacementBindings.AddRange(
-                ConfigurationBound.CreateReplacementBinding(this.ReplacementTableTemplates, databaseInfo.Tables)
+                ConfigurationBound.CreateReplacementBinding(
+                    this.ReplacementTableTemplates,
+                    databaseInfo.Tables)
                 );
             //
             return result;
         }
 
         private static bool IsADataTable(TableInfo t) {
-            return !(IsActivityTable(t) || IsAHistoryTable(t));
+            return !(IsOperationTable(t) || IsAHistoryTable(t));
         }
         private static bool IsAHistoryTable(TableInfo t) {
             return string.Equals(t.Schema, "history", System.StringComparison.Ordinal);
         }
 
-        private static bool IsActivityTable(TableInfo t) {
-            return string.Equals(t.GetNameQ(), "[dbo].[Activity]", System.StringComparison.Ordinal);
+        private static bool IsOperationTable(TableInfo t) {
+            return string.Equals(t.GetNameQ(), "[dbo].[Operation]", System.StringComparison.Ordinal);
         }
     }
 }

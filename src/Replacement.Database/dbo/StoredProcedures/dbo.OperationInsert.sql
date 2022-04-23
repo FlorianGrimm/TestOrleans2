@@ -1,4 +1,4 @@
-CREATE PROCEDURE [dbo].[ActivityInsert]
+CREATE PROCEDURE [dbo].[OperationInsert]
     @Id uniqueidentifier,
     @Title nvarchar(20),
     @Data nvarchar(MAX),
@@ -10,7 +10,7 @@ AS BEGIN
         SET @CreatedAt = GETUTCDATE();
     END;
 
-    INSERT INTO [dbo].[Activity] (
+    INSERT INTO [dbo].[Operation] (
         [Id],
         [Title],
         [Data],
@@ -31,7 +31,7 @@ AS BEGIN
         [CreatedAt],
         [SerialVersion] = CAST([SerialVersion] as BIGINT)
     FROM
-        [dbo].[Activity]
+        [dbo].[Operation]
     WHERE
         (@CreatedAt = [CreatedAt])
             AND (@Id = [Id])

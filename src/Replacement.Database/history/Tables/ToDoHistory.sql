@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [history].[ToDoHistory] (
-    [ActivityId]    UNIQUEIDENTIFIER   NOT NULL,
+    [OperationId]    UNIQUEIDENTIFIER   NOT NULL,
     [Id]            UNIQUEIDENTIFIER   NOT NULL,
     [ProjectId]     UNIQUEIDENTIFIER   NULL,
     [UserId]        UNIQUEIDENTIFIER   NULL,
@@ -8,7 +8,7 @@
     [ValidFrom]     DATETIMEOFFSET (7) NOT NULL,
     [ValidTo]       DATETIMEOFFSET (7) NOT NULL,
     [SerialVersion] ROWVERSION         NOT NULL,
-    CONSTRAINT [PK_history_ToDoistory] PRIMARY KEY CLUSTERED ([ValidTo] ASC, [ValidFrom] ASC, [ActivityId] ASC, [Id] ASC),
-    CONSTRAINT [FK_history_ToDoHistory_dbo_Activity] FOREIGN KEY ([ValidFrom], [ActivityId]) REFERENCES [dbo].[Activity] ([CreatedAt], [Id])
+    CONSTRAINT [PK_history_ToDoistory] PRIMARY KEY CLUSTERED ([ValidTo] ASC, [ValidFrom] ASC, [OperationId] ASC, [Id] ASC),
+    CONSTRAINT [FK_history_ToDoHistory_dbo_Operation] FOREIGN KEY ([ValidFrom], [OperationId]) REFERENCES [dbo].[Operation] ([CreatedAt], [Id])
 );
 

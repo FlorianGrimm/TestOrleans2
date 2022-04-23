@@ -3,7 +3,7 @@
     [Table("ProjectHistory", Schema = "history")]
     public partial class ProjectHistory {
         [Key]
-        public Guid ActivityId { get; set; }
+        public Guid OperationId { get; set; }
         [Key]
         public Guid Id { get; set; }
         [StringLength(50)]
@@ -14,16 +14,16 @@
         public DateTimeOffset ValidTo { get; set; }
         public long SerialVersion { get; set; }
 
-        [ForeignKey("ValidFrom,ActivityId")]
+        [ForeignKey("ValidFrom,OperationId")]
         [InverseProperty("ProjectHistory")]
-        public virtual Activity Activity { get; set; } = null!;
+        public virtual Operation Operation { get; set; } = null!;
     }
 */
 
 [Table("ProjectHistory", Schema = "history")]
 public record class ProjectHistory(
         [property:Key]
-        Guid ActivityId,
+        Guid OperationId,
         [property:Key]
         Guid Id,
         [property:StringLength(50)]

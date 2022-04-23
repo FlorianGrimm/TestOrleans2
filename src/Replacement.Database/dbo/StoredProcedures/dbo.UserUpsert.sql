@@ -1,7 +1,7 @@
 CREATE PROCEDURE [dbo].[UserUpsert]
     @Id uniqueidentifier,
     @UserName nvarchar(50),
-    @ActivityId uniqueidentifier,
+    @OperationId uniqueidentifier,
     @CreatedAt datetimeoffset,
     @ModifiedAt datetimeoffset,
     @SerialVersion BIGINT
@@ -10,7 +10,7 @@ AS BEGIN
 
     DECLARE @CurrentId uniqueidentifier;
     DECLARE @CurrentUserName nvarchar(50);
-    DECLARE @CurrentActivityId uniqueidentifier;
+    DECLARE @CurrentOperationId uniqueidentifier;
     DECLARE @CurrentCreatedAt datetimeoffset;
     DECLARE @CurrentModifiedAt datetimeoffset;
     DECLARE @CurrentSerialVersion BIGINT;
@@ -20,7 +20,7 @@ AS BEGIN
         SELECT TOP(1)
                 @CurrentId = [Id],
                 @CurrentUserName = [UserName],
-                @CurrentActivityId = [ActivityId],
+                @CurrentOperationId = [OperationId],
                 @CurrentCreatedAt = [CreatedAt],
                 @CurrentModifiedAt = [ModifiedAt],
                 @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
@@ -42,13 +42,13 @@ AS BEGIN
         INSERT INTO [dbo].[User] (
             [Id],
             [UserName],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt]
         ) Values (
             @Id,
             @UserName,
-            @ActivityId,
+            @OperationId,
             @CreatedAt,
             @ModifiedAt
         );
@@ -56,13 +56,13 @@ AS BEGIN
         INSERT INTO [history].[UserHistory] (
             [Id],
             [UserName],
-            [ActivityId],
+            [OperationId],
             [ValidFrom],
             [ValidTo]
         ) Values (
             @Id,
             @UserName,
-            @ActivityId,
+            @OperationId,
             @ModifiedAt,
             CAST('3141-05-09T00:00:00Z' as datetimeoffset)
         );
@@ -82,7 +82,7 @@ AS BEGIN
                 UPDATE TOP(1) [dbo].[User]
                     SET
                         [UserName] = @UserName,
-                        [ActivityId] = @ActivityId,
+                        [OperationId] = @OperationId,
                         [CreatedAt] = @CreatedAt,
                         [ModifiedAt] = @ModifiedAt
                     WHERE
@@ -94,19 +94,19 @@ AS BEGIN
                         [ValidTo] = @ModifiedAt
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
-                        AND ([ActivityId] = @ActivityId)
+                        AND ([OperationId] = @OperationId)
                         AND ([Id] = @Id)
                 ;
                 INSERT INTO [history].[UserHistory] (
                     [Id],
                     [UserName],
-                    [ActivityId],
+                    [OperationId],
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
                     @Id,
                     @UserName,
-                    @ActivityId,
+                    @OperationId,
                     @ModifiedAt,
                     CAST('3141-05-09T00:00:00Z' as datetimeoffset)
                 );
@@ -120,7 +120,7 @@ AS BEGIN
     SELECT TOP(1)
             [Id],
             [UserName],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)

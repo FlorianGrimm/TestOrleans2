@@ -16,12 +16,13 @@
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -51,9 +52,12 @@
     <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+    <SqlTasksPath Condition="'$(SQLDBExtensionsRefPath)' != ''">$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets</SqlTasksPath>
+    <SqlTasksPath Condition="'$(SQLDBExtensionsRefPath)' == ''">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets</SqlTasksPath>
   </PropertyGroup>
-  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
-  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Target Name="build">
+  </Target>
+  <Import Condition="Exists('$(SQLDBExtensionsRefPath)')" Project="$(SqlTasksPath)" />
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="dbo" />
@@ -65,8 +69,8 @@
     <Folder Include="Security" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\StoredProcedures\dbo.ActivityInsert.sql" />
-    <Build Include="dbo\StoredProcedures\dbo.ActivitySelectPK.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.OperationInsert.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.OperationSelectPK.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ProjectDeletePK.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ProjectSelectPK.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ProjectUpsert.sql" />
@@ -76,7 +80,7 @@
     <Build Include="dbo\StoredProcedures\dbo.UserDeletePK.sql" />
     <Build Include="dbo\StoredProcedures\dbo.UserSelectPK.sql" />
     <Build Include="dbo\StoredProcedures\dbo.UserUpsert.sql" />
-    <Build Include="dbo\Tables\Activity.sql" />
+    <Build Include="dbo\Tables\Operation.sql" />
     <Build Include="dbo\Tables\Project.sql" />
     <Build Include="dbo\Tables\ToDo.sql" />
     <Build Include="dbo\Tables\User.sql" />
@@ -84,6 +88,7 @@
     <Build Include="history\Tables\ToDoHistory.sql" />
     <Build Include="history\Tables\UserHistory.sql" />
     <Build Include="Security\history.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.UserSelectByUserName.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />

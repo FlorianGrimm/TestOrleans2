@@ -67,13 +67,13 @@ public class TodoGrain : Grain, ITodoGrain {
     }
 
     public async Task<bool> UpsertTodo(ToDo value, User user) {
-        var activity = new Activity(Guid.NewGuid(), "UpsertTodo", "Todo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
+        var operation = new Operation(Guid.NewGuid(), "UpsertTodo", "Todo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
         value = value with {
-            ActivityId = activity.Id,
+            OperationId = operation.Id,
             UserId = user.Id,
-            ModifiedAt = activity.CreatedAt
+            ModifiedAt = operation.CreatedAt
         };
-        this._DBContext.Activity.Add(activity);
+        this._DBContext.Operation.Add(operation);
         var to = this._DBContext.Todo.Upsert(value);
         await this._DBContext.ApplyChangesAsync();
         this._State = to.Value;
@@ -84,11 +84,11 @@ public class TodoGrain : Grain, ITodoGrain {
 
 
     public async Task<bool> DeleteTodo(ToDo value, User user) {
-        var activity = new Activity(Guid.NewGuid(), "DeleteTodo", "Todo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
+        var operation = new Operation(Guid.NewGuid(), "DeleteTodo", "Todo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
         value = value with {
-            ActivityId = activity.Id,
+            OperationId = operation.Id,
             UserId = user.Id,
-            ModifiedAt = activity.CreatedAt
+            ModifiedAt = operation.CreatedAt
         };
         this._DBContext.Todo.Delete(value);
         await this._DBContext.ApplyChangesAsync();

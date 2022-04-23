@@ -3,13 +3,13 @@ CREATE PROCEDURE [dbo].[ToDoSelectPK]
 AS BEGIN
     SET NOCOUNT ON;
 
-    SELECT
+    SELECT TOP(1)
             [Id],
             [ProjectId],
             [UserId],
             [Title],
             [Done],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)

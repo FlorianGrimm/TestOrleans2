@@ -1,7 +1,7 @@
 CREATE PROCEDURE [dbo].[ProjectUpsert]
     @Id uniqueidentifier,
     @Title nvarchar(50),
-    @ActivityId uniqueidentifier,
+    @OperationId uniqueidentifier,
     @CreatedAt datetimeoffset,
     @ModifiedAt datetimeoffset,
     @SerialVersion BIGINT
@@ -10,7 +10,7 @@ AS BEGIN
 
     DECLARE @CurrentId uniqueidentifier;
     DECLARE @CurrentTitle nvarchar(50);
-    DECLARE @CurrentActivityId uniqueidentifier;
+    DECLARE @CurrentOperationId uniqueidentifier;
     DECLARE @CurrentCreatedAt datetimeoffset;
     DECLARE @CurrentModifiedAt datetimeoffset;
     DECLARE @CurrentSerialVersion BIGINT;
@@ -20,7 +20,7 @@ AS BEGIN
         SELECT TOP(1)
                 @CurrentId = [Id],
                 @CurrentTitle = [Title],
-                @CurrentActivityId = [ActivityId],
+                @CurrentOperationId = [OperationId],
                 @CurrentCreatedAt = [CreatedAt],
                 @CurrentModifiedAt = [ModifiedAt],
                 @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
@@ -42,13 +42,13 @@ AS BEGIN
         INSERT INTO [dbo].[Project] (
             [Id],
             [Title],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt]
         ) Values (
             @Id,
             @Title,
-            @ActivityId,
+            @OperationId,
             @CreatedAt,
             @ModifiedAt
         );
@@ -56,13 +56,13 @@ AS BEGIN
         INSERT INTO [history].[ProjectHistory] (
             [Id],
             [Title],
-            [ActivityId],
+            [OperationId],
             [ValidFrom],
             [ValidTo]
         ) Values (
             @Id,
             @Title,
-            @ActivityId,
+            @OperationId,
             @ModifiedAt,
             CAST('3141-05-09T00:00:00Z' as datetimeoffset)
         );
@@ -82,7 +82,7 @@ AS BEGIN
                 UPDATE TOP(1) [dbo].[Project]
                     SET
                         [Title] = @Title,
-                        [ActivityId] = @ActivityId,
+                        [OperationId] = @OperationId,
                         [CreatedAt] = @CreatedAt,
                         [ModifiedAt] = @ModifiedAt
                     WHERE
@@ -94,19 +94,19 @@ AS BEGIN
                         [ValidTo] = @ModifiedAt
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
-                        AND ([ActivityId] = @ActivityId)
+                        AND ([OperationId] = @OperationId)
                         AND ([Id] = @Id)
                 ;
                 INSERT INTO [history].[ProjectHistory] (
                     [Id],
                     [Title],
-                    [ActivityId],
+                    [OperationId],
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
                     @Id,
                     @Title,
-                    @ActivityId,
+                    @OperationId,
                     @ModifiedAt,
                     CAST('3141-05-09T00:00:00Z' as datetimeoffset)
                 );
@@ -120,7 +120,7 @@ AS BEGIN
     SELECT TOP(1)
             [Id],
             [Title],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)

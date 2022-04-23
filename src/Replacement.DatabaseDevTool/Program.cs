@@ -36,6 +36,7 @@ public static partial class Program {
             }
 
             // MainGenerateSql
+#if true
             {
                 if (!System.IO.Path.IsPathFullyQualified(outputFolder)) {
                     outputFolder = System.IO.Path.Combine(upperDirectoryPath, outputFolder);
@@ -101,7 +102,9 @@ public static partial class Program {
                 }
             }
 
+#endif
             // GenerateSqlAccess
+#if true
             {
                 AddNativeTypeConverter();
 
@@ -113,7 +116,10 @@ public static partial class Program {
                     MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName);
                 }
             }
+#endif
+
             System.Console.Out.WriteLine($"done.");
+
             return 0;
         } catch (System.Exception error) {
             System.Console.Error.WriteLine(error.ToString());

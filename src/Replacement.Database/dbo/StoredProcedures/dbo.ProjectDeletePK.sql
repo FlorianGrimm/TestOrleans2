@@ -1,6 +1,6 @@
 CREATE PROCEDURE [dbo].[ProjectDeletePK]
     @Id uniqueidentifier,
-    @ActivityId uniqueidentifier,
+    @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @SerialVersion bigint
 AS BEGIN
@@ -27,7 +27,7 @@ AS BEGIN
             SET
                 [ValidTo] = @ModifiedAt
             WHERE
-                    ([ActivityId] = @ActivityId)
+                    ([OperationId] = @OperationId)
                     AND ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
                         AND (@Id = [Id])
         ;

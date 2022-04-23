@@ -12,7 +12,7 @@
 //            : base(options) {
 //        }
 
-//        public virtual DbSet<Activity> Activity { get; set; } = null!;
+//        public virtual DbSet<Operation> Operation { get; set; } = null!;
 //        public virtual DbSet<Project> Project { get; set; } = null!;
 //        public virtual DbSet<ProjectHistory> ProjectHistory { get; set; } = null!;
 //        public virtual DbSet<ToDo> ToDo { get; set; } = null!;
@@ -28,7 +28,7 @@
 //        }
 
 //        protected override void OnModelCreating(ModelBuilder modelBuilder) {
-//            modelBuilder.Entity<Activity>(entity => {
+//            modelBuilder.Entity<Operation>(entity => {
 //                entity.HasKey(e => new { e.CreatedAt, e.Id });
 
 //                entity.Property(e => e.SerialVersion)
@@ -43,25 +43,25 @@
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
-//                entity.HasOne(d => d.Activity)
+//                entity.HasOne(d => d.Operation)
 //                    .WithMany(p => p.Project)
-//                    .HasForeignKey(d => new { d.ModifiedAt, d.ActivityId })
-//                    .HasConstraintName("FK_Project_Activity");
+//                    .HasForeignKey(d => new { d.ModifiedAt, d.OperationId })
+//                    .HasConstraintName("FK_Project_Operation");
 //            });
 
 //            modelBuilder.Entity<ProjectHistory>(entity => {
-//                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.ActivityId, e.Id })
+//                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.OperationId, e.Id })
 //                    .HasName("PK_history_ProjectHistory");
 
 //                entity.Property(e => e.SerialVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
-//                entity.HasOne(d => d.Activity)
+//                entity.HasOne(d => d.Operation)
 //                    .WithMany(p => p.ProjectHistory)
-//                    .HasForeignKey(d => new { d.ValidFrom, d.ActivityId })
+//                    .HasForeignKey(d => new { d.ValidFrom, d.OperationId })
 //                    .OnDelete(DeleteBehavior.ClientSetNull)
-//                    .HasConstraintName("FK_history_ProjectHistory_dbo_Activity");
+//                    .HasConstraintName("FK_history_ProjectHistory_dbo_Operation");
 //            });
 
 //            modelBuilder.Entity<ToDo>(entity => {
@@ -81,25 +81,25 @@
 //                    .HasForeignKey(d => d.UserId)
 //                    .HasConstraintName("FK_dbo_ToDo_dbo_User");
 
-//                entity.HasOne(d => d.Activity)
+//                entity.HasOne(d => d.Operation)
 //                    .WithMany(p => p.ToDo)
-//                    .HasForeignKey(d => new { d.ModifiedAt, d.ActivityId })
-//                    .HasConstraintName("FK_dbo_ToDo_dbo_Activity");
+//                    .HasForeignKey(d => new { d.ModifiedAt, d.OperationId })
+//                    .HasConstraintName("FK_dbo_ToDo_dbo_Operation");
 //            });
 
 //            modelBuilder.Entity<ToDoHistory>(entity => {
-//                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.ActivityId, e.Id })
+//                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.OperationId, e.Id })
 //                    .HasName("PK_history_ToDoistory");
 
 //                entity.Property(e => e.SerialVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
-//                entity.HasOne(d => d.Activity)
+//                entity.HasOne(d => d.Operation)
 //                    .WithMany(p => p.ToDoHistory)
-//                    .HasForeignKey(d => new { d.ValidFrom, d.ActivityId })
+//                    .HasForeignKey(d => new { d.ValidFrom, d.OperationId })
 //                    .OnDelete(DeleteBehavior.ClientSetNull)
-//                    .HasConstraintName("FK_history_ToDoHistory_dbo_Activity");
+//                    .HasConstraintName("FK_history_ToDoHistory_dbo_Operation");
 //            });
 
 //            modelBuilder.Entity<User>(entity => {
@@ -109,25 +109,25 @@
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
-//                entity.HasOne(d => d.Activity)
+//                entity.HasOne(d => d.Operation)
 //                    .WithMany(p => p.User)
-//                    .HasForeignKey(d => new { d.ModifiedAt, d.ActivityId })
-//                    .HasConstraintName("FK_dbo_User_dbo_Activity");
+//                    .HasForeignKey(d => new { d.ModifiedAt, d.OperationId })
+//                    .HasConstraintName("FK_dbo_User_dbo_Operation");
 //            });
 
 //            modelBuilder.Entity<UserHistory>(entity => {
-//                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.ActivityId, e.Id })
+//                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.OperationId, e.Id })
 //                    .HasName("PK_history_UserHistory");
 
 //                entity.Property(e => e.SerialVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
-//                entity.HasOne(d => d.Activity)
+//                entity.HasOne(d => d.Operation)
 //                    .WithMany(p => p.UserHistory)
-//                    .HasForeignKey(d => new { d.ValidFrom, d.ActivityId })
+//                    .HasForeignKey(d => new { d.ValidFrom, d.OperationId })
 //                    .OnDelete(DeleteBehavior.ClientSetNull)
-//                    .HasConstraintName("FK_history_UserHistory_dbo_Activity");
+//                    .HasConstraintName("FK_history_UserHistory_dbo_Operation");
 //            });
 
 //            OnModelCreatingPartial(modelBuilder);

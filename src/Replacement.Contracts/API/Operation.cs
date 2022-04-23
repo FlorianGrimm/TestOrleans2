@@ -1,7 +1,7 @@
 ﻿namespace Replacement.Contracts.API;
 /*
-public partial class Activity {
-    public Activity() {
+public partial class Operation {
+    public Operation() {
         this.Project = new HashSet<Project>();
         this.ProjectHistory = new HashSet<ProjectHistory>();
         this.ToDo = new HashSet<ToDo>();
@@ -23,21 +23,21 @@ public partial class Activity {
     public DateTimeOffset CreatedAt { get; set; }
     public long SerialVersion { get; set; }
 
-    [InverseProperty("Activity")]
+    [InverseProperty("Operation")]
     public virtual ICollection<Project> Project { get; set; }
-    [InverseProperty("Activity")]
+    [InverseProperty("Operation")]
     public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }
-    [InverseProperty("Activity")]
+    [InverseProperty("Operation")]
     public virtual ICollection<ToDo> ToDo { get; set; }
-    [InverseProperty("Activity")]
+    [InverseProperty("Operation")]
     public virtual ICollection<ToDoHistory> ToDoHistory { get; set; }
-    [InverseProperty("Activity")]
+    [InverseProperty("Operation")]
     public virtual ICollection<User> User { get; set; }
-    [InverseProperty("Activity")]
+    [InverseProperty("Operation")]
     public virtual ICollection<UserHistory> UserHistory { get; set; }
 }
 */
-public record class Activity(
+public record class Operation(
     Guid Id,
     [property:StringLength(100)]
     string Title,

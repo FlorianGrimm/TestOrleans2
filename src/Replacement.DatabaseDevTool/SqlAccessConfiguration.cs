@@ -34,15 +34,15 @@ public static partial class Program {
     public static DatabaseDefintion GetDefintion() {
         return new DatabaseDefintion(
              StoredProcedures: new StoredProcedureDefintion[] {
-                new StoredProcedureDefintion("dbo", "ActivityInsert",
-                    CSTypeDefinition.TypeOf<Activity>(),
+                new StoredProcedureDefintion("dbo", "OperationInsert",
+                    CSTypeDefinition.TypeOf<Operation>(),
                     ExecutionMode.QuerySingle,
-                    CSTypeDefinition.TypeOf<Activity>(isList:false, isAsync: true)),
+                    CSTypeDefinition.TypeOf<Operation>(isList:false, isAsync: true)),
 
-                new StoredProcedureDefintion("dbo", "ActivitySelectPK",
-                    CSTypeDefinition.TypeOf<ActivityPK>(),
+                new StoredProcedureDefintion("dbo", "OperationSelectPK",
+                    CSTypeDefinition.TypeOf<OperationPK>(),
                     ExecutionMode.QuerySingleOrDefault,
-                    CSTypeDefinition.TypeOf<Activity>(isList:false, isAsync: true)),
+                    CSTypeDefinition.TypeOf<Operation>(isList:false, isAsync: true)),
 
                 new StoredProcedureDefintion("dbo", "ProjectDeletePK",
                     CSTypeDefinition.TypeOf<Project>(),
@@ -82,6 +82,11 @@ public static partial class Program {
                     CSTypeDefinition.TypeOf<User>(),
                     ExecutionMode.QueryMultiple,
                     TypeOfTManipulationResult<UserManipulationResult, User>()),
+
+                new StoredProcedureDefintion("dbo", "UserSelectByUserName", 
+                    CSTypeDefinition.TypeOf<UserSelectByUserNameArg>(), 
+                    ExecutionMode.QuerySingleOrDefault,
+                    CSTypeDefinition.TypeOf<User>(isList:false, isAsync:true)),
 
                 new StoredProcedureDefintion("dbo", "sp_alterdiagram", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
                 new StoredProcedureDefintion("dbo", "sp_creatediagram", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),

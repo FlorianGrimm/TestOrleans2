@@ -3,10 +3,10 @@ CREATE PROCEDURE [dbo].[ProjectSelectPK]
 AS BEGIN
     SET NOCOUNT ON;
 
-    SELECT
+    SELECT TOP(1)
             [Id],
             [Title],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)

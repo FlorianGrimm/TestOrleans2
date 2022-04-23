@@ -1,10 +1,10 @@
-CREATE PROCEDURE [dbo].[ActivitySelectPK]
+CREATE PROCEDURE [dbo].[OperationSelectPK]
     @CreatedAt datetimeoffset,
     @Id uniqueidentifier
 AS BEGIN
     SET NOCOUNT ON;
 
-    SELECT
+    SELECT TOP(1)
             [Id],
             [Title],
             [EntityType],
@@ -13,7 +13,7 @@ AS BEGIN
             [CreatedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)
         FROM
-            [dbo].[Activity]
+            [dbo].[Operation]
         WHERE
             (@CreatedAt = [CreatedAt])
              AND (@Id = [Id])

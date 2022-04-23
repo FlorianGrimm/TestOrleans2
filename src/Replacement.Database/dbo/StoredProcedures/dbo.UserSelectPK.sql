@@ -3,10 +3,10 @@ CREATE PROCEDURE [dbo].[UserSelectPK]
 AS BEGIN
     SET NOCOUNT ON;
 
-    SELECT
+    SELECT TOP(1)
             [Id],
             [UserName],
-            [ActivityId],
+            [OperationId],
             [CreatedAt],
             [ModifiedAt],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)

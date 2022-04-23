@@ -8,14 +8,14 @@
         [StringLength(50)]
         public string Title { get; set; } = null!;
         public bool Done { get; set; }
-        public Guid? ActivityId { get; set; }
+        public Guid? OperationId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset ModifiedAt { get; set; }
         public long SerialVersion { get; set; }
 
-        [ForeignKey("ModifiedAt,ActivityId")]
+        [ForeignKey("ModifiedAt,OperationId")]
         [InverseProperty("ToDo")]
-        public virtual Activity? Activity { get; set; }
+        public virtual Operation? Operation { get; set; }
         [ForeignKey("ProjectId")]
         [InverseProperty("ToDo")]
         public virtual Project? Project { get; set; }
@@ -32,7 +32,7 @@ public record class ToDo(
         [property: StringLength(50)]
         string Title,
         bool Done,
-        Guid? ActivityId,
+        Guid? OperationId,
         DateTimeOffset CreatedAt,
         DateTimeOffset ModifiedAt,
         long SerialVersion

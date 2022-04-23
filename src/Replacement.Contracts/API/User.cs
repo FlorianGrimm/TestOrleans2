@@ -9,14 +9,14 @@
         public Guid Id { get; set; }
         [StringLength(50)]
         public string UserName { get; set; } = null!;
-        public Guid? ActivityId { get; set; }
+        public Guid? OperationId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset ModifiedAt { get; set; }
         public long SerialVersion { get; set; }
 
-        [ForeignKey("ModifiedAt,ActivityId")]
+        [ForeignKey("ModifiedAt,OperationId")]
         [InverseProperty("User")]
-        public virtual Activity? Activity { get; set; }
+        public virtual Operation? Operation { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<ToDo> ToDo { get; set; }
     }
@@ -26,8 +26,13 @@ public record class User(
     Guid Id,
     [property: StringLength(50)]
     string UserName,
-    Guid? ActivityId,
+    Guid? OperationId,
     DateTimeOffset CreatedAt,
     DateTimeOffset ModifiedAt,
     long SerialVersion
 );
+
+public record class UserSelectByUserNameArg(
+    [property: StringLength(50)]
+    string UserName
+    );

@@ -5,7 +5,7 @@ public interface IDBContext : ITrackingContext {
     
     SqlAccess GetSqlAccess();
     
-    ITrackingSet<ActivityPK, Activity> Activity { get; }
+    ITrackingSet<OperationPK, Operation> Operation { get; }
     ITrackingSet<UserPK, User> User { get; }
     ITrackingSet<ProjectPK, Project> Project { get; }
     ITrackingSet<ToDoPK, ToDo> Todo { get; }

@@ -1,15 +1,17 @@
-﻿using Brimborium.Tracking;
+﻿namespace Replacement.Repository.Service;
 
-namespace Replacement.Repository.Service;
-public partial class SqlAccess : Brimborium.SqlAccess.SqlAccessBase {
+public partial interface ISqlAccess : IDisposable, ISqlAccessBase {
+}
+
+public partial class SqlAccess : Brimborium.SqlAccess.SqlAccessBase, ISqlAccess {
     public SqlAccess(string connectionString) : base(connectionString) {
     }
 }
 
 public class TrackingSqlAccessConnection : TrackingConnection {
-    private readonly SqlAccess _SqlAccess;
+    private readonly ISqlAccess _SqlAccess;
 
-    public TrackingSqlAccessConnection(SqlAccess sqlAccess) {
+    public TrackingSqlAccessConnection(ISqlAccess sqlAccess) {
         this._SqlAccess = sqlAccess;
     }
 
@@ -24,15 +26,15 @@ public class TrackingSqlAccessConnection : TrackingConnection {
 }
 public class TrackingSqlAccessTransConnection
     : TrackingTransConnection {
-    private readonly SqlAccess _SqlAccess;
+    private readonly ISqlAccess _SqlAccess;
     private System.Data.IDbTransaction? _DbTransaction;
 
-    public TrackingSqlAccessTransConnection(SqlAccess sqlAccess, System.Data.IDbTransaction dbTransaction) {
+    public TrackingSqlAccessTransConnection(ISqlAccess sqlAccess, System.Data.IDbTransaction dbTransaction) {
         this._SqlAccess = sqlAccess;
         this._DbTransaction = dbTransaction;
     }
     public System.Data.IDbTransaction? GetDbTransaction() => this._DbTransaction;
-    public SqlAccess GetSqlAccess() => this._SqlAccess;
+    public ISqlAccess GetSqlAccess() => this._SqlAccess;
     public override async Task CommitAsync() {
         using (var dbTransaction = this._DbTransaction) {
             this._DbTransaction = null;

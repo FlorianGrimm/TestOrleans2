@@ -1,55 +1,55 @@
 ﻿namespace Replacement.Repository.Service;
 
-public class TrackingSetActivity : TrackingSet<ActivityPK, Activity> {
-    public TrackingSetActivity(DBContext context, ITrackingSetApplyChanges<Activity> trackingApplyChanges)
+public class TrackingSetOperation : TrackingSet<OperationPK, Operation> {
+    public TrackingSetOperation(DBContext context, ITrackingSetApplyChanges<Operation> trackingApplyChanges)
         : base(
-            extractKey: ActivityUtiltiy.ExtractKey,
-            comparer: ActivityUtiltiy.Instance,
+            extractKey: OperationUtiltiy.ExtractKey,
+            comparer: OperationUtiltiy.Instance,
             trackingContext: context,
             trackingApplyChanges: trackingApplyChanges) {
 
     }
 }
 
-public class TrackingSetApplyChangesActivity : ITrackingSetApplyChanges<Activity> {
-    private static TrackingSetApplyChangesActivity? _Instance;
-    public static TrackingSetApplyChangesActivity Instance => _Instance ??= new TrackingSetApplyChangesActivity();
+public class TrackingSetApplyChangesOperation : ITrackingSetApplyChanges<Operation> {
+    private static TrackingSetApplyChangesOperation? _Instance;
+    public static TrackingSetApplyChangesOperation Instance => _Instance ??= new TrackingSetApplyChangesOperation();
 
-    public TrackingSetApplyChangesActivity() : base() {
+    public TrackingSetApplyChangesOperation() : base() {
 
     }
 
-    public async Task<Activity> Insert(Activity value, TrackingTransConnection trackingTransaction) {
+    public async Task<Operation> Insert(Operation value, TrackingTransConnection trackingTransaction) {
         var tc = (TrackingSqlAccessTransConnection)trackingTransaction;
         var sqlAccess = tc.GetSqlAccess();
-        var result = await sqlAccess.ExecuteActivityInsertAsync(value, tc.GetDbTransaction());
+        var result = await sqlAccess.ExecuteOperationInsertAsync(value, tc.GetDbTransaction());
 
         if (result is not null) {
             return result;
         } else { 
-            throw new InvalidOperationException($"Cannot insert Activity {value.Id}");
+            throw new InvalidOperationException($"Cannot insert Operation {value.Id}");
         }
     }
 
-    public Task<Activity> Update(Activity value, TrackingTransConnection trackingTransaction) {
-        throw new InvalidOperationException($"Cannot update Activity {value.Id}");
+    public Task<Operation> Update(Operation value, TrackingTransConnection trackingTransaction) {
+        throw new InvalidOperationException($"Cannot update Operation {value.Id}");
     }
 
-    public Task Delete(Activity value, TrackingTransConnection trackingTransaction) {
-        throw new InvalidOperationException($"Cannot delete Activity {value.Id}");
+    public Task Delete(Operation value, TrackingTransConnection trackingTransaction) {
+        throw new InvalidOperationException($"Cannot delete Operation {value.Id}");
     }
 }
 
 
-public sealed class ActivityUtiltiy
-    : IEqualityComparer<ActivityPK> {
-    private static ActivityUtiltiy? _Instance;
-    public static ActivityUtiltiy Instance => (_Instance ??= new ActivityUtiltiy());
-    private ActivityUtiltiy() { }
+public sealed class OperationUtiltiy
+    : IEqualityComparer<OperationPK> {
+    private static OperationUtiltiy? _Instance;
+    public static OperationUtiltiy Instance => (_Instance ??= new OperationUtiltiy());
+    private OperationUtiltiy() { }
 
-    public static ActivityPK ExtractKey(Activity that) => new ActivityPK(that.CreatedAt, that.Id);
+    public static OperationPK ExtractKey(Operation that) => new OperationPK(that.CreatedAt, that.Id);
 
-    bool IEqualityComparer<ActivityPK>.Equals(ActivityPK? x, ActivityPK? y) {
+    bool IEqualityComparer<OperationPK>.Equals(OperationPK? x, OperationPK? y) {
         if (object.ReferenceEquals(x, y)) {
             return true;
         } else if ((x is null) || (y is null)) {
@@ -59,7 +59,7 @@ public sealed class ActivityUtiltiy
         }
     }
 
-    int IEqualityComparer<ActivityPK>.GetHashCode(ActivityPK obj) {
+    int IEqualityComparer<OperationPK>.GetHashCode(OperationPK obj) {
         return obj.GetHashCode();
     }
 }

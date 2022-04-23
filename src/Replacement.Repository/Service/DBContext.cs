@@ -13,7 +13,7 @@ public class TodoRepo {
                 UserId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
                 Title: "1",
                 Done: false,
-                ActivityId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
+                OperationId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
                 CreatedAt: DateTimeOffset.Now,
                 ModifiedAt: DateTimeOffset.Now,
                 SerialVersion: 1
@@ -29,7 +29,7 @@ public class TodoRepo {
 public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
     private string? _ConnectionString;
 
-    public ITrackingSet<ActivityPK, Activity> Activity { get; }
+    public ITrackingSet<OperationPK, Operation> Operation { get; }
     public ITrackingSet<UserPK, User> User { get; }
     public ITrackingSet<ProjectPK, Project> Project { get; }
     public ITrackingSet<ToDoPK, ToDo> Todo { get; }
@@ -38,7 +38,7 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
 
     public DBContext(IOptions<DBContextOption> options) {
         this._ConnectionString = options.Value.ConnectionString;
-        this.Activity = new TrackingSetActivity(this, TrackingSetApplyChangesActivity.Instance);
+        this.Operation = new TrackingSetOperation(this, TrackingSetApplyChangesOperation.Instance);
         this.User = new TrackingSetUser(this, TrackingSetApplyChangesUser.Instance);
         this.Project = new TrackingSetProject(this, TrackingSetApplyChangesProject.Instance);
         this.Todo = new TrackingSetToDo(this, TrackingSetApplyChangesToDo.Instance);
