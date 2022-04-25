@@ -2,11 +2,11 @@
 
 #warning weichei
 
-public class TodoRepo {
-    private static Dictionary<Guid, ToDo>? _Todos;
-    internal static Dictionary<Guid, ToDo> GetTodos() {
-        if (_Todos == null) {
-            _Todos = new Dictionary<Guid, ToDo>();
+public class ToDoRepo {
+    private static Dictionary<Guid, ToDo>? _ToDos;
+    internal static Dictionary<Guid, ToDo> GetToDos() {
+        if (_ToDos == null) {
+            _ToDos = new Dictionary<Guid, ToDo>();
             var item = new ToDo(
                 Id: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
                 ProjectId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
@@ -18,9 +18,9 @@ public class TodoRepo {
                 ModifiedAt: DateTimeOffset.Now,
                 SerialVersion: 1
                 );
-            _Todos.Add(item.Id, item);
+            _ToDos.Add(item.Id, item);
         }
-        return _Todos;
+        return _ToDos;
 
     }
 }
@@ -32,7 +32,7 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
     public ITrackingSet<OperationPK, Operation> Operation { get; }
     public ITrackingSet<UserPK, User> User { get; }
     public ITrackingSet<ProjectPK, Project> Project { get; }
-    public ITrackingSet<ToDoPK, ToDo> Todo { get; }
+    public ITrackingSet<ToDoPK, ToDo> ToDo { get; }
 
     public string? ConnectionString { get => this._ConnectionString; set => this._ConnectionString = value; }
 
@@ -41,7 +41,7 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         this.Operation = new TrackingSetOperation(this, TrackingSetApplyChangesOperation.Instance);
         this.User = new TrackingSetUser(this, TrackingSetApplyChangesUser.Instance);
         this.Project = new TrackingSetProject(this, TrackingSetApplyChangesProject.Instance);
-        this.Todo = new TrackingSetToDo(this, TrackingSetApplyChangesToDo.Instance);
+        this.ToDo = new TrackingSetToDo(this, TrackingSetApplyChangesToDo.Instance);
     }
 
     public SqlAccess GetSqlAccess() {
@@ -55,7 +55,7 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         await this.ApplyChangesAsync(sqlAccessConnection);
     }
 
-    public async Task<ToDo[]> ReadAllTodoAsync() {
+    public async Task<ToDo[]> ReadAllToDoAsync() {
         using var sqlAccess = this.GetSqlAccess();
         var result = new List<ToDo>();
 #warning TODO
@@ -63,11 +63,11 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         if (item is not null) {
             result.Add(item);
         }
-        return this.Todo.AttachRange(result).Select(to => to.Value).ToArray();
+        return this.ToDo.AttachRange(result).Select(to => to.Value).ToArray();
     }
 
-    public Task<ToDo?> ReadTodoAsync(Guid id) {
-        TodoRepo.GetTodos().TryGetValue(id, out var result);
+    public Task<ToDo?> ReadToDoAsync(Guid id) {
+        ToDoRepo.GetToDos().TryGetValue(id, out var result);
         return Task.FromResult(result);
     }
 

@@ -16,7 +16,6 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.RazorPages;
 global using Microsoft.AspNetCore.Builder;
-global using Microsoft.AspNetCore.Authentication.Negotiate;
 global using Microsoft.AspNetCore.OData;
 
 global using Microsoft.OData.Edm;
@@ -24,14 +23,4 @@ global using Microsoft.OData.Edm.Csdl;
 global using Microsoft.OData.Edm.Validation;
 global using Microsoft.OData.ModelBuilder;
 
-global using Microsoft.OpenApi.Models;
-
-global using Orleans;
-global using Orleans.Hosting;
-
 global using Brimborium.Registrator;
-
-global using Replacement.Contracts.API;
-global using Replacement.Repository.Grains;
-global using Replacement.WebApp.Swagger;
-global using Microsoft.AspNetCore.Http;

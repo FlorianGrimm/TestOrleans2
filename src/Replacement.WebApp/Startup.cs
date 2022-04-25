@@ -1,9 +1,5 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.OpenApi.Models;
-
-using Brimborium.Registrator;
-
-using Replacement.WebApp.Swagger;
+using Replacement.Contracts.API;
+using Replacement.Repository.Service;
 
 namespace Replacement.WebApp;
 
@@ -26,21 +22,22 @@ public class Startup {
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
         var mvcBuilderControllers = this.AddControllers(services);
-        /*
-        mvcBuilderControllers.AddOData((odataOptions) => {
-            odataOptions.EnableQueryFeatures().Select().Filter().OrderBy();
-            var edmModel = UpToDocuVisualization.Model.EdmModelGenerator.GetEdmModel();
-            odataOptions.AddRouteComponents("odata", edmModel);
-        });
-        */
+        // AddAppOData(mvcBuilderControllers);
         services.AddRazorPages();
         AddAppSwaggerGen(services);
         AddAppServicesWithRegistrator(services);
+        AddAppAuthentication(services);
+        services.AddOptions<DBContextOption>().Configure(options => {
+            options.ConnectionString = this.Configuration.GetValue<string>("Database");
+        });
     }
+
+   
 
     public void ConfigureSwaggerGeneratorServices(IServiceCollection services) {
         this.AddControllers(services);
         AddAppSwaggerGen(services);
+        AddAppServicesWithRegistrator(services);
     }
 
     private IMvcBuilder AddControllers(IServiceCollection services) {
@@ -67,6 +64,17 @@ public class Startup {
             });
     }
 
+    private void AddAppAuthentication(IServiceCollection services) {
+        //services.AddAuthorization()
+        services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
+            .AddNegotiate((NegotiateOptions negotiateOptions) => {
+            });
+
+        services.AddAuthorization(options => {
+            options.FallbackPolicy = options.DefaultPolicy;
+        });
+    }
+
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
@@ -88,6 +96,8 @@ public class Startup {
 
         app.UseRouting();
 
+        app.UseAuthentication();
+        
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints => {

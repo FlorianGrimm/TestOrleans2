@@ -1,14 +1,14 @@
 ﻿namespace Replacement.Repository.Grains;
 
 public interface IUserCollectionGrain : IGrainWithGuidKey {
-    Task<User?> GetUserByName(string name);
+    Task<User?> GetUserByUserName(string username, Operation operation);
     Task SetDirty();
 }
 
 public interface IUserGrain : IGrainWithGuidKey {
-    Task<ToDo?> GetUser(User user);
-    Task<bool> UpsertUser(User value, User user);
-    Task<bool> DeleteUser(User value, User user);
+    Task<ToDo?> GetUser(User user, Operation operation);
+    Task<bool> UpsertUser(User value, User user, Operation operation);
+    Task<bool> DeleteUser(User value, User user, Operation operation);
 }
 
 public class UserCollectionGrain : Grain, IUserCollectionGrain {
@@ -21,15 +21,17 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
         this._DBContext = dBContext;
     }
 
-    public async Task<User?> GetUserByName(string name) {
+    public async Task<User?> GetUserByUserName(string name, Operation operation) {
         var cache = this._Cache ??= new Dictionary<string, User>(StringComparer.OrdinalIgnoreCase);
         if (cache.TryGetValue(name, out var result)) {
             return result;
         } else {
-            using var sqlAccess = this._DBContext.GetSqlAccess();
-#warning TODO
-            result = await sqlAccess.ExecuteUserSelectPKAsync(null!, null);
-            if (result is not null) { 
+            using (var sqlAccess = this._DBContext.GetSqlAccess()) {
+                using (sqlAccess.Connected()) {
+                    result = await sqlAccess.ExecuteUserSelectByUserNameAsync(new UserSelectByUserNameArg(name), null);
+                }
+            }
+            if (result is not null) {
                 cache[name] = result;
             }
             return result;
@@ -51,16 +53,35 @@ public class UserGrain : Grain, IUserGrain {
         this._DBContext = dBContext;
     }
 
-    public Task<ToDo?> GetUser(User user) {
+    public Task<ToDo?> GetUser(User user, Operation operation) {
         throw new NotImplementedException();
     }
 
-    public Task<bool> UpsertUser(User value, User user) {
+    public Task<bool> UpsertUser(User value, User user, Operation operation) {
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteUser(User value, User user) {
+    public Task<bool> DeleteUser(User value, User user, Operation operation) {
         throw new NotImplementedException();
     }
 }
 
+//
+
+public static partial class GrainExtensions {
+    public static IUserCollectionGrain GetUserCollectionGrain(this IClusterClient client) {
+        var grain = client.GetGrain<IUserCollectionGrain>(Guid.Empty);
+        return grain;
+    }
+
+    public static IUserGrain GetUserGrain(this IClusterClient client, Guid id) {
+        var grain = client.GetGrain<IUserGrain>(id);
+        return grain;
+    }
+
+    public static async Task<User?> GetUserByUserName(this IClusterClient client, string username, Operation operation) {
+        return await client.GetUserCollectionGrain().GetUserByUserName(username, operation);
+    }
+}
+
+//

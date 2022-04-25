@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Brimborium.Registrator" Version="1.1.79-g858c964373" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,12 +24,19 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.0" />
+		<PackageReference Include="System.DirectoryServices" Version="6.0.0" />
+		<PackageReference Include="System.DirectoryServices.AccountManagement" Version="6.0.0" />
+		<PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
 
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
 	  <ProjectReference Include="..\Replacement.Repository\Replacement.Repository.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Orleans_CodeGenInputs Remove="Controllers\ReplacementControllerBase.cs" />
 	</ItemGroup>
 
 </Project>
