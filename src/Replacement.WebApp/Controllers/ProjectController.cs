@@ -13,14 +13,15 @@ public class ProjectController : ReplacementControllerBase {
     // GET: api/Project
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Project>>> Get() {
-        var operation = new Replacement.Contracts.API.Operation(
-               Guid.NewGuid(),
-               this.GetOperationTitle(),
-               nameof(Project),
-               "",
-               this.GetOperationData(),
-               DateTimeOffset.Now,
-               0);
+        var operation = new Operation(
+               OperationId: Guid.NewGuid(),
+               Title: this.GetOperationTitle(),
+               EntityType: nameof(Project),
+               EntityId: "",
+               Data: this.GetOperationData(),
+               UserId: null,
+               CreatedAt: DateTimeOffset.Now,
+               SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -34,14 +35,15 @@ public class ProjectController : ReplacementControllerBase {
     // GET api/Project/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{projectId}")]
     public async Task<ActionResult<Project?>> Get(Guid projectId) {
-        var operation = new Replacement.Contracts.API.Operation(
-                Guid.NewGuid(),
-                this.GetOperationTitle(),
-                nameof(Project),
-                projectId.ToString(),
-                this.GetOperationData(),
-                DateTimeOffset.Now,
-                0);
+        var operation = new Operation(
+                OperationId: Guid.NewGuid(),
+                Title: this.GetOperationTitle(),
+                EntityType: nameof(Project),
+                EntityId: projectId.ToString(),
+                Data: this.GetOperationData(),
+                UserId: null,
+                CreatedAt: DateTimeOffset.Now,
+                SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -61,14 +63,15 @@ public class ProjectController : ReplacementControllerBase {
                 ProjectId = Guid.NewGuid()
             };
         }
-        var operation = new Replacement.Contracts.API.Operation(
-            Guid.NewGuid(),
-            this.GetOperationTitle(),
-            nameof(Project),
-            value.ProjectId.ToString(),
-            this.GetOperationData(),
-            DateTimeOffset.Now,
-            0);
+        var operation = new Operation(
+            OperationId: Guid.NewGuid(),
+            Title: this.GetOperationTitle(),
+            EntityType: nameof(Project),
+            EntityId: value.ProjectId.ToString(),
+            Data: this.GetOperationData(),
+            UserId: null,
+            CreatedAt: DateTimeOffset.Now,
+            SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -76,7 +79,7 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
             var result = await grain.UpsertProject(value, user, operation);
-            if (result) {
+            if (result is not null) {
                 return this.Ok();
             } else {
                 return this.Conflict();
@@ -88,22 +91,23 @@ public class ProjectController : ReplacementControllerBase {
     [HttpPut("{projectId}")]
     public async Task<ActionResult> Put(Guid projectId, [FromBody] Project value) {
         value = value with { ProjectId = projectId };
-        var operation = new Replacement.Contracts.API.Operation(
-            Guid.NewGuid(),
-            this.GetOperationTitle(),
-            nameof(Project),
-            projectId.ToString(),
-            this.GetOperationData(),
-            DateTimeOffset.Now,
-            0);
+        var operation = new Operation(
+            OperationId: Guid.NewGuid(),
+            Title: this.GetOperationTitle(),
+            EntityType: nameof(Project),
+            EntityId: projectId.ToString(),
+            Data: this.GetOperationData(),
+            UserId: null,
+            CreatedAt: DateTimeOffset.Now,
+            SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var result = await grain.UpsertProject(value, user, operation);
-            if (result) {
+            var project = await grain.UpsertProject(value, user, operation);
+            if (project is not null) {
                 return this.Ok();
             } else {
                 return this.Conflict();
@@ -117,14 +121,15 @@ public class ProjectController : ReplacementControllerBase {
         if (projectId == Guid.Empty) {
             return NotFound();
         }
-        var operation = new Replacement.Contracts.API.Operation(
-            Guid.NewGuid(),
-            this.GetOperationTitle(),
-            nameof(Project),
-            projectId.ToString(),
-            this.GetOperationData(),
-            DateTimeOffset.Now,
-            0);
+        var operation = new Operation(
+            OperationId: Guid.NewGuid(),
+            Title: this.GetOperationTitle(),
+            EntityType: nameof(Project),
+            EntityId: projectId.ToString(),
+            Data: this.GetOperationData(),
+            UserId: null,
+            CreatedAt: DateTimeOffset.Now,
+            SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();

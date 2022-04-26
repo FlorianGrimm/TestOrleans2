@@ -6,7 +6,7 @@ public interface IToDoCollectionGrain : IGrainWithGuidKey {
     Task SetDirty();
 }
 
-public interface IToDoGrain : IGrainWithGuidKey {
+public interface IToDoGrain : IGrainWithGuidCompoundKey {
     Task<ToDo?> GetToDo(User user, Operation operation);
     Task<bool> UpsertToDo(ToDo value, User user, Operation operation);
     Task<bool> DeleteToDo(User user, Operation operation);
@@ -65,20 +65,29 @@ public class ToDoGrain : Grain, IToDoGrain {
         this._DBContext = dBContext;
     }
 
-    public override async Task OnActivateAsync() {
-        var pk = new ToDoPK(
-            this.GetGrainIdentity().PrimaryKey
-            );
-        ToDo? state;
-        using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
-            state = await sqlAccess.ExecuteToDoSelectPKAsync(pk);
-        }
-        if (state is null) {
-            this.DeactivateOnIdle();
+    private ToDoPK? GetGrainIdentityAsPK() {
+        var toDoId = this.GetGrainIdentity().GetPrimaryKey(out var keyProjectId);
+        if ((toDoId == Guid.Empty)
+            && Guid.TryParse(keyProjectId, out var projectId)) {
+            return new ToDoPK(projectId, toDoId);
         } else {
-            this._DBContext.ToDo.Attach(state);
-            this._State = state;
+            return null;
         }
+    }
+    public override async Task OnActivateAsync() {
+        var pk=this.GetGrainIdentityAsPK();
+        if (pk is not null) {
+            ToDo? state;
+            using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+                state = await sqlAccess.ExecuteToDoSelectPKAsync(pk);
+            }
+            if (state is not null) {
+                this._DBContext.ToDo.Attach(state);
+                this._State = state;
+                return;
+            }
+        }
+        this.DeactivateOnIdle();
     }
 
     public Task<ToDo?> GetToDo(User user, Operation operation) {
@@ -145,8 +154,8 @@ public static partial class GrainExtensions {
         return grain;
     }
 
-    public static IToDoGrain GetToDoGrain(this /*IClusterClient*/ IGrainFactory client, Guid id) {
-        var grain = client.GetGrain<IToDoGrain>(id);
+    public static IToDoGrain GetToDoGrain(this /*IClusterClient*/ IGrainFactory client, ToDoPK toDoPK) {
+        var grain = client.GetGrain<IToDoGrain>(toDoPK.ToDoId, toDoPK.ProjectId.ToString());
         return grain;
     }
 }

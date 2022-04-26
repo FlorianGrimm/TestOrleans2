@@ -1,7 +1,7 @@
 ﻿namespace Replacement.Contracts.API;
 
 public interface IDataOperationRelated {
-    Guid? OperationId { get; init; }
+    Guid OperationId { get; init; }
     DateTimeOffset CreatedAt { get; init; }
     Guid? CreatedBy { get; init; }
     DateTimeOffset ModifiedAt { get; init; }

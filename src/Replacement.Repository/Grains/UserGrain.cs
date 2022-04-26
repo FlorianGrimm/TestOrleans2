@@ -39,7 +39,11 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
                 return (user: user, created: false);
             }
             if (createIfNeeded) {
-                user = new User(Guid.NewGuid(), username, operation.OperationId, operation.CreatedAt, operation.CreatedAt, 0);
+                user = User.Create(
+                    operation: operation,
+                    userId: Guid.NewGuid(),
+                    userName: username
+                    );
                 await this.GrainFactory.GetUserGrain(user.UserId).UpsertUser(user, null, operation);
                 return (user: user, created: true);
             } else {

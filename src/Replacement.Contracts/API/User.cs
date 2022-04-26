@@ -26,7 +26,7 @@ public record class User(
     Guid UserId,
     [property: StringLength(50)]
     string UserName,
-    Guid? OperationId,
+    Guid OperationId,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
@@ -34,7 +34,25 @@ public record class User(
     long SerialVersion
 ) : IDataOperationRelated {
     public UserPK GetPrimaryKey() => new UserPK(this.UserId);
+    public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
+    public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
+    public static User Create(
+        Operation operation,
+        Guid userId,
+        string userName
+        ) {
+        return new User(
+            UserId: userId,
+            UserName: userName,
+            OperationId: operation.OperationId,
+            CreatedAt: operation.CreatedAt,
+            CreatedBy: operation.UserId,
+            ModifiedAt: operation.CreatedAt,
+            ModifiedBy: operation.UserId,
+            SerialVersion: 0
+            );
+    }
     public User SetOperation(Operation value) {
         return this with {
             OperationId = value.OperationId,

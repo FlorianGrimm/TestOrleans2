@@ -65,7 +65,7 @@ public sealed class ToDoUtiltiy
     public static ToDoUtiltiy Instance => (_Instance ??= new ToDoUtiltiy());
     private ToDoUtiltiy() { }
 
-    public static ToDoPK ExtractKey(ToDo that) => new ToDoPK(that.ToDoId);
+    public static ToDoPK ExtractKey(ToDo that) => new ToDoPK(that.ProjectId, that.ToDoId);
 
     bool IEqualityComparer<ToDoPK>.Equals(ToDoPK? x, ToDoPK? y) {
         if (object.ReferenceEquals(x, y)) {

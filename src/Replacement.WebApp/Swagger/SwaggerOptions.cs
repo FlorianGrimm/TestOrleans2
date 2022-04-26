@@ -1,6 +1,15 @@
-﻿using Microsoft.OpenApi.Models;
+﻿namespace Replacement.WebApp.Swagger {
+    /*
+dotnet run -- --Swagger:Generate=true --Swagger:OutputPath=C:\github.com\FlorianGrimm\TestOrleans2\src\Replacement.Client\openapi.json
+<Exec Command="dotnet run -- --Swagger:Generate=true --Swagger:OutputPath=C:\github.com\FlorianGrimm\TestOrleans2\src\Replacement.Client\openapi.json" />
+dotnet msbuild /t:SwaggerGenerate
 
-namespace Replacement.WebApp.Swagger {
+        Swagger:Generate
+        Swagger:DocumentName
+        Swagger:OutputPath
+        Swagger:Host
+        Swagger:Basepath
+    */
     public class SwaggerOptions
     {
         public SwaggerOptions()

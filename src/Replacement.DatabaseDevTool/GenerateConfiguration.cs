@@ -4,6 +4,8 @@ namespace Replacement.DatabaseDevTool {
     public class GenerateConfiguration : Configuration {
         public readonly KnownTemplates KT;
 
+        // public readonly RenderTemplate<TableInfo> SelectColumnsParameterTempate;
+
         public readonly RenderTemplate<TableInfo> SelectColumnsParameterPKTempate;
 
         public readonly RenderTemplate<TableInfo> ConditionColumnsParameterPKTempate;
@@ -38,6 +40,13 @@ namespace Replacement.DatabaseDevTool {
         public GenerateConfiguration() {
             this.ReplacementTableTemplates = new List<ReplacementTemplate<TableInfo>>();
             this.KT = new KnownTemplates();
+
+            //this.SelectColumnsParameterTempate = new RenderTemplate<TableInfo>(
+            //    NameFn: (t) => $"SelectColumnsParameterTempate.{t.GetNameQ()}",
+            //    Render: (data, ctxt) => {
+            //        this.KT.Columns.Render(data.Columns, ctxt);
+            //        this.KT.ColumnRowversion.Render(data, ctxt);
+            //    });
 
             this.SelectColumnsParameterPKTempate = new RenderTemplate<TableInfo>(
                 NameFn: (t) => $"SelectColumnsParameterPKTempate.{t.GetNameQ()}",

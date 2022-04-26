@@ -36,4 +36,4 @@ public record class UserHistory(
     [property: Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-) : IUserHistory;
+) : IDataHistory;

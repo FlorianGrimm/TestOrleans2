@@ -32,8 +32,6 @@ public class Startup {
         });
     }
 
-   
-
     public void ConfigureSwaggerGeneratorServices(IServiceCollection services) {
         this.AddControllers(services);
         AddAppSwaggerGen(services);
@@ -41,7 +39,7 @@ public class Startup {
     }
 
     private IMvcBuilder AddControllers(IServiceCollection services) {
-        return services.AddControllers((Microsoft.AspNetCore.Mvc.MvcOptions options) => {
+        return services.AddControllers((MvcOptions options) => {
             options.RespectBrowserAcceptHeader = true;
         });
     }

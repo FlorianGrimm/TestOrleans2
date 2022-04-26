@@ -7,21 +7,23 @@ namespace Replacement.OData
     {
         public Operation()
         {
-            Project = new HashSet<Project>();
-            ProjectHistory = new HashSet<ProjectHistory>();
-            ToDo = new HashSet<ToDo>();
-            ToDoHistory = new HashSet<ToDoHistory>();
-            User = new HashSet<User>();
-            UserHistory = new HashSet<UserHistory>();
+            this.Project = new HashSet<Project>();
+            this.ProjectHistory = new HashSet<ProjectHistory>();
+            this.ToDo = new HashSet<ToDo>();
+            this.ToDoHistory = new HashSet<ToDoHistory>();
+            this.User = new HashSet<User>();
+            this.UserHistory = new HashSet<UserHistory>();
         }
 
-        public Guid Id { get; set; }
+        public Guid OperationId { get; set; }
         public string Title { get; set; }
         public string EntityType { get; set; }
         public string EntityId { get; set; }
         public string Data { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
-        public byte[] SerialVersion { get; set; }
+        public Guid? UserId { get; set; }
+        public long SerialVersion { get; set; }
+        
 
         public virtual ICollection<Project> Project { get; set; }
         public virtual ICollection<ProjectHistory> ProjectHistory { get; set; }

@@ -22,7 +22,7 @@ AS BEGIN
         @CreatedAt
     );
 
-    -- Replace=SelectPKTempateBody.[dbo].[Operation] --        
+    -- Replace=SelectPKTempateBody.[dbo].[Operation] --
     SELECT TOP(1)
             [OperationId],
             [Title],

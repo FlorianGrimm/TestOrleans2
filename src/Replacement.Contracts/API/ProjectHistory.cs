@@ -37,5 +37,5 @@ public record class ProjectHistory(
     [property:Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-);
+): IDataHistory;
         

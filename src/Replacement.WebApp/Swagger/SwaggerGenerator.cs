@@ -3,8 +3,8 @@
     using Swashbuckle.AspNetCore.Swagger;
 
     /// <summary>
-    /// swagger:documentname - as defined in code otherwise run webapp.
-    /// swagger:output - output filepath otherwise Console.Out.
+    /// swagger:DocumentName - as defined in code otherwise run webapp.
+    /// swagger:OutputPath - output filepath otherwise Console.Out.
     /// swagger:yaml true:yaml otherwise json.
     /// swagger:serializeasv2 - true:v2 otherwise v3.
     /// swagger:host - host in swagger.
@@ -13,9 +13,9 @@
     public static class SwaggerGenerator {
         public static bool Generate(
             string[] args,
-            Microsoft.Extensions.Hosting.IHostBuilder hostBuilder,
+            IHostBuilder hostBuilder,
             SwaggerOptions? swaggerOptions = default,
-            Action<Microsoft.Extensions.Hosting.IHostBuilder>? configureForSwaggerGeneration = default
+            Action<IHostBuilder>? configureForSwaggerGeneration = default
             ) {
             var configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.Add(new Microsoft.Extensions.Configuration.CommandLine.CommandLineConfigurationSource() { Args = args });
@@ -53,7 +53,7 @@
                         swagger.SerializeAsV3(writer);
                     }
                 } else {
-                    var sbSwagger = new System.Text.StringBuilder();
+                    var sbSwagger = new StringBuilder();
                     using (var swSwagger = new System.IO.StringWriter(sbSwagger)) {
                         IOpenApiWriter writer = (swaggerOptions.Yaml)
                             ? new OpenApiYamlWriter(swSwagger)
@@ -65,7 +65,7 @@
                         }
                     }
                     string contentNew = sbSwagger.ToString();
-                    string contentOld = string.Empty;
+                    string contentOld;
                     {
                         try {
                             contentOld = System.IO.File.ReadAllText(outputPath);

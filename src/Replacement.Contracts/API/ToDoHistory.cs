@@ -43,4 +43,4 @@ public record class ToDoHistory (
     [property:Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-);
+): IDataHistory;

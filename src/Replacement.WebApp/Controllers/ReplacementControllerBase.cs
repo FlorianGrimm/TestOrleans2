@@ -70,11 +70,15 @@ public static class ReplacementControllerBaseExtensions {
         if (created) {
             var operationNext = operation with {
                 OperationId = Guid.NewGuid(),
+                UserId = user?.UserId,
                 CreatedAt = DateTimeOffset.Now
             };
             return (operationNext, user);
         } else {
-            return (operation, user);
+            var operationNext = operation with {
+                UserId = user?.UserId
+            };
+            return (operationNext, user);
         }
     }
 }

@@ -12,14 +12,15 @@ public class UserController : ReplacementControllerBase {
     // GET: api/User
     [HttpGet]
     public async Task<ActionResult<IEnumerable<User>>> Get() {
-        var operation = new Replacement.Contracts.API.Operation(
-               Guid.NewGuid(),
-               this.GetOperationTitle(),
-               nameof(User),
-               "",
-               this.GetOperationData(),
-               DateTimeOffset.Now,
-               0);
+        var operation = new Operation(
+               OperationId: Guid.NewGuid(),
+               Title: this.GetOperationTitle(),
+               EntityType: nameof(User),
+               EntityId: "",
+               Data: this.GetOperationData(),
+               UserId: null,
+               CreatedAt: DateTimeOffset.Now,
+               SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -33,14 +34,15 @@ public class UserController : ReplacementControllerBase {
     // GET api/User/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{userId}")]
     public async Task<ActionResult<User?>> Get(Guid userId) {
-        var operation = new Replacement.Contracts.API.Operation(
-                Guid.NewGuid(),
-                this.GetOperationTitle(),
-                nameof(User),
-                userId.ToString(),
-                this.GetOperationData(),
-                DateTimeOffset.Now,
-                0);
+        var operation = new Operation(
+                OperationId: Guid.NewGuid(),
+                Title: this.GetOperationTitle(),
+                EntityType: nameof(User),
+                EntityId: userId.ToString(),
+                Data: this.GetOperationData(),
+                UserId: null,
+                CreatedAt: DateTimeOffset.Now,
+                SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -60,14 +62,15 @@ public class UserController : ReplacementControllerBase {
                 UserId = Guid.NewGuid()
             };
         }
-        var operation = new Replacement.Contracts.API.Operation(
-            Guid.NewGuid(),
-            this.GetOperationTitle(),
-            nameof(User),
-            value.UserId.ToString(),
-            this.GetOperationData(),
-            DateTimeOffset.Now,
-            0);
+        var operation = new Operation(
+            OperationId: Guid.NewGuid(),
+            Title: this.GetOperationTitle(),
+            EntityType: nameof(User),
+            EntityId: value.UserId.ToString(),
+            Data: this.GetOperationData(),
+            UserId: null,
+            CreatedAt: DateTimeOffset.Now,
+            SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -87,14 +90,15 @@ public class UserController : ReplacementControllerBase {
     [HttpPut("{userId}")]
     public async Task<ActionResult> Put(Guid userId, [FromBody] User value) {
         value = value with { UserId = userId };
-        var operation = new Replacement.Contracts.API.Operation(
-            Guid.NewGuid(),
-            this.GetOperationTitle(),
-            nameof(User),
-            userId.ToString(),
-            this.GetOperationData(),
-            DateTimeOffset.Now,
-            0);
+        var operation = new Operation(
+            OperationId: Guid.NewGuid(),
+            Title: this.GetOperationTitle(),
+            EntityType: nameof(User),
+            EntityId: userId.ToString(),
+            Data: this.GetOperationData(),
+            UserId: null,
+            CreatedAt: DateTimeOffset.Now,
+            SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
@@ -116,14 +120,15 @@ public class UserController : ReplacementControllerBase {
         if (userId == Guid.Empty) {
             return NotFound();
         }
-        var operation = new Replacement.Contracts.API.Operation(
-            Guid.NewGuid(),
-            this.GetOperationTitle(),
-            nameof(User),
-            userId.ToString(),
-            this.GetOperationData(),
-            DateTimeOffset.Now,
-            0);
+        var operation = new Operation(
+            OperationId: Guid.NewGuid(),
+            Title: this.GetOperationTitle(),
+            EntityType: nameof(User),
+            EntityId: userId.ToString(),
+            Data: this.GetOperationData(),
+            UserId: null,
+            CreatedAt: DateTimeOffset.Now,
+            SerialVersion: 0);
         (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();

@@ -91,6 +91,7 @@
     <Build Include="dbo\StoredProcedures\dbo.UserSelectByUserName.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ProjectSelectAll.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ToDoSelectAll.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.ToDoSelectProject.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />

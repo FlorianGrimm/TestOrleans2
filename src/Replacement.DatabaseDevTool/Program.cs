@@ -1,5 +1,4 @@
-﻿
-using Brimborium.TypedStoredProcedure;
+﻿using Brimborium.TypedStoredProcedure;
 
 using Microsoft.Extensions.Configuration;
 
@@ -7,6 +6,10 @@ namespace Replacement.DatabaseDevTool;
 
 public static partial class Program {
     public static int Main(string[] args) {
+        bool isForce = args.Contains("--force");
+        if (isForce) {
+            args = args.Where(a => (a != "--force")).ToArray();
+        }
         try {
             var configuration = GetConfiguration(args);
 
@@ -58,8 +61,8 @@ public static partial class Program {
                     sqlProjectTablesName
                     );
 
-                System.Console.Out.WriteLine($"changes in sql.");
-                var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectTables_csproj, sqlProjectTablesDirectory);
+                System.Console.Out.WriteLine($"Update tables in database.");
+                var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectTables_csproj, sqlProjectTablesDirectory, isForce);
                 if (subresult != 0) { return subresult; }
             }
 #if true
@@ -68,9 +71,9 @@ public static partial class Program {
                     outputFolder = System.IO.Path.Combine(upperDirectoryPath, outputFolder);
                 }
 
-                changes = MainGenerateSql(connectionString, outputFolder);
-                
-                changes = true;
+                changes = MainGenerateSql(connectionString, outputFolder, isForce);
+
+                //changes = true;
             }
 #else
             changes = true;
@@ -87,10 +90,11 @@ public static partial class Program {
                     upperDirectoryPath,
                     sqlProjectName
                     );
-
                 if (changes) {
                     System.Console.Out.WriteLine($"changes try to update.");
-                    var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectComplete_csproj, sqlProjectCompleteDirectory);
+                }
+                if (changes || isForce) {
+                    var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectComplete_csproj, sqlProjectCompleteDirectory, isForce);
                     if (subresult != 0) { return subresult; }
                 } else {
                     System.Console.Out.WriteLine($"no changes in sql.");
@@ -104,11 +108,21 @@ public static partial class Program {
                 AddNativeTypeConverter();
 
                 {
+                    var (outputPath, outputNamespace) = Replacement.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
+                    var subResult = MainGeneratePrimaryKey(connectionString, outputPath, outputNamespace);
+                    if (subResult) {
+                        System.Console.Out.WriteLine("PrimaryKey modified.");
+                        System.Console.Out.WriteLine("Please rerun.");
+                        System.Console.Out.WriteLine("terminate");
+                        return 0;
+                    }
+                }
+                {
                     var defintions = GetDefintion();
 
                     var (outputPath, outputNamespace, outputClassName) = Replacement.Repository.Service.SqlAccessLocation.GetPrimaryKeyOutputInfo();
 
-                    MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName);
+                    MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
                 }
             }
 #endif
@@ -122,7 +136,24 @@ public static partial class Program {
         }
     }
 
-    private static int UpdateDatabase(string connectionString, string dotnetPath, string sqlProject_csproj, string sqlProjectDirectory) {
+    private static int UpdateDatabase(
+        string connectionString,
+        string dotnetPath,
+        string sqlProject_csproj,
+        string sqlProjectDirectory,
+        bool isForce) {
+        var diBin = new System.IO.DirectoryInfo(
+            System.IO.Path.Combine(
+                sqlProjectDirectory,
+                "bin"
+                )
+            );
+
+        var dacpacFilesBefore = diBin.EnumerateFiles(
+            System.IO.Path.GetFileNameWithoutExtension(sqlProject_csproj) + ".dacpac",
+            System.IO.SearchOption.AllDirectories)
+            .Select(fi => new SavedFileInfo(fi.FullName, fi.LastWriteTimeUtc))
+            .ToList();
 
         // dotnet build
         {
@@ -140,8 +171,25 @@ public static partial class Program {
                 }
             }
         }
+        var dacpacFilesAfter = diBin.EnumerateFiles(
+            System.IO.Path.GetFileNameWithoutExtension(sqlProject_csproj) + ".dacpac",
+            System.IO.SearchOption.AllDirectories)
+            .Select(fi => new SavedFileInfo(fi.FullName, fi.LastWriteTimeUtc))
+            .ToList();
+        var dacpacChanged =
+            (dacpacFilesBefore.Count != dacpacFilesAfter.Count)
+            && (dacpacFilesBefore.Join(
+                    dacpacFilesAfter,
+                    o => o.FullName,
+                    i => i.FullName,
+                    (o, i) => o.LastWriteTimeUtc != o.LastWriteTimeUtc)
+                    .Any(c => c)
+            );
+
         // dotnet publish
-        {
+        if (dacpacChanged) {
+            System.Console.Out.WriteLine($"sqlProject: {sqlProject_csproj}");
+
             var csb = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
             var p1 = string.IsNullOrEmpty(csb.DataSource) || string.IsNullOrEmpty(csb.InitialCatalog) ? string.Empty :
                 $"/p:TargetServerName=\"{csb.DataSource}\" /p:TargetDatabaseName=\"{csb.InitialCatalog}\"";
@@ -161,8 +209,10 @@ public static partial class Program {
                     return 1;
                 }
             }
+            return 0;
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     public static IConfigurationRoot GetConfiguration(string[] args) {
@@ -173,14 +223,25 @@ public static partial class Program {
         return configuration;
     }
 
-    public static bool MainGenerateSql(string connectionString, string outputFolder) {
+    public static bool MainGenerateSql(string connectionString, string outputFolder, bool isForce) {
         var templateVariables = new Dictionary<string, string>();
         var cfg = new GenerateConfiguration();
         return Brimborium.GenerateStoredProcedure.Generator.GenerateSql(
             connectionString,
             outputFolder,
             cfg,
-            templateVariables);
+            templateVariables, 
+            isForce);
+    }
+
+    private static bool MainGeneratePrimaryKey(
+        string connectionString,
+        string outputFilePrimaryKey,
+        string outputNamespacePrimaryKey
+        ) {
+        var printClass = new PrintClass(outputNamespacePrimaryKey, string.Empty);
+        var result = Generator.GenerateModel(connectionString, outputFilePrimaryKey, printClass);
+        return result;
     }
 
     private static void MainGenerateSqlAccess(
@@ -188,7 +249,8 @@ public static partial class Program {
         DatabaseDefintion dbDefs,
         string outputPath,
         string outputNamespace,
-        string outputClassName
+        string outputClassName, 
+        bool isForce
         ) {
         var refType = typeof(Replacement.Contracts.API.PrimaryKeyLocation);
         var refTypeNamespace = refType.Namespace;
@@ -200,7 +262,7 @@ public static partial class Program {
             outputNamespace,
             outputClassName
             );
-        Generator.GenerateSqlAccessWrapper(types, connectionString, outputPath, dbDefs, printClass);
+        Generator.GenerateSqlAccessWrapper(types, connectionString, outputPath, dbDefs, printClass, isForce);
     }
 
     public static string GetUpperDirectoryPath() {
@@ -208,3 +270,4 @@ public static partial class Program {
         static string? getFilePathGenerated([System.Runtime.CompilerServices.CallerFilePath] string? fp = default) => fp;
     }
 }
+record SavedFileInfo(string FullName, DateTime LastWriteTimeUtc);

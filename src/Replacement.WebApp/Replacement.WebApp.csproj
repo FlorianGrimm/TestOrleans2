@@ -20,6 +20,7 @@
 
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.15" />
 		<PackageReference Include="Microsoft.AspNetCore.OData" Version="8.0.8" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.3.0" />
@@ -39,4 +40,14 @@
 	  <Orleans_CodeGenInputs Remove="Controllers\ReplacementControllerBase.cs" />
 	</ItemGroup>
 
+	<Target Name="SwaggerGenerate">
+		<PropertyGroup>
+			<SwaggerOutputPath>$(MSBuildProjectDirectory)\..\Replacement.Client\openapi.json</SwaggerOutputPath>
+			<SwaggerCommand>dotnet run -- --Swagger:Generate=true --Swagger:OutputPath="$(SwaggerOutputPath)"</SwaggerCommand>
+			<ClientProjectPath>$(MSBuildProjectDirectory)\..\Replacement.Client\Replacement.Client.csproj</ClientProjectPath>
+		</PropertyGroup>
+		<Message Text="$(ProjectPriFileName)" Importance="high" />
+		<Exec Command="$(SwaggerCommand)" ContinueOnError="true"></Exec>
+		<MSBuild Projects="$(ClientProjectPath)" Targets="SwaggerGenerate" Properties="Configuration=$(Configuration)" />
+	</Target>
 </Project>

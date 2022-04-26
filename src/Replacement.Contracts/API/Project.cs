@@ -35,7 +35,7 @@ public record class Project(
     Guid ProjectId,
     [property: StringLength(50)]
     string Title,
-    Guid? OperationId,
+    Guid OperationId,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
@@ -43,6 +43,9 @@ public record class Project(
     long SerialVersion
 ) : IDataOperationRelated {
     public ProjectPK GetPrimaryKey() => new ProjectPK(this.ProjectId);
+    public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
+    public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
+    public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
     public Project SetOperation(Operation value) {
         return this with {

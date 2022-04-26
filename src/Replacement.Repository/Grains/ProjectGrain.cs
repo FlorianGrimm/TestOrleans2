@@ -5,14 +5,20 @@ namespace Replacement.Repository.Grains;
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
     Task<List<Project>> GetAllProjects(User user, Operation operation);
     Task<List<Project>> GetUsersProjects(User user, Operation operation);
-    
+
+    Task<Guid?> GetProjectIdFromToDoId(Guid toDoId);
+
     Task SetDirty();
 }
 
 public interface IProjectGrain : IGrainWithGuidKey {
     Task<Project?> GetProject(User user, Operation operation);
-    Task<bool> UpsertProject(Project value, User user, Operation operation);
+    Task<Project?> UpsertProject(Project value, User user, Operation operation);
     Task<bool> DeleteProject(User user, Operation operation);
+
+    Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation);
+    Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation);
+    Task<bool> DeleteToDo(ToDoPK toDoPK, User user, Operation operation);
 }
 
 //
@@ -57,6 +63,10 @@ public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
         }
     }
 
+    public Task<Guid?> GetProjectIdFromToDoId(Guid toDoId) {
+        throw new NotImplementedException();
+    }
+
     public Task SetDirty() {
         this._IsDirty = true;
         return Task.CompletedTask;
@@ -94,43 +104,91 @@ public class ProjectGrain : Grain, IProjectGrain {
         return Task.FromResult<Project?>(state);
     }
 
-    public async Task<bool> UpsertProject(Project value, User user, Operation operation) {
+    public async Task<Project?> UpsertProject(Project value, User user, Operation operation) {
         var state = this._State;
-        if (state is null) { return false; }
-        //
-#warning TODO
-        if (state.SerialVersion != value.SerialVersion) {
-            return false;
+
+        if (state is null) {
+            // new
+        } else {
+            if (!state.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
+                return null;
+            }
         }
-        value = value with {
-            OperationId = operation.OperationId,
-            CreatedAt = operation.CreatedAt,
-            ModifiedAt = operation.CreatedAt
-        };
+
+        var nextValue = value.SetOperation(operation);
         this._DBContext.Operation.Add(operation);
-        var to = this._DBContext.Project.Upsert(value);
+        var to = this._DBContext.Project.Upsert(nextValue);
         await this._DBContext.ApplyChangesAsync();
         this._State = to.Value;
         await this.PopulateDirty();
 
-        return true;
+        return to.Value;
     }
-
 
     public async Task<bool> DeleteProject(User user, Operation operation) {
         var state = this._State;
         if (state is null) { return false; }
-        //
-        var value = state with {
-            OperationId = operation.OperationId
-        };
+        //        
+        var lstToDo = this._DBContext.GetToDoOfProject(state.GetPrimaryKey()).ToList();
         this._DBContext.Operation.Add(operation);
-        this._DBContext.Project.Delete(value);
+        foreach (var toDo in lstToDo) {
+            this._DBContext.ToDo.Delete(toDo.SetOperation(operation));
+        }
+        this._DBContext.Project.Delete(state.SetOperation(operation));
         await this._DBContext.ApplyChangesAsync();
         this._State = null;
         await this.PopulateDirty();
         this.DeactivateOnIdle();
         return true;
+    }
+
+    public Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation) {
+        var state = this._State;
+        if (state is not null) {
+            if (this._DBContext.ToDo.TryGetValue(toDoPK, out var result)) {
+                return Task.FromResult<ToDo?>(result);
+            }
+        }
+        return Task.FromResult<ToDo?>(null);
+    }
+
+    public async Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation) {
+        var state = this._State;
+        if (state is not null) {
+            TrackingObject<ToDo>? result = null;
+            if (this._DBContext.ToDo.TryGetValue(value.GetPrimaryKey(), out var currentToDo)) {
+                if (!currentToDo.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
+                    return null;
+                }
+                this._DBContext.Operation.Add(operation);
+                value = value.SetOperation(operation);
+                result = this._DBContext.ToDo.Update(value);
+            } else {
+                this._DBContext.Operation.Add(operation);
+                value = value.SetOperation(operation);
+                result = this._DBContext.ToDo.Add(value);
+            }
+            await this._DBContext.ApplyChangesAsync();
+            return result.Value;
+        } else {
+            return null;
+        }
+    }
+
+    public async Task<bool> DeleteToDo(ToDoPK toDoPK, User user, Operation operation) {
+        var state = this._State;
+        if (state is not null) {
+            if (this._DBContext.ToDo.TryGetValue(toDoPK, out var value)) {
+                this._DBContext.Operation.Add(operation);
+                this._DBContext.ToDo.Delete(value);
+                await this._DBContext.ApplyChangesAsync();
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     private async Task PopulateDirty() {

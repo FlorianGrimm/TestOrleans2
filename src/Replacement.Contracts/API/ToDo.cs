@@ -33,14 +33,18 @@ public record class ToDo(
     [property: StringLength(50)]
     string Title,
     bool Done,
-    Guid? OperationId,
+    Guid OperationId,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
     long SerialVersion
 ) : IDataOperationRelated {
-    public ToDoPK GetPrimaryKey() => new ToDoPK(this.ToDoId);
+    public ToDoPK GetPrimaryKey() => new ToDoPK(this.ProjectId, this.ToDoId);
+    public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
+    public ProjectPK GetProjectPK() => new ProjectPK(this.ProjectId);
+    public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
+    public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
     public ToDo SetOperation(Operation value) {
         return this with {
@@ -58,6 +62,4 @@ public record class ToDo(
         };
     }
 
-    public Project? GetProject(DB) { 
-    }
 }

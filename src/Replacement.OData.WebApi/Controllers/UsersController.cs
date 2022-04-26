@@ -2,120 +2,97 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using Replacement.OData;
 
-namespace Replacement.OData.Controllers
-{
+namespace Replacement.OData.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
-    {
+    public class UsersController : ControllerBase {
         private readonly TodoDBContext _context;
 
-        public UsersController(TodoDBContext context)
-        {
-            _context = context;
+        public UsersController(TodoDBContext context) {
+            this._context = context;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUser()
-        {
-            return await _context.User.ToListAsync();
+        public async Task<ActionResult<IEnumerable<User>>> GetUser() {
+            return await this._context.User.ToListAsync();
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(Guid id)
-        {
-            var user = await _context.User.FindAsync(id);
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<User>> GetUser(Guid userId) {
+            var user = await this._context.User.FindAsync(userId);
 
-            if (user == null)
-            {
-                return NotFound();
+            if (user == null) {
+                return this.NotFound();
+            } else {
+                return user;
             }
-
-            return user;
         }
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(Guid id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> PutUser(Guid userId, User user) {
+            if (userId != user.UserId) {
+                return this.BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            this._context.Entry(user).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
+            try {
+                await this._context.SaveChangesAsync();
+            } catch (DbUpdateConcurrencyException) {
+                if (!this.UserExists(userId)) {
+                    return this.NotFound();
+                } else {
                     throw;
                 }
             }
 
-            return NoContent();
+            return this.NoContent();
         }
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            _context.User.Add(user);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (UserExists(user.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
+        public async Task<ActionResult<User>> PostUser(User user) {
+            this._context.User.Add(user);
+            try {
+                await this._context.SaveChangesAsync();
+            } catch (DbUpdateException) {
+                if (UserExists(user.UserId)) {
+                    return this.Conflict();
+                } else {
                     throw;
                 }
             }
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return this.CreatedAtAction("GetUser", new { userId = user.UserId }, user);
         }
 
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(Guid id)
-        {
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteUser(Guid userId) {
+            var user = await this._context.User.FindAsync(userId);
+            if (user is null) {
+                return this.NotFound();
+            } else {
+                this._context.User.Remove(user);
+                await this._context.SaveChangesAsync();
+                return this.NoContent();
             }
-
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool UserExists(Guid id)
-        {
-            return _context.User.Any(e => e.Id == id);
+        private bool UserExists(Guid userId) {
+            return this._context.User.Any(e => e.UserId == userId);
         }
     }
 }

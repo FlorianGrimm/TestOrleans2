@@ -1,4 +1,4 @@
-﻿using System.Threading;
+﻿
 
 namespace Replacement.WebApp.Utility {
     public static class HostExtensions {

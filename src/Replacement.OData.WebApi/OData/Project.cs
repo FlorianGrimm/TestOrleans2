@@ -7,15 +7,17 @@ namespace Replacement.OData
     {
         public Project()
         {
-            ToDo = new HashSet<ToDo>();
+            this.ToDo = new HashSet<ToDo>();
         }
 
-        public Guid Id { get; set; }
+        public Guid ProjectId { get; set; }
         public string Title { get; set; }
         public Guid? OperationId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
+        public Guid? CreatedBy { get; set; }
         public DateTimeOffset ModifiedAt { get; set; }
-        public byte[] SerialVersion { get; set; }
+        public Guid? ModifiedBy { get; set; }
+        public long SerialVersion { get; set; }
 
         public virtual Operation Operation { get; set; }
         public virtual ICollection<ToDo> ToDo { get; set; }

@@ -35,6 +35,10 @@
 	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Contracts\API\" />
+	</ItemGroup>
+
 	<!--
 		FrameworkReference Include="Microsoft.AspNetCore.App" 	  
 	-->

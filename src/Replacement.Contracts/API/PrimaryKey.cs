@@ -1,44 +1,46 @@
 #if true
-using System;
 
 namespace Replacement.Contracts.API {
-    public sealed record OperationPK(
-        DateTimeOffset CreatedAt,
+    public sealed partial record OperationPK (
+        System.DateTimeOffset CreatedAt,
         Guid OperationId
         ) : IPrimaryKey;
 
-    public sealed record ProjectPK(
+    public sealed partial record ProjectPK (
         Guid ProjectId
         ) : IPrimaryKey;
 
-    public sealed record ToDoPK(
+    public sealed partial record ToDoPK (
+        Guid ProjectId,
         Guid ToDoId
         ) : IPrimaryKey;
 
-    public sealed record UserPK(
+    public sealed partial record UserPK (
         Guid UserId
         ) : IPrimaryKey;
 
-    public sealed record ProjectHistoryPK(
-        DateTimeOffset ValidTo,
-        DateTimeOffset ValidFrom,
+    public sealed partial record ProjectHistoryPK (
+        System.DateTimeOffset ValidTo,
+        System.DateTimeOffset ValidFrom,
         Guid OperationId,
-        Guid ProjectHistoryId
+        Guid ProjectId
         ) : IPrimaryKey;
 
-    public sealed record ToDoHistoryPK(
-        DateTimeOffset ValidTo,
-        DateTimeOffset ValidFrom,
+    public sealed partial record ToDoHistoryPK (
+        System.DateTimeOffset ValidTo,
+        System.DateTimeOffset ValidFrom,
         Guid OperationId,
+        Guid ProjectId,
         Guid ToDoId
         ) : IPrimaryKey;
 
-    public sealed record UserHistoryPK(
-        DateTimeOffset ValidTo,
-        DateTimeOffset ValidFrom,
+    public sealed partial record UserHistoryPK (
+        System.DateTimeOffset ValidTo,
+        System.DateTimeOffset ValidFrom,
         Guid OperationId,
         Guid UserId
         ) : IPrimaryKey;
+
 }
 
 #endif
