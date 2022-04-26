@@ -9,7 +9,9 @@ AS BEGIN
             [Title],
             [OperationId],
             [CreatedAt],
+            [CreatedBy],
             [ModifiedAt],
+            [ModifiedBy],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)
         FROM
             [dbo].[Project]
@@ -19,14 +21,16 @@ AS BEGIN
     -- Replace#SelectPKTempateBody.[dbo].[Project] --
     SELECT
         -- Replace=SelectTableColumns.[dbo].[ToDo] --
-        [ToDoId],
         [ProjectId],
+        [ToDoId],
         [UserId],
         [Title],
         [Done],
         [OperationId],
         [CreatedAt],
+        [CreatedBy],
         [ModifiedAt],
+        [ModifiedBy],
         [SerialVersion] = CAST([SerialVersion] as BIGINT)
         -- Replace#SelectTableColumns.[dbo].[ToDo] --
     FROM [dbo].[ToDO]

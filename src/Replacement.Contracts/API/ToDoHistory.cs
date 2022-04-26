@@ -34,6 +34,10 @@ public record class ToDoHistory (
     [property:StringLength(50)]
     string Title,
     bool Done,
+    DateTimeOffset CreatedAt,
+    Guid? CreatedBy,
+    DateTimeOffset ModifiedAt,
+    Guid? ModifiedBy,
     [property:Key]
     DateTimeOffset ValidFrom,
     [property:Key]

@@ -1,89 +1,98 @@
 CREATE PROCEDURE [dbo].[ToDoUpsert]
-    @ToDoId uniqueidentifier,
     @ProjectId uniqueidentifier,
+    @ToDoId uniqueidentifier,
     @UserId uniqueidentifier,
     @Title nvarchar(50),
     @Done bit,
     @OperationId uniqueidentifier,
     @CreatedAt datetimeoffset,
+    @CreatedBy uniqueidentifier,
     @ModifiedAt datetimeoffset,
+    @ModifiedBy uniqueidentifier,
     @SerialVersion BIGINT
 AS BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @CurrentToDoId uniqueidentifier;
     DECLARE @CurrentProjectId uniqueidentifier;
+    DECLARE @CurrentToDoId uniqueidentifier;
     DECLARE @CurrentUserId uniqueidentifier;
     DECLARE @CurrentTitle nvarchar(50);
     DECLARE @CurrentDone bit;
     DECLARE @CurrentOperationId uniqueidentifier;
     DECLARE @CurrentCreatedAt datetimeoffset;
+    DECLARE @CurrentCreatedBy uniqueidentifier;
     DECLARE @CurrentModifiedAt datetimeoffset;
+    DECLARE @CurrentModifiedBy uniqueidentifier;
     DECLARE @CurrentSerialVersion BIGINT;
     DECLARE @ResultValue INT;
 
-    IF (@CurrentSerialVersion > 0) BEGIN
-        SELECT TOP(1)
-                @CurrentToDoId = [ToDoId],
-                @CurrentProjectId = [ProjectId],
-                @CurrentUserId = [UserId],
-                @CurrentTitle = [Title],
-                @CurrentDone = [Done],
-                @CurrentOperationId = [OperationId],
-                @CurrentCreatedAt = [CreatedAt],
-                @CurrentModifiedAt = [ModifiedAt],
-                @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
-            FROM
-                [dbo].[ToDo]
-            WHERE
-                (@ToDoId = [ToDoId])
-            ;
-    END ELSE BEGIN
-        SELECT TOP(1)
-                @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
-            FROM
-                [dbo].[ToDo]
-            WHERE
-                (@ToDoId = [ToDoId])
-            ;
-    END;
+    SELECT TOP(1)
+            @CurrentProjectId = [ProjectId],
+            @CurrentToDoId = [ToDoId],
+            @CurrentUserId = [UserId],
+            @CurrentTitle = [Title],
+            @CurrentDone = [Done],
+            @CurrentOperationId = [OperationId],
+            @CurrentCreatedAt = [CreatedAt],
+            @CurrentCreatedBy = [CreatedBy],
+            @CurrentModifiedAt = [ModifiedAt],
+            @CurrentModifiedBy = [ModifiedBy],
+            @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
+        FROM
+            [dbo].[ToDo]
+        WHERE
+            (@ProjectId = [ProjectId])
+             AND (@ToDoId = [ToDoId])
+        ;
     IF ((@CurrentSerialVersion IS NULL)) BEGIN
         INSERT INTO [dbo].[ToDo] (
-            [ToDoId],
             [ProjectId],
+            [ToDoId],
             [UserId],
             [Title],
             [Done],
             [OperationId],
             [CreatedAt],
-            [ModifiedAt]
+            [CreatedBy],
+            [ModifiedAt],
+            [ModifiedBy]
         ) Values (
-            @ToDoId,
             @ProjectId,
+            @ToDoId,
             @UserId,
             @Title,
             @Done,
             @OperationId,
             @CreatedAt,
-            @ModifiedAt
+            @CreatedBy,
+            @ModifiedAt,
+            @ModifiedBy
         );
         SET @ResultValue = 1; /* Inserted */
         INSERT INTO [history].[ToDoHistory] (
-            [ToDoId],
             [ProjectId],
+            [ToDoId],
             [UserId],
             [Title],
             [Done],
             [OperationId],
+            [CreatedAt],
+            [CreatedBy],
+            [ModifiedAt],
+            [ModifiedBy],
             [ValidFrom],
             [ValidTo]
         ) Values (
-            @ToDoId,
             @ProjectId,
+            @ToDoId,
             @UserId,
             @Title,
             @Done,
             @OperationId,
+            @CreatedAt,
+            @CreatedBy,
+            @ModifiedAt,
+            @ModifiedBy,
             @ModifiedAt,
             CAST('3141-05-09T00:00:00Z' as datetimeoffset)
         );
@@ -93,29 +102,35 @@ AS BEGIN
         ) BEGIN
             IF (EXISTS(
                     SELECT
-                        @ToDoId,
                         @ProjectId,
+                        @ToDoId,
                         @UserId,
                         @Title,
-                        @Done
+                        @Done,
+                        @CreatedBy,
+                        @ModifiedBy
                     EXCEPT
                     SELECT
-                        @CurrentToDoId,
                         @CurrentProjectId,
+                        @CurrentToDoId,
                         @CurrentUserId,
                         @CurrentTitle,
-                        @CurrentDone
+                        @CurrentDone,
+                        @CurrentCreatedBy,
+                        @CurrentModifiedBy
                 )) BEGIN
                 UPDATE TOP(1) [dbo].[ToDo]
                     SET
-                        [ProjectId] = @ProjectId,
                         [UserId] = @UserId,
                         [Title] = @Title,
                         [Done] = @Done,
                         [OperationId] = @OperationId,
-                        [ModifiedAt] = @ModifiedAt
+                        [CreatedBy] = @CreatedBy,
+                        [ModifiedAt] = @ModifiedAt,
+                        [ModifiedBy] = @ModifiedBy
                     WHERE
-                        ([ToDoId] = @ToDoId)
+                        ([ProjectId] = @ProjectId)
+                         AND ([ToDoId] = @ToDoId)
                 ;
                 SET @ResultValue = 2; /* Updated */
                 UPDATE TOP(1) [history].[ToDoHistory]
@@ -123,25 +138,34 @@ AS BEGIN
                         [ValidTo] = @ModifiedAt
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
-                        AND ([OperationId] = @OperationId)
+                        AND ([OperationId] = @CurrentOperationId)
+                        AND ([ProjectId] = @ProjectId)
                         AND ([ToDoId] = @ToDoId)
                 ;
                 INSERT INTO [history].[ToDoHistory] (
-                    [ToDoId],
                     [ProjectId],
+                    [ToDoId],
                     [UserId],
                     [Title],
                     [Done],
                     [OperationId],
+                    [CreatedAt],
+                    [CreatedBy],
+                    [ModifiedAt],
+                    [ModifiedBy],
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
-                    @ToDoId,
                     @ProjectId,
+                    @ToDoId,
                     @UserId,
                     @Title,
                     @Done,
                     @OperationId,
+                    @CreatedAt,
+                    @CreatedBy,
+                    @ModifiedAt,
+                    @ModifiedBy,
                     @ModifiedAt,
                     CAST('3141-05-09T00:00:00Z' as datetimeoffset)
                 );
@@ -153,19 +177,22 @@ AS BEGIN
         END;
     END;
     SELECT TOP(1)
-            [ToDoId],
             [ProjectId],
+            [ToDoId],
             [UserId],
             [Title],
             [Done],
             [OperationId],
             [CreatedAt],
+            [CreatedBy],
             [ModifiedAt],
+            [ModifiedBy],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)
         FROM
             [dbo].[ToDo]
         WHERE
-            (@ToDoId = [ToDoId])
+            (@ProjectId = [ProjectId])
+             AND (@ToDoId = [ToDoId])
         ;
-    SELECT ResultValue = @ResultValue, Message='';
+    SELECT ResultValue = @ResultValue, [Message] = '';
 END;

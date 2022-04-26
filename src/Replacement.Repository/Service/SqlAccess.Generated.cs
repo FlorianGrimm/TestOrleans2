@@ -22,7 +22,8 @@ namespace Replacement.Repository.Service {
                 @EntityId: this.ReadString(reader, 3),
                 @Data: this.ReadString(reader, 4),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 5),
-                @SerialVersion: this.ReadInt64(reader, 6)
+                @UserId: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -43,7 +44,8 @@ namespace Replacement.Repository.Service {
                 @EntityId: this.ReadString(reader, 3),
                 @Data: this.ReadString(reader, 4),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 5),
-                @SerialVersion: this.ReadInt64(reader, 6)
+                @UserId: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -53,6 +55,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
+                this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.ProjectPK>(cmd, ReadRecordProjectDeletePK);
             }
@@ -77,8 +80,10 @@ namespace Replacement.Repository.Service {
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuidQ(reader, 2),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 3),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 4),
-                @SerialVersion: this.ReadInt64(reader, 5)
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -110,23 +115,27 @@ namespace Replacement.Repository.Service {
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuidQ(reader, 2),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 3),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 4),
-                @SerialVersion: this.ReadInt64(reader, 5)
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
 
         protected Replacement.Contracts.API.ToDo ReadRecordProjectSelectPK_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
             var result = new Replacement.Contracts.API.ToDo(
-                @ToDoId: this.ReadGuid(reader, 0),
-                @ProjectId: this.ReadGuidQ(reader, 1),
-                @UserId: this.ReadGuidQ(reader, 2),
+                @ProjectId: this.ReadGuid(reader, 0),
+                @ToDoId: this.ReadGuid(reader, 1),
+                @UserId: this.ReadGuid(reader, 2),
                 @Title: this.ReadString(reader, 3),
                 @Done: this.ReadBoolean(reader, 4),
                 @OperationId: this.ReadGuidQ(reader, 5),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 6),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 7),
-                @SerialVersion: this.ReadInt64(reader, 8)
+                @CreatedBy: this.ReadGuidQ(reader, 7),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
+                @ModifiedBy: this.ReadGuidQ(reader, 9),
+                @SerialVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -137,7 +146,9 @@ namespace Replacement.Repository.Service {
                 this.AddParameterString(cmd, "@Title", SqlDbType.NVarChar, 50, args.Title);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
+                this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
+                this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
                 Replacement.Contracts.API.Project result_DataResult = default!;
                 Replacement.Contracts.API.OperationResult result_OperationResult = default!;
@@ -163,8 +174,10 @@ namespace Replacement.Repository.Service {
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuidQ(reader, 2),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 3),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 4),
-                @SerialVersion: this.ReadInt64(reader, 5)
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -180,17 +193,21 @@ namespace Replacement.Repository.Service {
 
         public async Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.API.ToDo args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoDeletePK]", CommandType.StoredProcedure)) {
+                this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
+                this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.ToDoPK>(cmd, ReadRecordToDoDeletePK);
             }
         } 
 
         protected Replacement.Contracts.API.ToDoPK ReadRecordToDoDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+#warning ColumnNames: ProjectId, ToDoId
+#warning Column not mapped 0: ProjectId uniqueidentifier (0)
             var result = new Replacement.Contracts.API.ToDoPK(
-                @ToDoId: this.ReadGuid(reader, 0)
+                @ToDoId: this.ReadGuid(reader, 1)
             );
             return result;
         } 
@@ -203,21 +220,24 @@ namespace Replacement.Repository.Service {
 
         protected Replacement.Contracts.API.ToDo ReadRecordToDoSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
             var result = new Replacement.Contracts.API.ToDo(
-                @ToDoId: this.ReadGuid(reader, 0),
-                @ProjectId: this.ReadGuidQ(reader, 1),
-                @UserId: this.ReadGuidQ(reader, 2),
+                @ProjectId: this.ReadGuid(reader, 0),
+                @ToDoId: this.ReadGuid(reader, 1),
+                @UserId: this.ReadGuid(reader, 2),
                 @Title: this.ReadString(reader, 3),
                 @Done: this.ReadBoolean(reader, 4),
                 @OperationId: this.ReadGuidQ(reader, 5),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 6),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 7),
-                @SerialVersion: this.ReadInt64(reader, 8)
+                @CreatedBy: this.ReadGuidQ(reader, 7),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
+                @ModifiedBy: this.ReadGuidQ(reader, 9),
+                @SerialVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
 
         public async Task<Replacement.Contracts.API.ToDo?> ExecuteToDoSelectPKAsync(Replacement.Contracts.API.ToDoPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectPK]", CommandType.StoredProcedure)) {
+#warning StoredProcedure [dbo].[ToDoSelectPK] defines parameter @ProjectId no matching property found.
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
                 return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.API.ToDo>(cmd, ReadRecordToDoSelectPK);
             }
@@ -225,29 +245,33 @@ namespace Replacement.Repository.Service {
 
         protected Replacement.Contracts.API.ToDo ReadRecordToDoSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
             var result = new Replacement.Contracts.API.ToDo(
-                @ToDoId: this.ReadGuid(reader, 0),
-                @ProjectId: this.ReadGuidQ(reader, 1),
-                @UserId: this.ReadGuidQ(reader, 2),
+                @ProjectId: this.ReadGuid(reader, 0),
+                @ToDoId: this.ReadGuid(reader, 1),
+                @UserId: this.ReadGuid(reader, 2),
                 @Title: this.ReadString(reader, 3),
                 @Done: this.ReadBoolean(reader, 4),
                 @OperationId: this.ReadGuidQ(reader, 5),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 6),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 7),
-                @SerialVersion: this.ReadInt64(reader, 8)
+                @CreatedBy: this.ReadGuidQ(reader, 7),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
+                @ModifiedBy: this.ReadGuidQ(reader, 9),
+                @SerialVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
 
         public async Task<Replacement.Contracts.API.ToDoManipulationResult> ExecuteToDoUpsertAsync(Replacement.Contracts.API.ToDo args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoUpsert]", CommandType.StoredProcedure)) {
-                this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
+                this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterString(cmd, "@Title", SqlDbType.NVarChar, 50, args.Title);
                 this.AddParameterBoolean(cmd, "@Done", args.Done);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
+                this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
+                this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
                 Replacement.Contracts.API.ToDo result_DataResult = default!;
                 Replacement.Contracts.API.OperationResult result_OperationResult = default!;
@@ -269,15 +293,17 @@ namespace Replacement.Repository.Service {
 
         protected Replacement.Contracts.API.ToDo ReadRecordToDoUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
             var result = new Replacement.Contracts.API.ToDo(
-                @ToDoId: this.ReadGuid(reader, 0),
-                @ProjectId: this.ReadGuidQ(reader, 1),
-                @UserId: this.ReadGuidQ(reader, 2),
+                @ProjectId: this.ReadGuid(reader, 0),
+                @ToDoId: this.ReadGuid(reader, 1),
+                @UserId: this.ReadGuid(reader, 2),
                 @Title: this.ReadString(reader, 3),
                 @Done: this.ReadBoolean(reader, 4),
                 @OperationId: this.ReadGuidQ(reader, 5),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 6),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 7),
-                @SerialVersion: this.ReadInt64(reader, 8)
+                @CreatedBy: this.ReadGuidQ(reader, 7),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
+                @ModifiedBy: this.ReadGuidQ(reader, 9),
+                @SerialVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -296,6 +322,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
+                this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.UserPK>(cmd, ReadRecordUserDeletePK);
             }
@@ -321,8 +348,10 @@ namespace Replacement.Repository.Service {
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuidQ(reader, 2),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 3),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 4),
-                @SerialVersion: this.ReadInt64(reader, 5)
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -340,8 +369,10 @@ namespace Replacement.Repository.Service {
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuidQ(reader, 2),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 3),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 4),
-                @SerialVersion: this.ReadInt64(reader, 5)
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -352,7 +383,9 @@ namespace Replacement.Repository.Service {
                 this.AddParameterString(cmd, "@UserName", SqlDbType.NVarChar, 50, args.UserName);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
+                this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
+                this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
                 Replacement.Contracts.API.User result_DataResult = default!;
                 Replacement.Contracts.API.OperationResult result_OperationResult = default!;
@@ -378,8 +411,10 @@ namespace Replacement.Repository.Service {
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuidQ(reader, 2),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 3),
-                @ModifiedAt: this.ReadDateTimeOffset(reader, 4),
-                @SerialVersion: this.ReadInt64(reader, 5)
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @SerialVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 

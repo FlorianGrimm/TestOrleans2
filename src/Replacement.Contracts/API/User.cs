@@ -28,9 +28,24 @@ public record class User(
     string UserName,
     Guid? OperationId,
     DateTimeOffset CreatedAt,
+    Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
+    Guid? ModifiedBy,
     long SerialVersion
-);
+) : IDataOperationRelated {
+    public UserPK GetPrimaryKey() => new UserPK(this.UserId);
+
+    public User SetOperation(Operation value) {
+        return this with {
+            OperationId = value.OperationId,
+            CreatedAt = (this.SerialVersion == 0) ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = (this.SerialVersion == 0) ? value.UserId : this.CreatedBy,
+            ModifiedAt = value.CreatedAt,
+            ModifiedBy = value.UserId
+        };
+    }
+}
+
 
 public record class UserSelectByUserNameArg(
     [property: StringLength(50)]

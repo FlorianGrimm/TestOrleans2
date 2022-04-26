@@ -27,9 +27,13 @@ public record class UserHistory(
     Guid UserId,
     [property: StringLength(50)]
     string UserName,
+    DateTimeOffset CreatedAt,
+    Guid? CreatedBy,
+    DateTimeOffset ModifiedAt,
+    Guid? ModifiedBy,
     [property: Key]
     DateTimeOffset ValidFrom,
     [property: Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-);
+) : IUserHistory;

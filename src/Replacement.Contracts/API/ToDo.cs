@@ -25,15 +25,39 @@
     }
 */
 public record class ToDo(
-        [property: Key]
-        Guid ToDoId,
-        Guid? ProjectId,
-        Guid? UserId,
-        [property: StringLength(50)]
-        string Title,
-        bool Done,
-        Guid? OperationId,
-        DateTimeOffset CreatedAt,
-        DateTimeOffset ModifiedAt,
-        long SerialVersion
-    );
+    [property: Key]
+    Guid ToDoId,
+    [property: Key]
+    Guid ProjectId,
+    Guid UserId,
+    [property: StringLength(50)]
+    string Title,
+    bool Done,
+    Guid? OperationId,
+    DateTimeOffset CreatedAt,
+    Guid? CreatedBy,
+    DateTimeOffset ModifiedAt,
+    Guid? ModifiedBy,
+    long SerialVersion
+) : IDataOperationRelated {
+    public ToDoPK GetPrimaryKey() => new ToDoPK(this.ToDoId);
+
+    public ToDo SetOperation(Operation value) {
+        return this with {
+            OperationId = value.OperationId,
+            CreatedAt = (this.SerialVersion == 0) ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = (this.SerialVersion == 0) ? value.UserId : this.CreatedBy,
+            ModifiedAt = value.CreatedAt,
+            ModifiedBy = value.UserId
+        };
+    }
+
+    public ToDo SetProject(ProjectPK value) {
+        return this with {
+            ProjectId = value.ProjectId
+        };
+    }
+
+    public Project? GetProject(DB) { 
+    }
+}

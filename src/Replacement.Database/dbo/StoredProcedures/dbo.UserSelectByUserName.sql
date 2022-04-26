@@ -16,7 +16,9 @@ AS BEGIN
             [UserName],
             [OperationId],
             [CreatedAt],
+            [CreatedBy],
             [ModifiedAt],
+            [ModifiedBy],
             [SerialVersion] = CAST([SerialVersion] as BIGINT)
         FROM
             [dbo].[User]

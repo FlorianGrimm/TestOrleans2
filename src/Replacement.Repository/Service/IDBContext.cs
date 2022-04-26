@@ -8,7 +8,4 @@ public interface IDBContext : ITrackingContext {
 
     Task<ISqlAccess> GetDataAccessAsync(CancellationToken cancellationToken = default(CancellationToken));
     Task ApplyChangesAsync(ISqlAccess? sqlAccess = default, CancellationToken cancellationToken = default(CancellationToken));
-
-    //Task<ToDo?> ReadTodoAsync(Guid id);
-    //Task<ToDo[]> ReadAllTodoAsync();
 }

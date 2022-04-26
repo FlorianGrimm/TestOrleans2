@@ -46,6 +46,7 @@ public record class Operation(
     [property: StringLength(100)]
     string EntityId,
     string? Data,
+    Guid? UserId,
     [property: Key]
     DateTimeOffset CreatedAt,
     long SerialVersion

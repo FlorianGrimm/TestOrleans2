@@ -22,16 +22,20 @@
 
 [Table("ProjectHistory", Schema = "history")]
 public record class ProjectHistory(
-        [property:Key]
-        Guid OperationId,
-        [property:Key]
-        Guid ProjectId,
-        [property:StringLength(50)]
-        string Title, 
-        [property:Key]
-        DateTimeOffset ValidFrom,
-        [property:Key]
-        DateTimeOffset ValidTo,
-        long SerialVersion
+    [property:Key]
+    Guid OperationId,
+    [property:Key]
+    Guid ProjectId,
+    [property:StringLength(50)]
+    string Title,
+    DateTimeOffset CreatedAt,
+    Guid? CreatedBy,
+    DateTimeOffset ModifiedAt,
+    Guid? ModifiedBy,
+    [property:Key]
+    DateTimeOffset ValidFrom,
+    [property:Key]
+    DateTimeOffset ValidTo,
+    long SerialVersion
 );
         

@@ -69,7 +69,8 @@ public static partial class Program {
                 }
 
                 changes = MainGenerateSql(connectionString, outputFolder);
-            changes = true;
+                
+                changes = true;
             }
 #else
             changes = true;

@@ -8,7 +8,9 @@ AS BEGIN
         [Title],
         [OperationId],
         [CreatedAt],
+        [CreatedBy],
         [ModifiedAt],
+        [ModifiedBy],
         [SerialVersion] = CAST([SerialVersion] as BIGINT)
         -- Replace#SelectTableColumns.[dbo].[Project] --
     FROM [dbo].[Project]
