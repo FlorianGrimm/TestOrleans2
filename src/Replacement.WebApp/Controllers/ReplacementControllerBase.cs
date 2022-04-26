@@ -50,19 +50,31 @@ public static class ReplacementControllerBaseExtensions {
         var controllerName = that.GetType().Name;
         return $"{controllerName}.{callerMemberName}";
     }
-    public static async Task<User?> GetUserByUserName(this ReplacementControllerBase that, Operation operation) {
+    public static async Task<(Operation operation, User? user)> GetUserByUserName(
+        this ReplacementControllerBase that,
+        Operation operation,
+        bool createIfNeeded = true) {
         var identity = that.HttpContext.User.Identity;
         if (identity is null) {
-            return null;
+            return (operation, null);
         }
         if (!identity.IsAuthenticated) {
-            return null;
+            return (operation, null);
         }
         var username = identity.Name;
         if (username is null) {
-            return null;
+            return (operation, null);
         }
-        var user = await that.Client.GetUserCollectionGrain().GetUserByUserName(username, operation);
-        return user;
+        var userCollectionGrain = that.Client.GetUserCollectionGrain();
+        var (user, created) = await userCollectionGrain.GetUserByUserName(username, createIfNeeded, operation);
+        if (created) {
+            var operationNext = operation with {
+                OperationId = Guid.NewGuid(),
+                CreatedAt = DateTimeOffset.Now
+            };
+            return (operationNext, user);
+        } else {
+            return (operation, user);
+        }
     }
 }

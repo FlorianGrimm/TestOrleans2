@@ -14,6 +14,7 @@ public static partial class Program {
             var outputFolder = configuration.GetValue<string>("OutputFolder")
                 ?? configuration.GetValue<string>("App:OutputFolder");
             var sqlProjectName = configuration.GetValue<string>("SqlProject");
+            var sqlProjectTablesName = configuration.GetValue<string>("SqlProjectTables");
 
             if (string.IsNullOrEmpty(connectionString)) {
                 System.Console.Error.WriteLine("ConnectionString is empty");
@@ -29,6 +30,9 @@ public static partial class Program {
             if (string.IsNullOrEmpty(sqlProjectName)) {
                 sqlProjectName = "Replacement.DatabaseDeploy"; // change this
             }
+            if (string.IsNullOrEmpty(sqlProjectTablesName)) {
+                sqlProjectTablesName = "Replacement.DatabaseTablesDeploy"; // change this
+            }
 
             if (string.IsNullOrEmpty(outputFolder)) {
                 System.Console.Error.WriteLine("outputFolder is empty");
@@ -36,67 +40,57 @@ public static partial class Program {
             }
 
             // MainGenerateSql
+            bool changes = false;
+
+            var dotnetPath = Brimborium.GenerateStoredProcedure.Utility.TryGetDotNetPath();
+            if (string.IsNullOrEmpty(dotnetPath)) {
+                System.Console.Error.WriteLine("dotnet not found");
+                return 1;
+            }
+            {
+                var sqlProjectTables_csproj = System.IO.Path.Combine(
+                    upperDirectoryPath,
+                    sqlProjectTablesName,
+                    $"{sqlProjectTablesName}.csproj"
+                    );
+                var sqlProjectTablesDirectory = System.IO.Path.Combine(
+                    upperDirectoryPath,
+                    sqlProjectTablesName
+                    );
+
+                System.Console.Out.WriteLine($"changes in sql.");
+                var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectTables_csproj, sqlProjectTablesDirectory);
+                if (subresult != 0) { return subresult; }
+            }
 #if true
             {
                 if (!System.IO.Path.IsPathFullyQualified(outputFolder)) {
                     outputFolder = System.IO.Path.Combine(upperDirectoryPath, outputFolder);
                 }
-                var changes = MainGenerateSql(connectionString, outputFolder);
+
+                changes = MainGenerateSql(connectionString, outputFolder);
+            changes = true;
+            }
+#else
+            changes = true;
+#endif
+
+#if true
+            {
+                var sqlProjectComplete_csproj = System.IO.Path.Combine(
+                    upperDirectoryPath,
+                    sqlProjectName,
+                    $"{sqlProjectName}.csproj"
+                    );
+                var sqlProjectCompleteDirectory = System.IO.Path.Combine(
+                    upperDirectoryPath,
+                    sqlProjectName
+                    );
+
                 if (changes) {
                     System.Console.Out.WriteLine($"changes try to update.");
-
-                    var dotnet = Brimborium.GenerateStoredProcedure.Utility.TryGetDotNetPath();
-                    if (dotnet is null) {
-                        System.Console.Error.WriteLine("dotnet not found");
-                        return 1;
-                    }
-                    var sqlProject_csproj = System.IO.Path.Combine(
-                        upperDirectoryPath,
-                        sqlProjectName,
-                        $"{sqlProjectName}.csproj"
-                        );
-                    var sqlProjectDirectory = System.IO.Path.Combine(
-                            upperDirectoryPath,
-                            sqlProjectName
-                            );
-                    // dotnet build
-                    {
-                        var psi = new System.Diagnostics.ProcessStartInfo(
-                            dotnet, $"build \"{sqlProject_csproj}\"");
-                        psi.WorkingDirectory = sqlProjectDirectory;
-                        var process = System.Diagnostics.Process.Start(psi);
-                        if (process is not null) {
-                            process.WaitForExit(30_000);
-                            if (process.ExitCode == 0) {
-                                System.Console.Out.WriteLine($"dotnet build {sqlProject_csproj} OK");
-                            } else {
-                                System.Console.Error.WriteLine($"dotnet build {sqlProject_csproj} Failed");
-                                return 1;
-                            }
-                        }
-                    }
-                    // dotnet publish
-                    {
-                        var csb = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
-                        var p1 = string.IsNullOrEmpty(csb.DataSource) || string.IsNullOrEmpty(csb.InitialCatalog) ? string.Empty :
-                            $"/p:TargetServerName=\"{csb.DataSource}\" /p:TargetDatabaseName=\"{csb.InitialCatalog}\"";
-                        var p2 = string.IsNullOrEmpty(csb.UserID) || string.IsNullOrEmpty(csb.Password) ? string.Empty :
-                            $"/p:TargetUser=\"{csb.UserID} /p:TargetPassword=\"{csb.Password} ";
-                        var psi = new System.Diagnostics.ProcessStartInfo(
-                            dotnet,
-                            $"publish \"{sqlProject_csproj}\" {p1} {p2}");
-                        psi.WorkingDirectory = sqlProjectDirectory;
-                        var process = System.Diagnostics.Process.Start(psi);
-                        if (process is not null) {
-                            process.WaitForExit(30_000);
-                            if (process.ExitCode == 0) {
-                                System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} OK");
-                            } else {
-                                System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} Failed");
-                                return 1;
-                            }
-                        }
-                    }
+                    var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectComplete_csproj, sqlProjectCompleteDirectory);
+                    if (subresult != 0) { return subresult; }
                 } else {
                     System.Console.Out.WriteLine($"no changes in sql.");
                 }
@@ -125,6 +119,49 @@ public static partial class Program {
             System.Console.Error.WriteLine(error.ToString());
             return 1;
         }
+    }
+
+    private static int UpdateDatabase(string connectionString, string dotnetPath, string sqlProject_csproj, string sqlProjectDirectory) {
+
+        // dotnet build
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo(
+                dotnetPath, $"build \"{sqlProject_csproj}\"");
+            psi.WorkingDirectory = sqlProjectDirectory;
+            var process = System.Diagnostics.Process.Start(psi);
+            if (process is not null) {
+                process.WaitForExit(30_000);
+                if (process.ExitCode == 0) {
+                    System.Console.Out.WriteLine($"dotnet build {sqlProject_csproj} OK");
+                } else {
+                    System.Console.Error.WriteLine($"dotnet build {sqlProject_csproj} Failed");
+                    return 1;
+                }
+            }
+        }
+        // dotnet publish
+        {
+            var csb = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(connectionString);
+            var p1 = string.IsNullOrEmpty(csb.DataSource) || string.IsNullOrEmpty(csb.InitialCatalog) ? string.Empty :
+                $"/p:TargetServerName=\"{csb.DataSource}\" /p:TargetDatabaseName=\"{csb.InitialCatalog}\"";
+            var p2 = string.IsNullOrEmpty(csb.UserID) || string.IsNullOrEmpty(csb.Password) ? string.Empty :
+                $"/p:TargetUser=\"{csb.UserID} /p:TargetPassword=\"{csb.Password} ";
+            var psi = new System.Diagnostics.ProcessStartInfo(
+                dotnetPath,
+                $"publish \"{sqlProject_csproj}\" {p1} {p2}");
+            psi.WorkingDirectory = sqlProjectDirectory;
+            var process = System.Diagnostics.Process.Start(psi);
+            if (process is not null) {
+                process.WaitForExit(30_000);
+                if (process.ExitCode == 0) {
+                    System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} OK");
+                } else {
+                    System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} Failed");
+                    return 1;
+                }
+            }
+        }
+        return 0;
     }
 
     public static IConfigurationRoot GetConfiguration(string[] args) {

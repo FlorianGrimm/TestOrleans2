@@ -24,7 +24,7 @@ public record class UserHistory(
     [property:Key]
     Guid OperationId,
     [property: Key]
-    Guid Id,
+    Guid UserId,
     [property: StringLength(50)]
     string UserName,
     [property: Key]

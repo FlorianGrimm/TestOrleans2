@@ -2,6 +2,8 @@
 
 namespace Replacement.DatabaseDevTool {
     public class GenerateConfiguration : Configuration {
+        public readonly KnownTemplates KT;
+
         public readonly RenderTemplate<TableInfo> SelectPKTempateBody;
 
         public readonly RenderTemplate<TableInfo> SelectPKTempate;
@@ -27,7 +29,7 @@ namespace Replacement.DatabaseDevTool {
 
         public GenerateConfiguration() {
             this.ReplacementTableTemplates = new List<ReplacementTemplate<TableInfo>>();
-            var KT = new KnownTemplates();
+            this.KT = new KnownTemplates();
 
             this.SelectPKTempateBody = new RenderTemplate<TableInfo>(
                 NameFn: (t) => $"SelectPKTempateBody.{t.GetNameQ()}",
@@ -37,15 +39,16 @@ namespace Replacement.DatabaseDevTool {
                              ctxt,
                              top: 1,
                              columnsBlock: (data, ctxt) => {
-                                 ctxt.AppendList(
-                                     data.Columns,
-                                     (column, ctxt) => {
-                                         ctxt.AppendPartsLine(
-                                             column.GetNameQ(), ","
-                                             );
-                                     });
-                                 ctxt.AppendLine(
-                                     $"{data.ColumnRowversion.GetNameQ()} = CAST({data.ColumnRowversion.GetNameQ()} as BIGINT)");
+                                 KT.SelectTableColumns.Render(data, ctxt);
+                                 //ctxt.AppendList(
+                                 //    data.Columns,
+                                 //    (column, ctxt) => {
+                                 //        ctxt.AppendPartsLine(
+                                 //            column.GetNameQ(), ","
+                                 //            );
+                                 //    });
+                                 //ctxt.AppendLine(
+                                 //    $"{data.ColumnRowversion.GetNameQ()} = CAST({data.ColumnRowversion.GetNameQ()} as BIGINT)");
                              },
                              fromBlock: (data, ctxt) => {
                                  ctxt.AppendLine(data.GetNameQ());
@@ -391,7 +394,7 @@ namespace Replacement.DatabaseDevTool {
                                                        target: data.TableData.GetNameQ(),
                                                        setBlock: (data, ctxt) => {
                                                            ctxt.AppendList(
-                                                               data.TableData.Columns.Where(column => column.PrimaryKeyIndexPosition < 0),
+                                                               data.TableData.Columns.Where(column => (column.PrimaryKeyIndexPosition < 0) && (column.GetExtraInfo("ExcludeFromUpdate", false)==false)),
                                                                (column, ctxt) => {
                                                                    ctxt.AppendPartsLine(
                                                                        column.GetNameQ(),
@@ -650,8 +653,8 @@ namespace Replacement.DatabaseDevTool {
 
         public override ConfigurationBound Build(DatabaseInfo databaseInfo) {
             var result = new ConfigurationBound();
-
-            var hsExcludeFromCompare = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+            var stringComparer = System.StringComparer.OrdinalIgnoreCase;
+            var hsExcludeFromCompare = new HashSet<string>(stringComparer);
             hsExcludeFromCompare.Add("OperationId");
             hsExcludeFromCompare.Add("CreatedAt");
             hsExcludeFromCompare.Add("ModifiedAt");
@@ -662,6 +665,7 @@ namespace Replacement.DatabaseDevTool {
                 foreach (var column in t.Columns) {
                     var excludeFromCompare = hsExcludeFromCompare.Contains(column.Name);
                     column.ExtraInfo["ExcludeFromCompare"] = excludeFromCompare;
+                    column.ExtraInfo["ExcludeFromUpdate"] = (stringComparer.Equals(column.Name, "CreatedAt"));
                 }
             }
 
@@ -716,7 +720,7 @@ namespace Replacement.DatabaseDevTool {
 
             result.AddRenderBindings(
                     "SelectPKTempate",
-                    tablesNotHistory
+                    tablesNotHistory.Where(t=>t.GetNameQ()!= "[dbo].[Project]")
                     .Select(tableInfo => new TableBinding(tableInfo, this.SelectPKTempate)));
 
 
@@ -751,6 +755,11 @@ namespace Replacement.DatabaseDevTool {
                 "SelectPKTempateBody",
                 databaseInfo.Tables.Select(
                     t => new TableBinding(t, SelectPKTempateBody)
+                    ));
+            result.AddReplacementBindings(
+                "SelectTableColumns",
+                databaseInfo.Tables.Select(
+                    t => new TableBinding(t, KT.SelectTableColumns)
                     ));
 
             /*

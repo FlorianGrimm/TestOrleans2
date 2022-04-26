@@ -1,10 +1,10 @@
 CREATE PROCEDURE [dbo].[UserSelectPK]
-    @Id uniqueidentifier
+    @UserId uniqueidentifier
 AS BEGIN
     SET NOCOUNT ON;
 
     SELECT TOP(1)
-            [Id],
+            [UserId],
             [UserName],
             [OperationId],
             [CreatedAt],
@@ -13,6 +13,6 @@ AS BEGIN
         FROM
             [dbo].[User]
         WHERE
-            (@Id = [Id])
+            (@UserId = [UserId])
         ;
 END;

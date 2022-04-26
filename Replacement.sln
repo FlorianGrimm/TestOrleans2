@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Tracking", "..\B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.OData", "src\Replacement.OData\Replacement.OData.csproj", "{6AD5F8A2-3D07-4419-B596-0D50E418BA63}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.DatabaseTablesDeploy", "src\Replacement.DatabaseTablesDeploy\Replacement.DatabaseTablesDeploy.csproj", "{AA793798-1C19-46FD-A4FC-68EDC4BA3DEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{6AD5F8A2-3D07-4419-B596-0D50E418BA63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AD5F8A2-3D07-4419-B596-0D50E418BA63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AD5F8A2-3D07-4419-B596-0D50E418BA63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA793798-1C19-46FD-A4FC-68EDC4BA3DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA793798-1C19-46FD-A4FC-68EDC4BA3DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA793798-1C19-46FD-A4FC-68EDC4BA3DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA793798-1C19-46FD-A4FC-68EDC4BA3DEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{681918B1-A893-418D-A563-DAD8708A228B} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
 		{1EBC5362-2D8B-4079-A347-8DA21EC3E310} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
 		{6AD5F8A2-3D07-4419-B596-0D50E418BA63} = {C82109C3-A4CF-4F73-8421-57D63144F441}
+		{AA793798-1C19-46FD-A4FC-68EDC4BA3DEA} = {E71EDD14-7580-4AD0-B80D-0BAA71E7287A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD958C01-5C66-4EA6-9349-07977081E079}

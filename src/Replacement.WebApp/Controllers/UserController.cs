@@ -20,34 +20,34 @@ public class UserController : ReplacementControllerBase {
                this.GetOperationData(),
                DateTimeOffset.Now,
                0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
             var grain = this.Client.GetGrain<IUserCollectionGrain>(Guid.Empty)!;
-            return await grain.GetAllUsers(user, operation);
+            return await grain.GetAllUsers(operation);
         }
     }
 
     // GET api/User/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
-    [HttpGet("{id}")]
-    public async Task<ActionResult<User?>> Get(Guid id) {
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<User?>> Get(Guid userId) {
         var operation = new Replacement.Contracts.API.Operation(
                 Guid.NewGuid(),
                 this.GetOperationTitle(),
                 nameof(User),
-                id.ToString(),
+                userId.ToString(),
                 this.GetOperationData(),
                 DateTimeOffset.Now,
                 0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetUserGrain(id);
-            var result = await grain.GetUser(user, operation);
+            var grain = this.Client.GetUserGrain(userId);
+            var result = await grain.GetUser(operation);
             return result;
         }
     }
@@ -55,27 +55,27 @@ public class UserController : ReplacementControllerBase {
     // POST api/User
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] User value) {
-        if (value.Id == Guid.Empty) {
+        if (value.UserId == Guid.Empty) {
             value = value with {
-                Id = Guid.NewGuid()
+                UserId = Guid.NewGuid()
             };
         }
         var operation = new Replacement.Contracts.API.Operation(
             Guid.NewGuid(),
             this.GetOperationTitle(),
             nameof(User),
-            value.Id.ToString(),
+            value.UserId.ToString(),
             this.GetOperationData(),
             DateTimeOffset.Now,
             0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetUserGrain(value.Id);
+            var grain = this.Client.GetUserGrain(value.UserId);
             var result = await grain.UpsertUser(value, user, operation);
-            if (result) {
+            if (result is not null) {
                 return this.Ok();
             } else {
                 return this.Conflict();
@@ -84,25 +84,25 @@ public class UserController : ReplacementControllerBase {
     }
 
     // PUT api/User/5
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] User value) {
-        value = value with { Id = id };
+    [HttpPut("{userId}")]
+    public async Task<ActionResult> Put(Guid userId, [FromBody] User value) {
+        value = value with { UserId = userId };
         var operation = new Replacement.Contracts.API.Operation(
             Guid.NewGuid(),
             this.GetOperationTitle(),
             nameof(User),
-            id.ToString(),
+            userId.ToString(),
             this.GetOperationData(),
             DateTimeOffset.Now,
             0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetGrain<IUserGrain>(value.Id);
+            var grain = this.Client.GetGrain<IUserGrain>(value.UserId);
             var result = await grain.UpsertUser(value, user, operation);
-            if (result) {
+            if (result is not null) {
                 return this.Ok();
             } else {
                 return this.Conflict();
@@ -111,26 +111,25 @@ public class UserController : ReplacementControllerBase {
     }
 
     // DELETE api/User/5
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id) {
-        if (id == Guid.Empty) {
+    [HttpDelete("{userId}")]
+    public async Task<ActionResult> Delete(Guid userId) {
+        if (userId == Guid.Empty) {
             return NotFound();
         }
         var operation = new Replacement.Contracts.API.Operation(
             Guid.NewGuid(),
             this.GetOperationTitle(),
             nameof(User),
-            id.ToString(),
+            userId.ToString(),
             this.GetOperationData(),
             DateTimeOffset.Now,
             0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var value = new User(id, null, null, "", false, null, Contracts.Consts.MinDateTimeOffset, Contracts.Consts.MaxDateTimeOffset, 0);
-            var result = await this.Client.GetGrain<IUserGrain>(id).DeleteUser(value, user, operation);
+            var result = await this.Client.GetGrain<IUserGrain>(userId).DeleteUser(user, operation);
             if (result) {
                 return Ok();
             } else {

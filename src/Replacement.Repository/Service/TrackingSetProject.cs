@@ -19,18 +19,17 @@ public class TrackingSetApplyChangesProject : ITrackingSetApplyChanges<Project> 
 
     }
 
-    public async Task<Project> Insert(Project value, TrackingTransConnection trackingTransaction) {
+    public async Task<Project> Insert(Project value, ITrackingTransConnection trackingTransaction) {
         return await this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<Project> Update(Project value, TrackingTransConnection trackingTransaction) {
+    public async Task<Project> Update(Project value, ITrackingTransConnection trackingTransaction) {
         return await this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<Project> Upsert(Project value, TrackingTransConnection trackingTransaction) {
-        var tc = (TrackingSqlAccessTransConnection)trackingTransaction;
-        var sqlAccess = tc.GetSqlAccess();
-        var result = await sqlAccess.ExecuteProjectUpsertAsync(value, tc.GetDbTransaction());
+    public async Task<Project> Upsert(Project value, ITrackingTransConnection trackingTransaction) {
+        var sqlAccess = (ISqlAccess)trackingTransaction;
+        var result = await sqlAccess.ExecuteProjectUpsertAsync(value);
         if (result.OperationResult.ResultValue == ResultValue.Inserted) {
             return result.DataResult;
         }
@@ -41,21 +40,20 @@ public class TrackingSetApplyChangesProject : ITrackingSetApplyChanges<Project> 
         if (result.OperationResult.ResultValue == ResultValue.RowVersionMismatch) {
             throw new InvalidOperationException($"RowVersionMismatch {value.SerialVersion}!={result.DataResult.SerialVersion}");
         }
-        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} Project {value.Id}");
+        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} Project {value.ProjectId}");
     }
 
-    public async Task Delete(Project value, TrackingTransConnection trackingTransaction) {
-        var tc = (TrackingSqlAccessTransConnection)trackingTransaction;
-        var sqlAccess = tc.GetSqlAccess();
-        var result = await sqlAccess.ExecuteProjectDeletePKAsync(value, tc.GetDbTransaction());
+    public async Task Delete(Project value, ITrackingTransConnection trackingTransaction) {
+        var sqlAccess = (ISqlAccess)trackingTransaction;
+        var result = await sqlAccess.ExecuteProjectDeletePKAsync(value);
         if (result.Count == 1) {
-            if (result[0].Id == value.Id) {
+            if (result[0].ProjectId == value.ProjectId) {
                 return;
             } else {
-                throw new InvalidOperationException($"Unknown error Project {result[0].Id} != {value.Id}");
+                throw new InvalidOperationException($"Unknown error Project {result[0].ProjectId} != {value.ProjectId}");
             }
         } else {
-            throw new InvalidOperationException($"Cannot delete Project {value.Id}");
+            throw new InvalidOperationException($"Cannot delete Project {value.ProjectId}");
         }
     }
 }
@@ -67,7 +65,7 @@ public sealed class ProjectUtiltiy
     public static ProjectUtiltiy Instance => (_Instance ??= new ProjectUtiltiy());
     private ProjectUtiltiy() { }
 
-    public static ProjectPK ExtractKey(Project that) => new ProjectPK(that.Id);
+    public static ProjectPK ExtractKey(Project that) => new ProjectPK(that.ProjectId);
 
     bool IEqualityComparer<ProjectPK>.Equals(ProjectPK? x, ProjectPK? y) {
         if (object.ReferenceEquals(x, y)) {

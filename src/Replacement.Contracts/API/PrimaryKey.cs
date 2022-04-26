@@ -4,40 +4,40 @@ using System;
 namespace Replacement.Contracts.API {
     public sealed record OperationPK(
         DateTimeOffset CreatedAt,
-        Guid Id
+        Guid OperationId
         ) : IPrimaryKey;
 
     public sealed record ProjectPK(
-        Guid Id
+        Guid ProjectId
         ) : IPrimaryKey;
 
     public sealed record ToDoPK(
-        Guid Id
+        Guid ToDoId
         ) : IPrimaryKey;
 
     public sealed record UserPK(
-        Guid Id
+        Guid UserId
         ) : IPrimaryKey;
 
     public sealed record ProjectHistoryPK(
         DateTimeOffset ValidTo,
         DateTimeOffset ValidFrom,
         Guid OperationId,
-        Guid Id
+        Guid ProjectHistoryId
         ) : IPrimaryKey;
 
     public sealed record ToDoHistoryPK(
         DateTimeOffset ValidTo,
         DateTimeOffset ValidFrom,
         Guid OperationId,
-        Guid Id
+        Guid ToDoId
         ) : IPrimaryKey;
 
     public sealed record UserHistoryPK(
         DateTimeOffset ValidTo,
         DateTimeOffset ValidFrom,
         Guid OperationId,
-        Guid Id
+        Guid UserId
         ) : IPrimaryKey;
 }
 

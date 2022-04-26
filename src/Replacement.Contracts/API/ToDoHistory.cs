@@ -28,7 +28,7 @@ public record class ToDoHistory (
     [property:Key]
     Guid OperationId,
     [property:Key]
-    Guid Id,
+    Guid ToDoId,
     Guid? ProjectId,
     Guid? UserId,
     [property:StringLength(50)]

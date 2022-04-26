@@ -1,7 +1,11 @@
-﻿namespace Replacement.Repository.Grains;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Replacement.Repository.Grains;
 
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
-    Task<Project[]> GetAllProjects(User user, Operation operation);
+    Task<List<Project>> GetAllProjects(User user, Operation operation);
+    Task<List<Project>> GetUsersProjects(User user, Operation operation);
+    
     Task SetDirty();
 }
 
@@ -16,7 +20,7 @@ public interface IProjectGrain : IGrainWithGuidKey {
 public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
     private readonly IDBContext _DBContext;
     private bool _IsDirty;
-    private Project[]? _GetAllProjects;
+    private List<Project>? _GetAllProjects;
 
     public ProjectCollectionGrain(
         IDBContext dBContext
@@ -24,19 +28,30 @@ public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
         this._DBContext = dBContext;
     }
 
-    public async Task<Project[]> GetAllProjects(User user, Operation operation) {
+    public async Task<List<Project>> GetAllProjects(User user, Operation operation) {
         if (this._IsDirty || this._GetAllProjects is null) {
-            using (var sqlAccess = this._DBContext.GetSqlAccess()) {
-                using (sqlAccess.Connected()) {
-#warning here
-                    sqlAccess.ExecuteProjectSelectAllAsync();
-                }
+            List<Replacement.Contracts.API.Project> projects;
+            using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+                projects = await sqlAccess.ExecuteProjectSelectAllAsync();
             }
-                //sqlAccess.ExecuteProjectSelectPKAsync()
-                var result = await this._DBContext.ReadAllProjectAsync();
-            this._GetAllProjects = result;
+            this._GetAllProjects = projects;
             this._IsDirty = false;
-            return result;
+            return projects;
+        } else {
+            return this._GetAllProjects;
+        }
+    }
+
+    public async Task<List<Project>> GetUsersProjects(User user, Operation operation) {
+        if (this._IsDirty || this._GetAllProjects is null) {
+            List<Replacement.Contracts.API.Project> projects;
+            using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+#warning TODO
+                projects = await sqlAccess.ExecuteProjectSelectAllAsync();
+            }
+            this._GetAllProjects = projects;
+            this._IsDirty = false;
+            return projects;
         } else {
             return this._GetAllProjects;
         }
@@ -60,18 +75,18 @@ public class ProjectGrain : Grain, IProjectGrain {
 
     public override async Task OnActivateAsync() {
         var pk = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
-        Project? result;
-        using (var sqlAccess = this._DBContext.GetSqlAccess()) {
-            using (sqlAccess.Connected()) {
-                result = await sqlAccess.ExecuteProjectSelectPKAsync(pk);
-            }
+        Project? project;
+        List<ToDo> lstToDos;
+        using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+            (project, lstToDos) = await sqlAccess.ExecuteProjectSelectPKAsync(pk);
         }
-        if (result is null) {
+        if (project is null) {
             this.DeactivateOnIdle();
         } else {
-            this._DBContext.Project.Attach(result);
+            this._DBContext.Project.Attach(project);
+            this._DBContext.ToDo.AttachRange(lstToDos);
+            this._State = project;
         }
-        this._State = result;
     }
 
     public Task<Project?> GetProject(User user, Operation operation) {
@@ -88,7 +103,8 @@ public class ProjectGrain : Grain, IProjectGrain {
             return false;
         }
         value = value with {
-            OperationId = operation.Id,
+            OperationId = operation.OperationId,
+            CreatedAt = operation.CreatedAt,
             ModifiedAt = operation.CreatedAt
         };
         this._DBContext.Operation.Add(operation);
@@ -106,7 +122,7 @@ public class ProjectGrain : Grain, IProjectGrain {
         if (state is null) { return false; }
         //
         var value = state with {
-            OperationId = operation.Id
+            OperationId = operation.OperationId
         };
         this._DBContext.Operation.Add(operation);
         this._DBContext.Project.Delete(value);
@@ -126,12 +142,12 @@ public class ProjectGrain : Grain, IProjectGrain {
 //
 
 public static partial class GrainExtensions {
-    public static IProjectCollectionGrain GetProjectCollectionGrain(this IClusterClient client) {
+    public static IProjectCollectionGrain GetProjectCollectionGrain(this /*IClusterClient*/ IGrainFactory client) {
         var grain = client.GetGrain<IProjectCollectionGrain>(Guid.Empty);
         return grain;
     }
 
-    public static IProjectGrain GetProjectGrain(this IClusterClient client, Guid id) {
+    public static IProjectGrain GetProjectGrain(this /*IClusterClient*/ IGrainFactory client, Guid id) {
         var grain = client.GetGrain<IProjectGrain>(id);
         return grain;
     }

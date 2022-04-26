@@ -25,7 +25,7 @@ public record class ProjectHistory(
         [property:Key]
         Guid OperationId,
         [property:Key]
-        Guid Id,
+        Guid ProjectId,
         [property:StringLength(50)]
         string Title, 
         [property:Key]

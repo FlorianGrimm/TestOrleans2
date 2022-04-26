@@ -32,7 +32,7 @@ namespace Replacement.Contracts.API;
 
 public record class Project(
     [property: Key]
-    Guid Id,
+    Guid ProjectId,
     [property: StringLength(50)]
     string Title,
     Guid? OperationId,
@@ -40,3 +40,8 @@ public record class Project(
     DateTimeOffset ModifiedAt,
     long SerialVersion
 );
+
+public record class ProjectSelectPKResult(
+    Project? Project,
+    List<ToDo> ToDos
+    );

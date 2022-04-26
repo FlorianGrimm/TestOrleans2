@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[OperationInsert]
-    @Id uniqueidentifier,
+    @OperationId uniqueidentifier,
     @Title nvarchar(20),
     @Data nvarchar(MAX),
     @CreatedAt datetimeoffset
@@ -11,30 +11,31 @@ AS BEGIN
     END;
 
     INSERT INTO [dbo].[Operation] (
-        [Id],
+        [OperationId],
         [Title],
         [Data],
         [CreatedAt]
     ) Values (
-        @Id,
+        @OperationId,
         @Title,
         @Data,
         @CreatedAt
     );
 
-    SELECT
-        [Id],
-        [Title],
-        [EntityType],
-        [EntityId],
-        [Data],
-        [CreatedAt],
-        [SerialVersion] = CAST([SerialVersion] as BIGINT)
-    FROM
-        [dbo].[Operation]
-    WHERE
-        (@CreatedAt = [CreatedAt])
-            AND (@Id = [Id])
-    ;
-
+    -- Replace=SelectPKTempateBody.[dbo].[Operation] --        
+    SELECT TOP(1)
+            [OperationId],
+            [Title],
+            [EntityType],
+            [EntityId],
+            [Data],
+            [CreatedAt],
+            [SerialVersion] = CAST([SerialVersion] as BIGINT)
+        FROM
+            [dbo].[Operation]
+        WHERE
+            (@CreatedAt = [CreatedAt])
+             AND (@OperationId = [OperationId])
+        ;
+    -- Replace#SelectPKTempateBody.[dbo].[Operation] --
 END;

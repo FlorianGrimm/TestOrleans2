@@ -1,11 +1,11 @@
 CREATE PROCEDURE [dbo].[OperationSelectPK]
     @CreatedAt datetimeoffset,
-    @Id uniqueidentifier
+    @OperationId uniqueidentifier
 AS BEGIN
     SET NOCOUNT ON;
 
     SELECT TOP(1)
-            [Id],
+            [OperationId],
             [Title],
             [EntityType],
             [EntityId],
@@ -16,6 +16,6 @@ AS BEGIN
             [dbo].[Operation]
         WHERE
             (@CreatedAt = [CreatedAt])
-             AND (@Id = [Id])
+             AND (@OperationId = [OperationId])
         ;
 END;

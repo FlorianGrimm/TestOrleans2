@@ -1,18 +1,15 @@
-﻿using Replacement.Contracts.API;
-
-using System.Security.Claims;
-
-namespace Replacement.Repository.Grains;
+﻿namespace Replacement.Repository.Grains;
 
 public interface IToDoCollectionGrain : IGrainWithGuidKey {
-    Task<ToDo[]> GetAllToDos(User user, Operation operation);
+    Task<List<ToDo>> GetAllToDos(User user, Operation operation);
+    Task<List<ToDo>> GetUsersToDos(User user, Operation operation);
     Task SetDirty();
 }
 
 public interface IToDoGrain : IGrainWithGuidKey {
     Task<ToDo?> GetToDo(User user, Operation operation);
     Task<bool> UpsertToDo(ToDo value, User user, Operation operation);
-    Task<bool> DeleteToDo(ToDo value, User user, Operation operation);
+    Task<bool> DeleteToDo(User user, Operation operation);
 }
 
 //
@@ -20,7 +17,7 @@ public interface IToDoGrain : IGrainWithGuidKey {
 public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
     private readonly IDBContext _DBContext;
     private bool _IsDirty;
-    private ToDo[]? _GetAllToDos;
+    private List<ToDo>? _GetAllToDos;
 
     public ToDoCollectionGrain(
         IDBContext dBContext
@@ -28,17 +25,28 @@ public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
         this._DBContext = dBContext;
     }
 
-    public async Task<ToDo[]> GetAllToDos(User user, Operation operation) {
-        if (this._IsDirty || this._GetAllToDos is null) {
-            //using var sqlAccess = this._DBContext.GetSqlAccess();
-            //sqlAccess.ExecuteToDoSelectPKAsync()
-            var result = await this._DBContext.ReadAllToDoAsync();
-            this._GetAllToDos = result;
-            this._IsDirty = false;
+    public async Task<List<ToDo>> GetAllToDos(User user, Operation operation) {
+        var result = this._GetAllToDos;
+        if (this._IsDirty || result is null) {
+            using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+                result = await sqlAccess.ExecuteToDoSelectAllAsync();
+            }
+            if (result.Count < 1000) {
+                this._GetAllToDos = result;
+                this._IsDirty = false;
+            }
             return result;
         } else {
-            return this._GetAllToDos;
+            return result;
         }
+    }
+
+    public async Task<List<ToDo>> GetUsersToDos(User user, Operation operation) {
+        List<ToDo> result;
+        using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+            result = await sqlAccess.ExecuteToDoSelectAllAsync();
+        }
+        return result;
     }
 
     public Task SetDirty() {
@@ -58,17 +66,27 @@ public class ToDoGrain : Grain, IToDoGrain {
     }
 
     public override async Task OnActivateAsync() {
-        this._State = await this._DBContext.ReadToDoAsync(this.GetGrainIdentity().PrimaryKey);
+        var pk = new ToDoPK(
+            this.GetGrainIdentity().PrimaryKey
+            );
+        ToDo? state;
+        using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+            state = await sqlAccess.ExecuteToDoSelectPKAsync(pk);
+        }
+        if (state is null) {
+            this.DeactivateOnIdle();
+        } else {
+            this._DBContext.ToDo.Attach(state);
+            this._State = state;
+        }
     }
 
     public Task<ToDo?> GetToDo(User user, Operation operation) {
         var state = this._State;
-        if (state is null) {
-            this.DeactivateOnIdle();
-        } else if (state.UserId == user.Id) {
-            return Task.FromResult(this._State);
+        if ((state is not null)
+            && (state.UserId == user.UserId)) {
+            return Task.FromResult<ToDo?>(state);
         }
-
         {
             return Task.FromResult<ToDo?>(null);
         }
@@ -77,8 +95,9 @@ public class ToDoGrain : Grain, IToDoGrain {
     public async Task<bool> UpsertToDo(ToDo value, User user, Operation operation) {
         //var operation = new Operation(Guid.NewGuid(), "UpsertToDo", "ToDo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
         value = value with {
-            OperationId = operation.Id,
-            UserId = user.Id,
+            OperationId = operation.OperationId,
+            UserId = user.UserId,
+            CreatedAt = operation.CreatedAt,
             ModifiedAt = operation.CreatedAt
         };
         this._DBContext.Operation.Add(operation);
@@ -91,19 +110,25 @@ public class ToDoGrain : Grain, IToDoGrain {
     }
 
 
-    public async Task<bool> DeleteToDo(ToDo value, User user, Operation operation) {
-        //var operation = new Operation(Guid.NewGuid(), "DeleteToDo", "ToDo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
-        value = value with {
-            OperationId = operation.Id,
-            UserId = user.Id,
-            ModifiedAt = operation.CreatedAt
-        };
-        this._DBContext.ToDo.Delete(value);
-        await this._DBContext.ApplyChangesAsync();
-        this._State = null;
-        await this.PopulateDirty();
-        this.DeactivateOnIdle();
-        return true;
+    public async Task<bool> DeleteToDo(User user, Operation operation) {
+        var state = this._State;
+        if (state is null) {
+            return false;
+        } else {
+            var value = state with {
+                OperationId = operation.OperationId,
+                UserId = user.UserId,
+                CreatedAt = operation.CreatedAt,
+                ModifiedAt = operation.CreatedAt
+            };
+            this._DBContext.Operation.Add(operation);
+            this._DBContext.ToDo.Delete(value);
+            await this._DBContext.ApplyChangesAsync();
+            this._State = null;
+            await this.PopulateDirty();
+            this.DeactivateOnIdle();
+            return true;
+        }
     }
 
     private async Task PopulateDirty() {
@@ -115,12 +140,12 @@ public class ToDoGrain : Grain, IToDoGrain {
 //
 
 public static partial class GrainExtensions {
-    public static IToDoCollectionGrain GetToDoCollectionGrain(this IClusterClient client) {
+    public static IToDoCollectionGrain GetToDoCollectionGrain(this /*IClusterClient*/ IGrainFactory client) {
         var grain = client.GetGrain<IToDoCollectionGrain>(Guid.Empty);
         return grain;
     }
 
-    public static IToDoGrain GetToDoGrain(this IClusterClient client, Guid id) {
+    public static IToDoGrain GetToDoGrain(this /*IClusterClient*/ IGrainFactory client, Guid id) {
         var grain = client.GetGrain<IToDoGrain>(id);
         return grain;
     }

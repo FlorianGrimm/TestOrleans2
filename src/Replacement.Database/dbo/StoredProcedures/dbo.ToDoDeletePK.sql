@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[ToDoDeletePK]
-    @Id uniqueidentifier,
+    @ToDoId uniqueidentifier,
     @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @SerialVersion bigint
@@ -7,19 +7,19 @@ AS BEGIN
     SET NOCOUNT ON;
 
     DECLARE @Result AS TABLE (
-        [Id] uniqueidentifier
+        [ToDoId] uniqueidentifier
     );
 
     DELETE FROM [dbo].[ToDo]
         OUTPUT
-            DELETED.[Id]
+            DELETED.[ToDoId]
         INTO @Result
-        WHERE (@Id = [Id])
+        WHERE (@ToDoId = [ToDoId])
         ;
 
     IF (EXISTS(
         SELECT
-            [Id]
+            [ToDoId]
             FROM @Result
         )
     ) BEGIN
@@ -29,11 +29,11 @@ AS BEGIN
             WHERE
                     ([OperationId] = @OperationId)
                     AND ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
-                        AND (@Id = [Id])
+                        AND (@ToDoId = [ToDoId])
         ;
     END;
     SELECT
-        [Id]
+        [ToDoId]
         FROM @Result
         ;
 END;

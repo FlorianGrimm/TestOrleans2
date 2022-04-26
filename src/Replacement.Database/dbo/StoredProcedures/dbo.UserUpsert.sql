@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[UserUpsert]
-    @Id uniqueidentifier,
+    @UserId uniqueidentifier,
     @UserName nvarchar(50),
     @OperationId uniqueidentifier,
     @CreatedAt datetimeoffset,
@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[UserUpsert]
 AS BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @CurrentId uniqueidentifier;
+    DECLARE @CurrentUserId uniqueidentifier;
     DECLARE @CurrentUserName nvarchar(50);
     DECLARE @CurrentOperationId uniqueidentifier;
     DECLARE @CurrentCreatedAt datetimeoffset;
@@ -18,7 +18,7 @@ AS BEGIN
 
     IF (@CurrentSerialVersion > 0) BEGIN
         SELECT TOP(1)
-                @CurrentId = [Id],
+                @CurrentUserId = [UserId],
                 @CurrentUserName = [UserName],
                 @CurrentOperationId = [OperationId],
                 @CurrentCreatedAt = [CreatedAt],
@@ -27,7 +27,7 @@ AS BEGIN
             FROM
                 [dbo].[User]
             WHERE
-                (@Id = [Id])
+                (@UserId = [UserId])
             ;
     END ELSE BEGIN
         SELECT TOP(1)
@@ -35,18 +35,18 @@ AS BEGIN
             FROM
                 [dbo].[User]
             WHERE
-                (@Id = [Id])
+                (@UserId = [UserId])
             ;
     END;
     IF ((@CurrentSerialVersion IS NULL)) BEGIN
         INSERT INTO [dbo].[User] (
-            [Id],
+            [UserId],
             [UserName],
             [OperationId],
             [CreatedAt],
             [ModifiedAt]
         ) Values (
-            @Id,
+            @UserId,
             @UserName,
             @OperationId,
             @CreatedAt,
@@ -54,13 +54,13 @@ AS BEGIN
         );
         SET @ResultValue = 1; /* Inserted */
         INSERT INTO [history].[UserHistory] (
-            [Id],
+            [UserId],
             [UserName],
             [OperationId],
             [ValidFrom],
             [ValidTo]
         ) Values (
-            @Id,
+            @UserId,
             @UserName,
             @OperationId,
             @ModifiedAt,
@@ -72,21 +72,20 @@ AS BEGIN
         ) BEGIN
             IF (EXISTS(
                     SELECT
-                        @Id,
+                        @UserId,
                         @UserName
                     EXCEPT
                     SELECT
-                        @CurrentId,
+                        @CurrentUserId,
                         @CurrentUserName
                 )) BEGIN
                 UPDATE TOP(1) [dbo].[User]
                     SET
                         [UserName] = @UserName,
                         [OperationId] = @OperationId,
-                        [CreatedAt] = @CreatedAt,
                         [ModifiedAt] = @ModifiedAt
                     WHERE
-                        ([Id] = @Id)
+                        ([UserId] = @UserId)
                 ;
                 SET @ResultValue = 2; /* Updated */
                 UPDATE TOP(1) [history].[UserHistory]
@@ -95,16 +94,16 @@ AS BEGIN
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
                         AND ([OperationId] = @OperationId)
-                        AND ([Id] = @Id)
+                        AND ([UserId] = @UserId)
                 ;
                 INSERT INTO [history].[UserHistory] (
-                    [Id],
+                    [UserId],
                     [UserName],
                     [OperationId],
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
-                    @Id,
+                    @UserId,
                     @UserName,
                     @OperationId,
                     @ModifiedAt,
@@ -118,7 +117,7 @@ AS BEGIN
         END;
     END;
     SELECT TOP(1)
-            [Id],
+            [UserId],
             [UserName],
             [OperationId],
             [CreatedAt],
@@ -127,7 +126,7 @@ AS BEGIN
         FROM
             [dbo].[User]
         WHERE
-            (@Id = [Id])
+            (@UserId = [UserId])
         ;
     SELECT ResultValue = @ResultValue, Message='';
 END;

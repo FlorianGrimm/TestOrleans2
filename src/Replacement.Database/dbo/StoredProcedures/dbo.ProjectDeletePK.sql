@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[ProjectDeletePK]
-    @Id uniqueidentifier,
+    @ProjectId uniqueidentifier,
     @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @SerialVersion bigint
@@ -7,19 +7,19 @@ AS BEGIN
     SET NOCOUNT ON;
 
     DECLARE @Result AS TABLE (
-        [Id] uniqueidentifier
+        [ProjectId] uniqueidentifier
     );
 
     DELETE FROM [dbo].[Project]
         OUTPUT
-            DELETED.[Id]
+            DELETED.[ProjectId]
         INTO @Result
-        WHERE (@Id = [Id])
+        WHERE (@ProjectId = [ProjectId])
         ;
 
     IF (EXISTS(
         SELECT
-            [Id]
+            [ProjectId]
             FROM @Result
         )
     ) BEGIN
@@ -29,11 +29,11 @@ AS BEGIN
             WHERE
                     ([OperationId] = @OperationId)
                     AND ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
-                        AND (@Id = [Id])
+                        AND (@ProjectId = [ProjectId])
         ;
     END;
     SELECT
-        [Id]
+        [ProjectId]
         FROM @Result
         ;
 END;

@@ -2,9 +2,9 @@ CREATE PROCEDURE [dbo].[UserSelectByUserName]
 	 @UserName      NVARCHAR (50) 
 AS BEGIN
     SET NOCOUNT ON;
-    DECLARE @Id uniqueidentifier;
+    DECLARE @UserId uniqueidentifier;
     SELECT TOP(1)
-            @Id=[Id]         
+            @UserId=[UserId]         
         FROM
             [dbo].[User]
         WHERE
@@ -12,7 +12,7 @@ AS BEGIN
         ;
     -- Replace=SelectPKTempateBody.[dbo].[User] --        
     SELECT TOP(1)
-            [Id],
+            [UserId],
             [UserName],
             [OperationId],
             [CreatedAt],
@@ -21,7 +21,7 @@ AS BEGIN
         FROM
             [dbo].[User]
         WHERE
-            (@Id = [Id])
+            (@UserId = [UserId])
         ;
     -- Replace#SelectPKTempateBody.[dbo].[User] --
 END;

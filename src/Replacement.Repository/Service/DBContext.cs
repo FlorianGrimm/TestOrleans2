@@ -1,78 +1,91 @@
 ﻿namespace Replacement.Repository.Service;
 
-#warning weichei
-
-public class ToDoRepo {
-    private static Dictionary<Guid, ToDo>? _ToDos;
-    internal static Dictionary<Guid, ToDo> GetToDos() {
-        if (_ToDos == null) {
-            _ToDos = new Dictionary<Guid, ToDo>();
-            var item = new ToDo(
-                Id: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
-                ProjectId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
-                UserId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
-                Title: "1",
-                Done: false,
-                OperationId: new Guid("9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A"),
-                CreatedAt: DateTimeOffset.Now,
-                ModifiedAt: DateTimeOffset.Now,
-                SerialVersion: 1
-                );
-            _ToDos.Add(item.Id, item);
-        }
-        return _ToDos;
-
-    }
-}
-
 [Transient]
 public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
-    private string? _ConnectionString;
+    private ISqlAccessFactory _SqlAccessFactory;
+    private DBContextOption _Options;
 
     public ITrackingSet<OperationPK, Operation> Operation { get; }
     public ITrackingSet<UserPK, User> User { get; }
     public ITrackingSet<ProjectPK, Project> Project { get; }
     public ITrackingSet<ToDoPK, ToDo> ToDo { get; }
 
-    public string? ConnectionString { get => this._ConnectionString; set => this._ConnectionString = value; }
 
-    public DBContext(IOptions<DBContextOption> options) {
-        this._ConnectionString = options.Value.ConnectionString;
+    public DBContext(
+        ISqlAccessFactory sqlAccessFactory,
+        IOptions<DBContextOption> options
+        ) {
+        this._SqlAccessFactory = sqlAccessFactory;
+        this._Options = options.Value;
+
         this.Operation = new TrackingSetOperation(this, TrackingSetApplyChangesOperation.Instance);
         this.User = new TrackingSetUser(this, TrackingSetApplyChangesUser.Instance);
         this.Project = new TrackingSetProject(this, TrackingSetApplyChangesProject.Instance);
         this.ToDo = new TrackingSetToDo(this, TrackingSetApplyChangesToDo.Instance);
     }
 
-    public SqlAccess GetSqlAccess() {
-        if (string.IsNullOrEmpty(this._ConnectionString)) { throw new InvalidOperationException("ConnectionString is empty"); }
-        return new SqlAccess(this._ConnectionString);
-    }
-
-    public async Task ApplyChangesAsync() {
-        using var sqlAccess = this.GetSqlAccess();
-        var sqlAccessConnection = new TrackingSqlAccessConnection(this.GetSqlAccess());
-        await this.ApplyChangesAsync(sqlAccessConnection);
-    }
-
-    public async Task<ToDo[]> ReadAllToDoAsync() {
-        using var sqlAccess = this.GetSqlAccess();
-        var result = new List<ToDo>();
-#warning TODO
-        var item = await sqlAccess.ExecuteToDoSelectPKAsync(null!, null);
-        if (item is not null) {
-            result.Add(item);
+    public DBContextOption Options {
+        get {
+            return this._Options;
         }
-        return this.ToDo.AttachRange(result).Select(to => to.Value).ToArray();
+        set {
+            this._Options = value;
+            this._SqlAccessFactory.SetOptions(value);
+        }
+    }
+    public ISqlAccessFactory SqlAccessFactory {
+        get => this._SqlAccessFactory;
+        set => this._SqlAccessFactory = value;
     }
 
-    public Task<ToDo?> ReadToDoAsync(Guid id) {
-        ToDoRepo.GetToDos().TryGetValue(id, out var result);
-        return Task.FromResult(result);
+    public Task<ISqlAccess> GetDataAccessAsync(
+            CancellationToken cancellationToken = default(CancellationToken)
+        ) {
+        return this._SqlAccessFactory.CreateDataAccessAsync(cancellationToken);
     }
 
+    public async Task ApplyChangesAsync(
+            ISqlAccess? sqlAccess = default,
+            CancellationToken cancellationToken = default(CancellationToken)
+        ) {
+        if (sqlAccess is null) {
+            using (sqlAccess = await this.GetDataAccessAsync()) {
+                await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+            }
+        } else {
+            await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+        }
+    }
+
+    //    public async Task<ToDo[]> ReadAllToDoAsync() {
+    //        using (var sqlAccess = this.GetDataAccess()) {
+    //            using (sqlAccess.Connected()) {
+    //                var result = new List<ToDo>();
+    //#warning TODO
+    //                var item = await sqlAccess.ExecuteToDoSelectPKAsync(null!, null);
+    //                if (item is not null) {
+    //                    result.Add(item);
+    //                }
+    //                return this.ToDo.AttachRange(result).Select(to => to.Value).ToArray();
+    //            }
+    //        }
+    //    }
+
+    //    public Task<ToDo?> ReadToDoAsync(Guid id) {
+    //        ToDoRepo.GetToDos().TryGetValue(id, out var result);
+    //        return Task.FromResult(result);
+    //    }
+
+    //    public Task<ToDo?> ReadTodoAsync(Guid id) {
+    //        throw new NotImplementedException();
+    //    }
+
+    //    public Task<ToDo[]> ReadAllTodoAsync() {
+    //        throw new NotImplementedException();
+    //    }
 }
 
-public class DBContextOption {
-    public string? ConnectionString { get; set; }
+public class DBContextOption
+    : TrackingSqlConnectionOption {
+    // public string? ConnectionString { get; set; }
 }

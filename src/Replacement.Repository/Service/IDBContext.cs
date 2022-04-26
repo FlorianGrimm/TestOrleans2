@@ -1,19 +1,14 @@
 ﻿namespace Replacement.Repository.Service;
 
 public interface IDBContext : ITrackingContext {
-    //TrackingSetToDo Todo { get; }
-    
-    SqlAccess GetSqlAccess();
-    
     ITrackingSet<OperationPK, Operation> Operation { get; }
     ITrackingSet<UserPK, User> User { get; }
     ITrackingSet<ProjectPK, Project> Project { get; }
-    ITrackingSet<ToDoPK, ToDo> Todo { get; }
+    ITrackingSet<ToDoPK, ToDo> ToDo { get; }
 
-    Task ApplyChangesAsync();
+    Task<ISqlAccess> GetDataAccessAsync(CancellationToken cancellationToken = default(CancellationToken));
+    Task ApplyChangesAsync(ISqlAccess? sqlAccess = default, CancellationToken cancellationToken = default(CancellationToken));
 
-#warning weichei
-    Task<ToDo?> ReadTodoAsync(Guid id);
-    Task<ToDo[]> ReadAllTodoAsync();
-    
+    //Task<ToDo?> ReadTodoAsync(Guid id);
+    //Task<ToDo[]> ReadAllTodoAsync();
 }

@@ -89,8 +89,13 @@
     <Build Include="history\Tables\UserHistory.sql" />
     <Build Include="Security\history.sql" />
     <Build Include="dbo\StoredProcedures\dbo.UserSelectByUserName.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.ProjectSelectAll.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.ToDoSelectAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Replacement.Database.refactorlog" />
   </ItemGroup>
 </Project>

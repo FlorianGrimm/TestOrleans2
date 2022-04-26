@@ -13,6 +13,40 @@ public static partial class Program {
         //    nameof(Solvin.OneTS.Services.SqlHelpers.Int32Converter.ToBool));
     }
 
+    //private static MemberDefinition TypeOfResultAsync<TRecord>() {
+    //    return new MemberDefinition(
+    //            nameof(IDataManipulationResult<TRecord>.OperationResult),
+    //            CSTypeDefinition.TypeOf<OperationResult>(
+    //                isAsync:true,
+    //                isList:false)
+    //        );
+    //}
+
+
+    private static CSTypeDefinition TypeOfResultAsync<TResult, TRecord1, TRecord2>(
+        string result1,
+        bool isList1,
+        string result2,
+        bool isList2
+        ) {
+        return CSTypeDefinition.TypeOf<TResult>(
+            members: new MemberDefinition[] {
+            new MemberDefinition(
+                result1,
+                CSTypeDefinition.TypeOf<TRecord1>(
+                    isAsync:true,
+                    isList:isList1)
+                ),
+            new MemberDefinition(
+                result2,
+                CSTypeDefinition.TypeOf<TRecord2>(
+                    isAsync:true,
+                    isList:isList2)
+                )
+            },
+            isAsync: true);
+    }
+
     private static CSTypeDefinition TypeOfTManipulationResult<TManipulationResult, TRecord>() {
         return CSTypeDefinition.TypeOf<TManipulationResult>(
             members: new MemberDefinition[] {
@@ -50,8 +84,16 @@ public static partial class Program {
                     CSTypeDefinition.TypeOf<ProjectPK>(isList:true, isAsync:true)),
                 new StoredProcedureDefintion("dbo", "ProjectSelectPK",
                     CSTypeDefinition.TypeOf<ProjectPK>(),
-                    ExecutionMode.QuerySingleOrDefault,
-                    CSTypeDefinition.TypeOf<Project>(isList:false, isAsync:true)),
+                    ExecutionMode.QueryMultiple,
+                    TypeOfResultAsync<ProjectSelectPKResult, Project, ToDo>(nameof(ProjectSelectPKResult.Project), false, nameof(ProjectSelectPKResult.ToDos), true)
+                    //CSTypeDefinition.TypeOf<Project>(isList:false, isAsync:true)
+                    ),
+                new StoredProcedureDefintion("dbo", "ProjectSelectAll",
+                    CSTypeDefinition.Void,
+                    ExecutionMode.Query,
+                    CSTypeDefinition.TypeOf<Project>(isList:true, isAsync:true)
+                    ),
+
                 new StoredProcedureDefintion("dbo", "ProjectUpsert",
                     CSTypeDefinition.TypeOf<Project>(),
                     ExecutionMode.QueryMultiple,
@@ -70,6 +112,12 @@ public static partial class Program {
                     ExecutionMode.QueryMultiple,
                     TypeOfTManipulationResult<ToDoManipulationResult, ToDo>()),
 
+                new StoredProcedureDefintion("dbo", "ToDoSelectAll",
+                    CSTypeDefinition.Void,
+                    ExecutionMode.Query,
+                    CSTypeDefinition.TypeOf<ToDo>(isList:true, isAsync:true)),
+
+
                 new StoredProcedureDefintion("dbo", "UserDeletePK",
                     CSTypeDefinition.TypeOf<User>(),
                     ExecutionMode.Query,
@@ -83,8 +131,8 @@ public static partial class Program {
                     ExecutionMode.QueryMultiple,
                     TypeOfTManipulationResult<UserManipulationResult, User>()),
 
-                new StoredProcedureDefintion("dbo", "UserSelectByUserName", 
-                    CSTypeDefinition.TypeOf<UserSelectByUserNameArg>(), 
+                new StoredProcedureDefintion("dbo", "UserSelectByUserName",
+                    CSTypeDefinition.TypeOf<UserSelectByUserNameArg>(),
                     ExecutionMode.QuerySingleOrDefault,
                     CSTypeDefinition.TypeOf<User>(isList:false, isAsync:true)),
 

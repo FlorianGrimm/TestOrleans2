@@ -19,18 +19,17 @@ public class TrackingSetApplyChangesToDo : ITrackingSetApplyChanges<ToDo> {
 
     }
 
-    public async Task<ToDo> Insert(ToDo value, TrackingTransConnection trackingTransaction) {
+    public async Task<ToDo> Insert(ToDo value, ITrackingTransConnection trackingTransaction) {
         return await this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<ToDo> Update(ToDo value, TrackingTransConnection trackingTransaction) {
+    public async Task<ToDo> Update(ToDo value, ITrackingTransConnection trackingTransaction) {
         return await this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<ToDo> Upsert(ToDo value, TrackingTransConnection trackingTransaction) {
-        var tc = (TrackingSqlAccessTransConnection)trackingTransaction;
-        var sqlAccess = tc.GetSqlAccess();
-        var result = await sqlAccess.ExecuteToDoUpsertAsync(value, tc.GetDbTransaction());
+    public async Task<ToDo> Upsert(ToDo value, ITrackingTransConnection trackingTransaction) {
+        var sqlAccess = (ISqlAccess)trackingTransaction;
+        var result = await sqlAccess.ExecuteToDoUpsertAsync(value);
         if (result.OperationResult.ResultValue == ResultValue.Inserted) {
             return result.DataResult;
         }
@@ -41,21 +40,20 @@ public class TrackingSetApplyChangesToDo : ITrackingSetApplyChanges<ToDo> {
         if (result.OperationResult.ResultValue == ResultValue.RowVersionMismatch) {
             throw new InvalidOperationException($"RowVersionMismatch {value.SerialVersion}!={result.DataResult.SerialVersion}");
         }
-        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} Todo {value.Id}");
+        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} Todo {value.ToDoId}");
     }
 
-    public async Task Delete(ToDo value, TrackingTransConnection trackingTransaction) {
-        var tc = (TrackingSqlAccessTransConnection)trackingTransaction;
-        var sqlAccess = tc.GetSqlAccess();
-        var result = await sqlAccess.ExecuteToDoDeletePKAsync(value, tc.GetDbTransaction());
+    public async Task Delete(ToDo value, ITrackingTransConnection trackingTransaction) {
+        var sqlAccess = (ISqlAccess)trackingTransaction;
+        var result = await sqlAccess.ExecuteToDoDeletePKAsync(value);
         if (result.Count == 1) {
-            if (result[0].Id == value.Id) {
+            if (result[0].ToDoId == value.ToDoId) {
                 return;
             } else {
-                throw new InvalidOperationException($"Unknown error Todo {result[0].Id} != {value.Id}");
+                throw new InvalidOperationException($"Unknown error Todo {result[0].ToDoId} != {value.ToDoId}");
             }
         } else {
-            throw new InvalidOperationException($"Cannot delete Todo {value.Id}");
+            throw new InvalidOperationException($"Cannot delete Todo {value.ToDoId}");
         }
     }
 }
@@ -67,7 +65,7 @@ public sealed class ToDoUtiltiy
     public static ToDoUtiltiy Instance => (_Instance ??= new ToDoUtiltiy());
     private ToDoUtiltiy() { }
 
-    public static ToDoPK ExtractKey(ToDo that) => new ToDoPK(that.Id);
+    public static ToDoPK ExtractKey(ToDo that) => new ToDoPK(that.ToDoId);
 
     bool IEqualityComparer<ToDoPK>.Equals(ToDoPK? x, ToDoPK? y) {
         if (object.ReferenceEquals(x, y)) {

@@ -19,24 +19,23 @@ public class TrackingSetApplyChangesOperation : ITrackingSetApplyChanges<Operati
 
     }
 
-    public async Task<Operation> Insert(Operation value, TrackingTransConnection trackingTransaction) {
-        var tc = (TrackingSqlAccessTransConnection)trackingTransaction;
-        var sqlAccess = tc.GetSqlAccess();
-        var result = await sqlAccess.ExecuteOperationInsertAsync(value, tc.GetDbTransaction());
+    public async Task<Operation> Insert(Operation value, ITrackingTransConnection trackingTransaction) {
+        var sqlAccess = (ISqlAccess)trackingTransaction;
+        var result = await sqlAccess.ExecuteOperationInsertAsync(value);
 
         if (result is not null) {
             return result;
         } else { 
-            throw new InvalidOperationException($"Cannot insert Operation {value.Id}");
+            throw new InvalidOperationException($"Cannot insert Operation {value.OperationId}");
         }
     }
 
-    public Task<Operation> Update(Operation value, TrackingTransConnection trackingTransaction) {
-        throw new InvalidOperationException($"Cannot update Operation {value.Id}");
+    public Task<Operation> Update(Operation value, ITrackingTransConnection trackingTransaction) {
+        throw new InvalidOperationException($"Cannot update Operation {value.OperationId}");
     }
 
-    public Task Delete(Operation value, TrackingTransConnection trackingTransaction) {
-        throw new InvalidOperationException($"Cannot delete Operation {value.Id}");
+    public Task Delete(Operation value, ITrackingTransConnection trackingTransaction) {
+        throw new InvalidOperationException($"Cannot delete Operation {value.OperationId}");
     }
 }
 
@@ -47,7 +46,7 @@ public sealed class OperationUtiltiy
     public static OperationUtiltiy Instance => (_Instance ??= new OperationUtiltiy());
     private OperationUtiltiy() { }
 
-    public static OperationPK ExtractKey(Operation that) => new OperationPK(that.CreatedAt, that.Id);
+    public static OperationPK ExtractKey(Operation that) => new OperationPK(that.CreatedAt, that.OperationId);
 
     bool IEqualityComparer<OperationPK>.Equals(OperationPK? x, OperationPK? y) {
         if (object.ReferenceEquals(x, y)) {

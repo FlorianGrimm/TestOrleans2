@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[ProjectUpsert]
-    @Id uniqueidentifier,
+    @ProjectId uniqueidentifier,
     @Title nvarchar(50),
     @OperationId uniqueidentifier,
     @CreatedAt datetimeoffset,
@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[ProjectUpsert]
 AS BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @CurrentId uniqueidentifier;
+    DECLARE @CurrentProjectId uniqueidentifier;
     DECLARE @CurrentTitle nvarchar(50);
     DECLARE @CurrentOperationId uniqueidentifier;
     DECLARE @CurrentCreatedAt datetimeoffset;
@@ -18,7 +18,7 @@ AS BEGIN
 
     IF (@CurrentSerialVersion > 0) BEGIN
         SELECT TOP(1)
-                @CurrentId = [Id],
+                @CurrentProjectId = [ProjectId],
                 @CurrentTitle = [Title],
                 @CurrentOperationId = [OperationId],
                 @CurrentCreatedAt = [CreatedAt],
@@ -27,7 +27,7 @@ AS BEGIN
             FROM
                 [dbo].[Project]
             WHERE
-                (@Id = [Id])
+                (@ProjectId = [ProjectId])
             ;
     END ELSE BEGIN
         SELECT TOP(1)
@@ -35,18 +35,18 @@ AS BEGIN
             FROM
                 [dbo].[Project]
             WHERE
-                (@Id = [Id])
+                (@ProjectId = [ProjectId])
             ;
     END;
     IF ((@CurrentSerialVersion IS NULL)) BEGIN
         INSERT INTO [dbo].[Project] (
-            [Id],
+            [ProjectId],
             [Title],
             [OperationId],
             [CreatedAt],
             [ModifiedAt]
         ) Values (
-            @Id,
+            @ProjectId,
             @Title,
             @OperationId,
             @CreatedAt,
@@ -54,13 +54,13 @@ AS BEGIN
         );
         SET @ResultValue = 1; /* Inserted */
         INSERT INTO [history].[ProjectHistory] (
-            [Id],
+            [ProjectId],
             [Title],
             [OperationId],
             [ValidFrom],
             [ValidTo]
         ) Values (
-            @Id,
+            @ProjectId,
             @Title,
             @OperationId,
             @ModifiedAt,
@@ -72,21 +72,20 @@ AS BEGIN
         ) BEGIN
             IF (EXISTS(
                     SELECT
-                        @Id,
+                        @ProjectId,
                         @Title
                     EXCEPT
                     SELECT
-                        @CurrentId,
+                        @CurrentProjectId,
                         @CurrentTitle
                 )) BEGIN
                 UPDATE TOP(1) [dbo].[Project]
                     SET
                         [Title] = @Title,
                         [OperationId] = @OperationId,
-                        [CreatedAt] = @CreatedAt,
                         [ModifiedAt] = @ModifiedAt
                     WHERE
-                        ([Id] = @Id)
+                        ([ProjectId] = @ProjectId)
                 ;
                 SET @ResultValue = 2; /* Updated */
                 UPDATE TOP(1) [history].[ProjectHistory]
@@ -95,16 +94,16 @@ AS BEGIN
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
                         AND ([OperationId] = @OperationId)
-                        AND ([Id] = @Id)
+                        AND ([ProjectId] = @ProjectId)
                 ;
                 INSERT INTO [history].[ProjectHistory] (
-                    [Id],
+                    [ProjectId],
                     [Title],
                     [OperationId],
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
-                    @Id,
+                    @ProjectId,
                     @Title,
                     @OperationId,
                     @ModifiedAt,
@@ -118,7 +117,7 @@ AS BEGIN
         END;
     END;
     SELECT TOP(1)
-            [Id],
+            [ProjectId],
             [Title],
             [OperationId],
             [CreatedAt],
@@ -127,7 +126,7 @@ AS BEGIN
         FROM
             [dbo].[Project]
         WHERE
-            (@Id = [Id])
+            (@ProjectId = [ProjectId])
         ;
     SELECT ResultValue = @ResultValue, Message='';
 END;

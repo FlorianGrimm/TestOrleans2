@@ -26,7 +26,7 @@
 */
 public record class ToDo(
         [property: Key]
-        Guid Id,
+        Guid ToDoId,
         Guid? ProjectId,
         Guid? UserId,
         [property: StringLength(50)]

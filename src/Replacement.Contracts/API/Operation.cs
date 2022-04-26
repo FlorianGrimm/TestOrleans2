@@ -38,7 +38,7 @@ public partial class Operation {
 }
 */
 public record class Operation(
-    Guid Id,
+    Guid OperationId,
     [property:StringLength(100)]
     string Title,
     [property: StringLength(100)]

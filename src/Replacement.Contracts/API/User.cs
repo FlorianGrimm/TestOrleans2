@@ -23,7 +23,7 @@
 */
 public record class User(
     [property:Key]
-    Guid Id,
+    Guid UserId,
     [property: StringLength(50)]
     string UserName,
     Guid? OperationId,

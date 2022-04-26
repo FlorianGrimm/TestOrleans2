@@ -1,5 +1,5 @@
 CREATE PROCEDURE [dbo].[ToDoUpsert]
-    @Id uniqueidentifier,
+    @ToDoId uniqueidentifier,
     @ProjectId uniqueidentifier,
     @UserId uniqueidentifier,
     @Title nvarchar(50),
@@ -11,7 +11,7 @@ CREATE PROCEDURE [dbo].[ToDoUpsert]
 AS BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @CurrentId uniqueidentifier;
+    DECLARE @CurrentToDoId uniqueidentifier;
     DECLARE @CurrentProjectId uniqueidentifier;
     DECLARE @CurrentUserId uniqueidentifier;
     DECLARE @CurrentTitle nvarchar(50);
@@ -24,7 +24,7 @@ AS BEGIN
 
     IF (@CurrentSerialVersion > 0) BEGIN
         SELECT TOP(1)
-                @CurrentId = [Id],
+                @CurrentToDoId = [ToDoId],
                 @CurrentProjectId = [ProjectId],
                 @CurrentUserId = [UserId],
                 @CurrentTitle = [Title],
@@ -36,7 +36,7 @@ AS BEGIN
             FROM
                 [dbo].[ToDo]
             WHERE
-                (@Id = [Id])
+                (@ToDoId = [ToDoId])
             ;
     END ELSE BEGIN
         SELECT TOP(1)
@@ -44,12 +44,12 @@ AS BEGIN
             FROM
                 [dbo].[ToDo]
             WHERE
-                (@Id = [Id])
+                (@ToDoId = [ToDoId])
             ;
     END;
     IF ((@CurrentSerialVersion IS NULL)) BEGIN
         INSERT INTO [dbo].[ToDo] (
-            [Id],
+            [ToDoId],
             [ProjectId],
             [UserId],
             [Title],
@@ -58,7 +58,7 @@ AS BEGIN
             [CreatedAt],
             [ModifiedAt]
         ) Values (
-            @Id,
+            @ToDoId,
             @ProjectId,
             @UserId,
             @Title,
@@ -69,7 +69,7 @@ AS BEGIN
         );
         SET @ResultValue = 1; /* Inserted */
         INSERT INTO [history].[ToDoHistory] (
-            [Id],
+            [ToDoId],
             [ProjectId],
             [UserId],
             [Title],
@@ -78,7 +78,7 @@ AS BEGIN
             [ValidFrom],
             [ValidTo]
         ) Values (
-            @Id,
+            @ToDoId,
             @ProjectId,
             @UserId,
             @Title,
@@ -93,14 +93,14 @@ AS BEGIN
         ) BEGIN
             IF (EXISTS(
                     SELECT
-                        @Id,
+                        @ToDoId,
                         @ProjectId,
                         @UserId,
                         @Title,
                         @Done
                     EXCEPT
                     SELECT
-                        @CurrentId,
+                        @CurrentToDoId,
                         @CurrentProjectId,
                         @CurrentUserId,
                         @CurrentTitle,
@@ -113,10 +113,9 @@ AS BEGIN
                         [Title] = @Title,
                         [Done] = @Done,
                         [OperationId] = @OperationId,
-                        [CreatedAt] = @CreatedAt,
                         [ModifiedAt] = @ModifiedAt
                     WHERE
-                        ([Id] = @Id)
+                        ([ToDoId] = @ToDoId)
                 ;
                 SET @ResultValue = 2; /* Updated */
                 UPDATE TOP(1) [history].[ToDoHistory]
@@ -125,10 +124,10 @@ AS BEGIN
                     WHERE
                         ([ValidTo] = CAST('3141-05-09T00:00:00Z' as datetimeoffset))
                         AND ([OperationId] = @OperationId)
-                        AND ([Id] = @Id)
+                        AND ([ToDoId] = @ToDoId)
                 ;
                 INSERT INTO [history].[ToDoHistory] (
-                    [Id],
+                    [ToDoId],
                     [ProjectId],
                     [UserId],
                     [Title],
@@ -137,7 +136,7 @@ AS BEGIN
                     [ValidFrom],
                     [ValidTo]
                 ) Values (
-                    @Id,
+                    @ToDoId,
                     @ProjectId,
                     @UserId,
                     @Title,
@@ -154,7 +153,7 @@ AS BEGIN
         END;
     END;
     SELECT TOP(1)
-            [Id],
+            [ToDoId],
             [ProjectId],
             [UserId],
             [Title],
@@ -166,7 +165,7 @@ AS BEGIN
         FROM
             [dbo].[ToDo]
         WHERE
-            (@Id = [Id])
+            (@ToDoId = [ToDoId])
         ;
     SELECT ResultValue = @ResultValue, Message='';
 END;

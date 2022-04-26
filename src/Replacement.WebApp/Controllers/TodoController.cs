@@ -19,33 +19,32 @@ public class ToDoController : ReplacementControllerBase {
                this.GetOperationData(),
                DateTimeOffset.Now,
                0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetGrain<IToDoCollectionGrain>(Guid.Empty)!;
-            return await grain.GetAllToDos(user, operation);
+            return await this.Client.GetToDoCollectionGrain().GetAllToDos(user, operation);
         }
     }
 
     // GET api/ToDo/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ToDo?>> Get(Guid id) {
+    [HttpGet("{todoId}")]
+    public async Task<ActionResult<ToDo?>> Get(Guid todoId) {
         var operation = new Replacement.Contracts.API.Operation(
                 Guid.NewGuid(),
                 this.GetOperationTitle(),
                 nameof(ToDo),
-                id.ToString(),
+                todoId.ToString(),
                 this.GetOperationData(),
                 DateTimeOffset.Now,
                 0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetToDoGrain(id);
+            var grain = this.Client.GetToDoGrain(todoId);
             var result = await grain.GetToDo(user, operation);
             return result;
         }
@@ -54,25 +53,25 @@ public class ToDoController : ReplacementControllerBase {
     // POST api/ToDo
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] ToDo value) {
-        if (value.Id == Guid.Empty) {
+        if (value.ToDoId == Guid.Empty) {
             value = value with {
-                Id = Guid.NewGuid()
+                ToDoId = Guid.NewGuid()
             };
         }
         var operation = new Replacement.Contracts.API.Operation(
             Guid.NewGuid(),
             this.GetOperationTitle(),
             nameof(ToDo),
-            value.Id.ToString(),
+            value.ToDoId.ToString(),
             this.GetOperationData(),
             DateTimeOffset.Now,
             0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetToDoGrain(value.Id);
+            var grain = this.Client.GetToDoGrain(value.ToDoId);
             var result = await grain.UpsertToDo(value, user, operation);
             if (result) {
                 return this.Ok();
@@ -83,23 +82,23 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // PUT api/ToDo/5
-    [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] ToDo value) {
-        value = value with { Id = id };
+    [HttpPut("{toDoId}")]
+    public async Task<ActionResult> Put(Guid toDoId, [FromBody] ToDo value) {
+        value = value with { ToDoId = toDoId };
         var operation = new Replacement.Contracts.API.Operation(
             Guid.NewGuid(),
             this.GetOperationTitle(),
             nameof(ToDo),
-            id.ToString(),
+            toDoId.ToString(),
             this.GetOperationData(),
             DateTimeOffset.Now,
             0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetGrain<IToDoGrain>(value.Id);
+            var grain = this.Client.GetGrain<IToDoGrain>(value.ToDoId);
             var result = await grain.UpsertToDo(value, user, operation);
             if (result) {
                 return this.Ok();
@@ -110,26 +109,25 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // DELETE api/ToDo/5
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id) {
-        if (id == Guid.Empty) {
+    [HttpDelete("{todoId}")]
+    public async Task<ActionResult> Delete(Guid todoId) {
+        if (todoId == Guid.Empty) {
             return NotFound();
         }
         var operation = new Replacement.Contracts.API.Operation(
             Guid.NewGuid(),
             this.GetOperationTitle(),
             nameof(ToDo),
-            id.ToString(),
+            todoId.ToString(),
             this.GetOperationData(),
             DateTimeOffset.Now,
             0);
-        var user = await this.GetUserByUserName(operation);
+        (operation, User? user) = await this.GetUserByUserName(operation);
         if (user is null) {
             return this.Forbid();
         }
         {
-            var value = new ToDo(id, null, null, "", false, null, Contracts.Consts.MinDateTimeOffset, Contracts.Consts.MaxDateTimeOffset, 0);
-            var result = await this.Client.GetGrain<IToDoGrain>(id).DeleteToDo(value, user, operation);
+            var result = await this.Client.GetToDoGrain(todoId).DeleteToDo(user, operation);
             if (result) {
                 return Ok();
             } else {
