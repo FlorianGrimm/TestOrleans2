@@ -9,6 +9,7 @@ public static partial class Program {
         bool isForce = args.Contains("--force");
         if (isForce) {
             args = args.Where(a => (a != "--force")).ToArray();
+            System.Console.Out.WriteLine("update with --force");
         }
         try {
             var configuration = GetConfiguration(args);
@@ -187,7 +188,7 @@ public static partial class Program {
             );
 
         // dotnet publish
-        if (dacpacChanged) {
+        if (dacpacChanged || isForce) {
             System.Console.Out.WriteLine($"sqlProject: {sqlProject_csproj}");
 
             var csb = new Microsoft.Data.SqlClient.SqlConnectionStringBuilder(connectionString);

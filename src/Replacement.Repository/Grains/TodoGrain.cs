@@ -75,7 +75,7 @@ public class ToDoGrain : Grain, IToDoGrain {
         }
     }
     public override async Task OnActivateAsync() {
-        var pk=this.GetGrainIdentityAsPK();
+        var pk = this.GetGrainIdentityAsPK();
         if (pk is not null) {
             ToDo? state;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
@@ -87,16 +87,17 @@ public class ToDoGrain : Grain, IToDoGrain {
                 return;
             }
         }
-        this.DeactivateOnIdle();
+        this._State = null;
     }
 
     public Task<ToDo?> GetToDo(User user, Operation operation) {
         var state = this._State;
-        if ((state is not null)
-            && (state.UserId == user.UserId)) {
+        if (state is null) {
+            this.DeactivateOnIdle();
+            return Task.FromResult<ToDo?>(null);
+        } else if (state.UserId == user.UserId) {
             return Task.FromResult<ToDo?>(state);
-        }
-        {
+        } else {
             return Task.FromResult<ToDo?>(null);
         }
     }

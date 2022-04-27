@@ -11,7 +11,7 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // GET: api/Project
-    [HttpGet]
+    [HttpGet(Name = "ProjectGetAll")]
     public async Task<ActionResult<IEnumerable<Project>>> Get() {
         var operation = new Operation(
                OperationId: Guid.NewGuid(),
@@ -33,14 +33,14 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // GET api/Project/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
-    [HttpGet("{projectId}")]
+    [HttpGet("{projectId}", Name = "ProjectGetOne")]
     public async Task<ActionResult<Project?>> Get(Guid projectId) {
         var operation = new Operation(
                 OperationId: Guid.NewGuid(),
                 Title: this.GetOperationTitle(),
                 EntityType: nameof(Project),
                 EntityId: projectId.ToString(),
-                Data: this.GetOperationData(),
+                Data: this.GetOperationData(projectId),
                 UserId: null,
                 CreatedAt: DateTimeOffset.Now,
                 SerialVersion: 0);
@@ -56,8 +56,8 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // POST api/Project
-    [HttpPost]
-    public async Task<ActionResult> Post([FromBody] Project value) {
+    [HttpPost(Name = "ProjectPost")]
+    public async Task<ActionResult<Project?>> Post([FromBody] Project value) {
         if (value.ProjectId == Guid.Empty) {
             value = value with {
                 ProjectId = Guid.NewGuid()
@@ -68,7 +68,7 @@ public class ProjectController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(Project),
             EntityId: value.ProjectId.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(value),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);
@@ -80,7 +80,8 @@ public class ProjectController : ReplacementControllerBase {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
             var result = await grain.UpsertProject(value, user, operation);
             if (result is not null) {
-                return this.Ok();
+                return result;
+                //return this.Ok();
             } else {
                 return this.Conflict();
             }
@@ -88,15 +89,15 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // PUT api/Project/5
-    [HttpPut("{projectId}")]
-    public async Task<ActionResult> Put(Guid projectId, [FromBody] Project value) {
+    [HttpPut("{projectId}", Name = "ProjectPut")]
+    public async Task<ActionResult<Project?>> Put(Guid projectId, [FromBody] Project value) {
         value = value with { ProjectId = projectId };
         var operation = new Operation(
             OperationId: Guid.NewGuid(),
             Title: this.GetOperationTitle(),
             EntityType: nameof(Project),
             EntityId: projectId.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(value),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);
@@ -116,7 +117,7 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // DELETE api/Project/5
-    [HttpDelete("{projectId}")]
+    [HttpDelete("{projectId}", Name = "ProjectDelete")]
     public async Task<ActionResult> Delete(Guid projectId) {
         if (projectId == Guid.Empty) {
             return NotFound();
@@ -126,7 +127,7 @@ public class ProjectController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(Project),
             EntityId: projectId.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(projectId),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);

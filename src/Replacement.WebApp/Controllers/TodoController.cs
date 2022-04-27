@@ -38,7 +38,7 @@ public class ToDoController : ReplacementControllerBase {
                 Title: this.GetOperationTitle(),
                 EntityType: nameof(ToDo),
                 EntityId: toDoPK.ToString(),
-                Data: this.GetOperationData(),
+                Data: this.GetOperationData(toDoId),
                 UserId: null,
                 CreatedAt: DateTimeOffset.Now,
                 SerialVersion: 0);
@@ -67,7 +67,7 @@ public class ToDoController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(ToDo),
             EntityId: toDoPK.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(value),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);
@@ -100,7 +100,7 @@ public class ToDoController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(ToDo),
             EntityId: toDoPK.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(value),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);
@@ -132,7 +132,7 @@ public class ToDoController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(ToDo),
             EntityId: toDoPK.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(toDoPK),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);

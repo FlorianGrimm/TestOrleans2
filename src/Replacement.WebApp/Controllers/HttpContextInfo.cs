@@ -7,19 +7,26 @@ public record HttpContextInfo(
     string? Username,
     string Method,
     string Path,
-    List<KeyValuePair<string, List<string>>>? Form
+    List<KeyValuePair<string, List<string>>>? Form,
+    string ArgumentType,
+    object Argument
+    //string Argument
     ) {
 
-    public static HttpContextInfo ConvertFrom(string? username, string method, string path, IFormCollection form) {
+    public static List<KeyValuePair<string, List<string>>> ConvertRequestForm(
+        IFormCollection? form
+        ) {
         var lstForm = new List<KeyValuePair<string, List<string>>>();
-        foreach (var kv in form) {
-            var values = new List<string>();
-            foreach (var value in kv.Value) {
-                values.Add(value);
+        if (form is not null) {
+            foreach (var kv in form) {
+                var values = new List<string>();
+                foreach (var value in kv.Value) {
+                    values.Add(value);
+                }
+                lstForm.Add(new KeyValuePair<string, List<string>>(kv.Key, values));
             }
-            lstForm.Add(new KeyValuePair<string, List<string>>(kv.Key, values));
         }
-        return new HttpContextInfo(username, method, path, lstForm);
+        return lstForm;
     }
 
     /*

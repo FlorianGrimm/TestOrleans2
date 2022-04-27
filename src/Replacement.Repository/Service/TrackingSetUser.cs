@@ -1,9 +1,9 @@
 ﻿namespace Replacement.Repository.Service;
 
-public class TrackingSetUser : TrackingSet<UserPK, User> {
+public sealed class TrackingSetUser : TrackingSet<UserPK, User> {
     public TrackingSetUser(DBContext context, ITrackingSetApplyChanges<User> trackingApplyChanges)
         : base(
-            extractKey: UserUtiltiy.ExtractKey,
+            extractKey: UserUtiltiy.Instance,
             comparer: UserUtiltiy.Instance,
             trackingContext: context,
             trackingApplyChanges: trackingApplyChanges) {
@@ -11,61 +11,44 @@ public class TrackingSetUser : TrackingSet<UserPK, User> {
     }
 }
 
-public class TrackingSetApplyChangesUser : ITrackingSetApplyChanges<User> {
+public sealed class TrackingSetApplyChangesUser : TrackingSetApplyChangesBase<User, UserPK> {
     private static TrackingSetApplyChangesUser? _Instance;
     public static TrackingSetApplyChangesUser Instance => _Instance ??= new TrackingSetApplyChangesUser();
 
-    public TrackingSetApplyChangesUser() : base() {
+    private TrackingSetApplyChangesUser() : base() { }
 
+    protected override UserPK ExtractKey(User value) => value.GetPrimaryKey();
+
+    public override Task<User> Insert(User value, ITrackingTransConnection trackingTransaction) {
+        return this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<User> Insert(User value, ITrackingTransConnection trackingTransaction) {
-        return await this.Upsert(value, trackingTransaction);
+    public override Task<User> Update(User value, ITrackingTransConnection trackingTransaction) {
+        return this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<User> Update(User value, ITrackingTransConnection trackingTransaction) {
-        return await this.Upsert(value, trackingTransaction);
-    }
-
-    public async Task<User> Upsert(User value, ITrackingTransConnection trackingTransaction) {
+    private async Task<User> Upsert(User value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteUserUpsertAsync(value);
-        if (result.OperationResult.ResultValue == ResultValue.Inserted) {
-            return result.DataResult;
-        }
-        if (result.OperationResult.ResultValue == ResultValue.NoNeedToUpdate) {
-            // User: Log??
-            return result.DataResult;
-        }
-        if (result.OperationResult.ResultValue == ResultValue.RowVersionMismatch) {
-            throw new InvalidOperationException($"RowVersionMismatch {value.SerialVersion}!={result.DataResult.SerialVersion}");
-        }
-        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} User {value.UserId}");
+        return this.ValidateUpsertDataManipulationResult(value, result);
     }
 
-    public async Task Delete(User value, ITrackingTransConnection trackingTransaction) {
+    public override async Task Delete(User value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteUserDeletePKAsync(value);
-        if (result.Count == 1) {
-            if (result[0].UserId == value.UserId) {
-                return;
-            } else {
-                throw new InvalidOperationException($"Unknown error User {result[0].UserId} != {value.UserId}");
-            }
-        } else {
-            throw new InvalidOperationException($"Cannot delete User {value.UserId}");
-        }
+        this.ValidateDelete(value, result);
     }
 }
 
 
 public sealed class UserUtiltiy
-    : IEqualityComparer<UserPK> {
+    : IEqualityComparer<UserPK>
+    , IExtractKey<User, UserPK> {
     private static UserUtiltiy? _Instance;
     public static UserUtiltiy Instance => (_Instance ??= new UserUtiltiy());
     private UserUtiltiy() { }
 
-    public static UserPK ExtractKey(User that) => new UserPK(that.UserId);
+    public UserPK ExtractKey(User that) => that.GetPrimaryKey();
 
     bool IEqualityComparer<UserPK>.Equals(UserPK? x, UserPK? y) {
         if (object.ReferenceEquals(x, y)) {

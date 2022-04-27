@@ -22,9 +22,9 @@
     }
 */
 public record class User(
-    [property:Key]
+    // [property:Key]
     Guid UserId,
-    [property: StringLength(50)]
+    // [property: StringLength(50)]
     string UserName,
     Guid OperationId,
     DateTimeOffset CreatedAt,

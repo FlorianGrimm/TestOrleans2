@@ -13,6 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.Repository", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{54E35E3F-3D17-49E7-BF9D-72B16D506E3F}"
 	ProjectSection(SolutionItems) = preProject
+		build.bat = build.bat
 		nuget.config = nuget.config
 		ReplacementTestSecrets.json = ReplacementTestSecrets.json
 	EndProjectSection

@@ -25,12 +25,12 @@
     }
 */
 public record class ToDo(
-    [property: Key]
+    // [property: Key]
     Guid ToDoId,
-    [property: Key]
+    // [property: Key]
     Guid ProjectId,
     Guid UserId,
-    [property: StringLength(50)]
+    // [property: StringLength(50)]
     string Title,
     bool Done,
     Guid OperationId,

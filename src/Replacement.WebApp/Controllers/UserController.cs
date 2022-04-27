@@ -39,7 +39,7 @@ public class UserController : ReplacementControllerBase {
                 Title: this.GetOperationTitle(),
                 EntityType: nameof(User),
                 EntityId: userId.ToString(),
-                Data: this.GetOperationData(),
+                Data: this.GetOperationData(userId),
                 UserId: null,
                 CreatedAt: DateTimeOffset.Now,
                 SerialVersion: 0);
@@ -67,7 +67,7 @@ public class UserController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(User),
             EntityId: value.UserId.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(value),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);
@@ -95,7 +95,7 @@ public class UserController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(User),
             EntityId: userId.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(value),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);
@@ -125,7 +125,7 @@ public class UserController : ReplacementControllerBase {
             Title: this.GetOperationTitle(),
             EntityType: nameof(User),
             EntityId: userId.ToString(),
-            Data: this.GetOperationData(),
+            Data: this.GetOperationData(userId),
             UserId: null,
             CreatedAt: DateTimeOffset.Now,
             SerialVersion: 0);

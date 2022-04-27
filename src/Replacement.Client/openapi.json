@@ -115,6 +115,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ProjectGetAll",
         "responses": {
           "200": {
             "description": "Success",
@@ -151,6 +152,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ProjectPost",
         "requestBody": {
           "content": {
             "application/json": {
@@ -172,7 +174,24 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
           }
         }
       }
@@ -182,6 +201,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ProjectGetOne",
         "parameters": [
           {
             "name": "projectId",
@@ -220,6 +240,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ProjectPut",
         "parameters": [
           {
             "name": "projectId",
@@ -252,7 +273,24 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
           }
         }
       },
@@ -260,6 +298,7 @@
         "tags": [
           "Project"
         ],
+        "operationId": "ProjectDelete",
         "parameters": [
           {
             "name": "projectId",
@@ -345,14 +384,23 @@
         }
       }
     },
-    "/api/ToDo/{todoId}": {
+    "/api/ToDo/{projectId}/{todoId}": {
       "get": {
         "tags": [
           "ToDo"
         ],
         "parameters": [
           {
-            "name": "todoId",
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "toDoId",
             "in": "path",
             "required": true,
             "schema": {
@@ -390,6 +438,15 @@
         ],
         "parameters": [
           {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
             "name": "todoId",
             "in": "path",
             "required": true,
@@ -406,12 +463,21 @@
         }
       }
     },
-    "/api/ToDo/{toDoId}": {
+    "/api/ToDo/{projectId}/{toDoId}": {
       "put": {
         "tags": [
           "ToDo"
         ],
         "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
           {
             "name": "toDoId",
             "in": "path",
@@ -627,8 +693,6 @@
             "format": "uuid"
           },
           "title": {
-            "maxLength": 50,
-            "minLength": 0,
             "type": "string",
             "nullable": true
           },
@@ -677,8 +741,6 @@
             "format": "uuid"
           },
           "title": {
-            "maxLength": 50,
-            "minLength": 0,
             "type": "string",
             "nullable": true
           },
@@ -722,8 +784,6 @@
             "format": "uuid"
           },
           "userName": {
-            "maxLength": 50,
-            "minLength": 0,
             "type": "string",
             "nullable": true
           },

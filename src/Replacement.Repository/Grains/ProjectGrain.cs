@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Replacement.Repository.Grains;
+﻿namespace Replacement.Repository.Grains;
 
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
     Task<List<Project>> GetAllProjects(User user, Operation operation);
@@ -64,6 +62,7 @@ public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
     }
 
     public Task<Guid?> GetProjectIdFromToDoId(Guid toDoId) {
+#warning TODO
         throw new NotImplementedException();
     }
 
@@ -75,6 +74,7 @@ public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
 
 public class ProjectGrain : Grain, IProjectGrain {
     private readonly IDBContext _DBContext;
+    private bool _IsDirty;
     private Project? _State;
 
     public ProjectGrain(
@@ -83,24 +83,38 @@ public class ProjectGrain : Grain, IProjectGrain {
         this._DBContext = dBContext;
     }
 
-    public override async Task OnActivateAsync() {
-        var pk = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
-        Project? project;
+    public override Task OnActivateAsync() {
+        return this.LoadAsync();
+    }
+
+    private async Task LoadAsync() {
+        if (this._IsDirty) {
+            this._DBContext.Clear();
+            this._IsDirty = false;
+        }
+        var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
+        List<Project> projects;
         List<ToDo> lstToDos;
         using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
-            (project, lstToDos) = await sqlAccess.ExecuteProjectSelectPKAsync(pk);
+            (projects, lstToDos) = await sqlAccess.ExecuteProjectSelectPKAsync(projectPK);
         }
+        var project = projects.SingleOrDefault();
         if (project is null) {
-            this.DeactivateOnIdle();
+            this._IsDirty = false;
+            this._State = null;
         } else {
             this._DBContext.Project.Attach(project);
             this._DBContext.ToDo.AttachRange(lstToDos);
+            this._IsDirty = false;
             this._State = project;
         }
     }
 
     public Task<Project?> GetProject(User user, Operation operation) {
         var state = this._State;
+        if (state is null) {
+            this.DeactivateOnIdle();
+        }
         return Task.FromResult<Project?>(state);
     }
 
@@ -116,30 +130,35 @@ public class ProjectGrain : Grain, IProjectGrain {
         }
 
         var nextValue = value.SetOperation(operation);
-        this._DBContext.Operation.Add(operation);
-        var to = this._DBContext.Project.Upsert(nextValue);
+        var operationTO = this._DBContext.Operation.Add(operation);
+        var projectTO = this._DBContext.Project.Upsert(nextValue);
         await this._DBContext.ApplyChangesAsync();
-        this._State = to.Value;
+        this._State = projectTO.Value;
+        this._DBContext.Operation.Detach(operationTO);
         await this.PopulateDirty();
 
-        return to.Value;
+        return projectTO.Value;
     }
 
     public async Task<bool> DeleteProject(User user, Operation operation) {
         var state = this._State;
-        if (state is null) { return false; }
-        //        
-        var lstToDo = this._DBContext.GetToDoOfProject(state.GetPrimaryKey()).ToList();
-        this._DBContext.Operation.Add(operation);
-        foreach (var toDo in lstToDo) {
-            this._DBContext.ToDo.Delete(toDo.SetOperation(operation));
+        if (state is null) {
+            return false;
+        } else {
+            //        
+            var lstToDo = this._DBContext.GetToDoOfProject(state.GetPrimaryKey()).ToList();
+            var operationTO = this._DBContext.Operation.Add(operation);
+            foreach (var toDo in lstToDo) {
+                this._DBContext.ToDo.Delete(toDo.SetOperation(operation));
+            }
+            this._DBContext.Project.Delete(state.SetOperation(operation));
+            this._State = null;
+            await this._DBContext.ApplyChangesAsync();
+            this._DBContext.Operation.Detach(operationTO);
+            await this.PopulateDirty();
+            this.DeactivateOnIdle();
+            return true;
         }
-        this._DBContext.Project.Delete(state.SetOperation(operation));
-        await this._DBContext.ApplyChangesAsync();
-        this._State = null;
-        await this.PopulateDirty();
-        this.DeactivateOnIdle();
-        return true;
     }
 
     public Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation) {
@@ -155,20 +174,22 @@ public class ProjectGrain : Grain, IProjectGrain {
     public async Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation) {
         var state = this._State;
         if (state is not null) {
-            TrackingObject<ToDo>? result = null;
+            TrackingObject<Operation> operationTO;
+            TrackingObject<ToDo> result;
             if (this._DBContext.ToDo.TryGetValue(value.GetPrimaryKey(), out var currentToDo)) {
                 if (!currentToDo.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
                     return null;
                 }
-                this._DBContext.Operation.Add(operation);
+                operationTO = this._DBContext.Operation.Add(operation);
                 value = value.SetOperation(operation);
                 result = this._DBContext.ToDo.Update(value);
             } else {
-                this._DBContext.Operation.Add(operation);
+                operationTO = this._DBContext.Operation.Add(operation);
                 value = value.SetOperation(operation);
                 result = this._DBContext.ToDo.Add(value);
             }
             await this._DBContext.ApplyChangesAsync();
+            this._DBContext.Operation.Detach(operationTO);
             return result.Value;
         } else {
             return null;
@@ -179,9 +200,10 @@ public class ProjectGrain : Grain, IProjectGrain {
         var state = this._State;
         if (state is not null) {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var value)) {
-                this._DBContext.Operation.Add(operation);
+                var operationTO = this._DBContext.Operation.Add(operation);
                 this._DBContext.ToDo.Delete(value);
                 await this._DBContext.ApplyChangesAsync();
+                this._DBContext.Operation.Detach(operationTO);
                 return true;
             } else {
                 return false;

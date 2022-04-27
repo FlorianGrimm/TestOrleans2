@@ -39,15 +39,15 @@ public partial class Operation {
 */
 public record class Operation(
     Guid OperationId,
-    [property:StringLength(100)]
+    // [property:StringLength(100)]
     string Title,
-    [property: StringLength(100)]
+    // [property: StringLength(100)]
     string EntityType,
-    [property: StringLength(100)]
+    // [property: StringLength(100)]
     string EntityId,
     string? Data,
     Guid? UserId,
-    [property: Key]
+    // [property: Key]
     DateTimeOffset CreatedAt,
     long SerialVersion
 );

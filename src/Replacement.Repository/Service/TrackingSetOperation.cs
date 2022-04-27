@@ -1,9 +1,9 @@
 ﻿namespace Replacement.Repository.Service;
 
-public class TrackingSetOperation : TrackingSet<OperationPK, Operation> {
+public sealed class TrackingSetOperation : TrackingSet<OperationPK, Operation> {
     public TrackingSetOperation(DBContext context, ITrackingSetApplyChanges<Operation> trackingApplyChanges)
         : base(
-            extractKey: OperationUtiltiy.ExtractKey,
+            extractKey: OperationUtiltiy.Instance,
             comparer: OperationUtiltiy.Instance,
             trackingContext: context,
             trackingApplyChanges: trackingApplyChanges) {
@@ -11,11 +11,11 @@ public class TrackingSetOperation : TrackingSet<OperationPK, Operation> {
     }
 }
 
-public class TrackingSetApplyChangesOperation : ITrackingSetApplyChanges<Operation> {
+public sealed class TrackingSetApplyChangesOperation : ITrackingSetApplyChanges<Operation> {
     private static TrackingSetApplyChangesOperation? _Instance;
-    public static TrackingSetApplyChangesOperation Instance => _Instance ??= new TrackingSetApplyChangesOperation();
+    public static TrackingSetApplyChangesOperation Instance => (_Instance ??= new TrackingSetApplyChangesOperation());
 
-    public TrackingSetApplyChangesOperation() : base() {
+    private TrackingSetApplyChangesOperation() : base() {
 
     }
 
@@ -41,12 +41,13 @@ public class TrackingSetApplyChangesOperation : ITrackingSetApplyChanges<Operati
 
 
 public sealed class OperationUtiltiy
-    : IEqualityComparer<OperationPK> {
+    : IEqualityComparer<OperationPK>
+    , IExtractKey<Operation, OperationPK> {
     private static OperationUtiltiy? _Instance;
     public static OperationUtiltiy Instance => (_Instance ??= new OperationUtiltiy());
     private OperationUtiltiy() { }
 
-    public static OperationPK ExtractKey(Operation that) => new OperationPK(that.CreatedAt, that.OperationId);
+    public OperationPK ExtractKey(Operation that) => new OperationPK(that.CreatedAt, that.OperationId);
 
     bool IEqualityComparer<OperationPK>.Equals(OperationPK? x, OperationPK? y) {
         if (object.ReferenceEquals(x, y)) {

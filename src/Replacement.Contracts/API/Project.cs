@@ -31,9 +31,9 @@ namespace Replacement.Contracts.API;
 
 
 public record class Project(
-    [property: Key]
+    // [property: Key]
     Guid ProjectId,
-    [property: StringLength(50)]
+    // [property: StringLength(50)]
     string Title,
     Guid OperationId,
     DateTimeOffset CreatedAt,
@@ -59,6 +59,6 @@ public record class Project(
 }
 
 public record class ProjectSelectPKResult(
-    Project? Project,
+    List<Project> Projects,
     List<ToDo> ToDos
     );

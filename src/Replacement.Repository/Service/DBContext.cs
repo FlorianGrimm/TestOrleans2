@@ -57,32 +57,13 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         }
     }
 
-    //    public async Task<ToDo[]> ReadAllToDoAsync() {
-    //        using (var sqlAccess = this.GetDataAccess()) {
-    //            using (sqlAccess.Connected()) {
-    //                var result = new List<ToDo>();
-    //#warning TODO
-    //                var item = await sqlAccess.ExecuteToDoSelectPKAsync(null!, null);
-    //                if (item is not null) {
-    //                    result.Add(item);
-    //                }
-    //                return this.ToDo.AttachRange(result).Select(to => to.Value).ToArray();
-    //            }
-    //        }
-    //    }
-
-    //    public Task<ToDo?> ReadToDoAsync(Guid id) {
-    //        ToDoRepo.GetToDos().TryGetValue(id, out var result);
-    //        return Task.FromResult(result);
-    //    }
-
-    //    public Task<ToDo?> ReadTodoAsync(Guid id) {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public Task<ToDo[]> ReadAllTodoAsync() {
-    //        throw new NotImplementedException();
-    //    }
+    public void Clear() {
+        this.Operation.Clear();
+        this.User.Clear();
+        this.Project.Clear();
+        this.ToDo.Clear();
+        this.TrackingChanges.Clear();
+    }
 }
 
 public class DBContextOption

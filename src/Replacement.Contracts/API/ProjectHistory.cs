@@ -22,19 +22,19 @@
 
 [Table("ProjectHistory", Schema = "history")]
 public record class ProjectHistory(
-    [property:Key]
+    // [property:Key]
     Guid OperationId,
-    [property:Key]
+    // [property:Key]
     Guid ProjectId,
-    [property:StringLength(50)]
+    // [property:StringLength(50)]
     string Title,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
-    [property:Key]
+    // [property:Key]
     DateTimeOffset ValidFrom,
-    [property:Key]
+    // [property:Key]
     DateTimeOffset ValidTo,
     long SerialVersion
 ): IDataHistory;

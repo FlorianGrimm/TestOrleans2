@@ -1,71 +1,52 @@
 ﻿namespace Replacement.Repository.Service;
 
-public class TrackingSetToDo : TrackingSet<ToDoPK, ToDo> {
+public sealed class TrackingSetToDo : TrackingSet<ToDoPK, ToDo> {
     public TrackingSetToDo(DBContext context, ITrackingSetApplyChanges<ToDo> trackingApplyChanges)
         : base(
-            extractKey: ToDoUtiltiy.ExtractKey,
+            extractKey: ToDoUtiltiy.Instance,
             comparer: ToDoUtiltiy.Instance,
             trackingContext: context,
             trackingApplyChanges: trackingApplyChanges) {
-
     }
 }
 
-public class TrackingSetApplyChangesToDo : ITrackingSetApplyChanges<ToDo> {
+public sealed class TrackingSetApplyChangesToDo : TrackingSetApplyChangesBase<ToDo, ToDoPK> {
     private static TrackingSetApplyChangesToDo? _Instance;
     public static TrackingSetApplyChangesToDo Instance => _Instance ??= new TrackingSetApplyChangesToDo();
 
-    public TrackingSetApplyChangesToDo() : base() {
+    private TrackingSetApplyChangesToDo() : base() { }
 
+    protected override ToDoPK ExtractKey(ToDo value) => value.GetPrimaryKey();
+
+    public override Task<ToDo> Insert(ToDo value, ITrackingTransConnection trackingTransaction) {
+        return this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<ToDo> Insert(ToDo value, ITrackingTransConnection trackingTransaction) {
-        return await this.Upsert(value, trackingTransaction);
+    public override Task<ToDo> Update(ToDo value, ITrackingTransConnection trackingTransaction) {
+        return this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<ToDo> Update(ToDo value, ITrackingTransConnection trackingTransaction) {
-        return await this.Upsert(value, trackingTransaction);
-    }
-
-    public async Task<ToDo> Upsert(ToDo value, ITrackingTransConnection trackingTransaction) {
+    private async Task<ToDo> Upsert(ToDo value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteToDoUpsertAsync(value);
-        if (result.OperationResult.ResultValue == ResultValue.Inserted) {
-            return result.DataResult;
-        }
-        if (result.OperationResult.ResultValue == ResultValue.NoNeedToUpdate) {
-            // TODO: Log??
-            return result.DataResult;
-        }
-        if (result.OperationResult.ResultValue == ResultValue.RowVersionMismatch) {
-            throw new InvalidOperationException($"RowVersionMismatch {value.SerialVersion}!={result.DataResult.SerialVersion}");
-        }
-        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} Todo {value.ToDoId}");
+        return this.ValidateUpsertDataManipulationResult(value, result);
     }
 
-    public async Task Delete(ToDo value, ITrackingTransConnection trackingTransaction) {
+    public override async Task Delete(ToDo value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteToDoDeletePKAsync(value);
-        if (result.Count == 1) {
-            if (result[0].ToDoId == value.ToDoId) {
-                return;
-            } else {
-                throw new InvalidOperationException($"Unknown error Todo {result[0].ToDoId} != {value.ToDoId}");
-            }
-        } else {
-            throw new InvalidOperationException($"Cannot delete Todo {value.ToDoId}");
-        }
+        this.ValidateDelete(value, result);
     }
 }
 
-
 public sealed class ToDoUtiltiy
-    : IEqualityComparer<ToDoPK> {
+    : IEqualityComparer<ToDoPK>
+    , IExtractKey<ToDo, ToDoPK> {
     private static ToDoUtiltiy? _Instance;
     public static ToDoUtiltiy Instance => (_Instance ??= new ToDoUtiltiy());
     private ToDoUtiltiy() { }
 
-    public static ToDoPK ExtractKey(ToDo that) => new ToDoPK(that.ProjectId, that.ToDoId);
+    public ToDoPK ExtractKey(ToDo that) => that.GetPrimaryKey();
 
     bool IEqualityComparer<ToDoPK>.Equals(ToDoPK? x, ToDoPK? y) {
         if (object.ReferenceEquals(x, y)) {

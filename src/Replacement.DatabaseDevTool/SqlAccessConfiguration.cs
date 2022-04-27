@@ -85,7 +85,7 @@ public static partial class Program {
                 new StoredProcedureDefintion("dbo", "ProjectSelectPK",
                     CSTypeDefinition.TypeOf<ProjectPK>(),
                     ExecutionMode.QueryMultiple,
-                    TypeOfResultAsync<ProjectSelectPKResult, Project, ToDo>(nameof(ProjectSelectPKResult.Project), false, nameof(ProjectSelectPKResult.ToDos), true)
+                    TypeOfResultAsync<ProjectSelectPKResult, Project, ToDo>(nameof(ProjectSelectPKResult.Projects), true, nameof(ProjectSelectPKResult.ToDos), true)
                     //CSTypeDefinition.TypeOf<Project>(isList:false, isAsync:true)
                     ),
                 new StoredProcedureDefintion("dbo", "ProjectSelectAll",

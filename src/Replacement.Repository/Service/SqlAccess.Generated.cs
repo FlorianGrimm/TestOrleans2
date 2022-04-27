@@ -8,8 +8,11 @@ namespace Replacement.Repository.Service {
             using(var cmd = this.CreateCommand("[dbo].[OperationInsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterString(cmd, "@Title", SqlDbType.NVarChar, 20, args.Title);
+                this.AddParameterString(cmd, "@EntityType", SqlDbType.NVarChar, 100, args.EntityType);
+                this.AddParameterString(cmd, "@EntityId", SqlDbType.NVarChar, 100, args.EntityId);
                 this.AddParameterString(cmd, "@Data", SqlDbType.NVarChar, -1, args.Data);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
+                this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 return await this.CommandQuerySingleAsync<Replacement.Contracts.API.Operation>(cmd, ReadRecordOperationInsert);
             }
         } 
@@ -91,18 +94,18 @@ namespace Replacement.Repository.Service {
         public async Task<Replacement.Contracts.API.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.API.ProjectPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
-                Replacement.Contracts.API.Project result_Project = default!;
+                System.Collections.Generic.List<Replacement.Contracts.API.Project> result_Projects = new System.Collections.Generic.List<Replacement.Contracts.API.Project>();
                 System.Collections.Generic.List<Replacement.Contracts.API.ToDo> result_ToDos = new System.Collections.Generic.List<Replacement.Contracts.API.ToDo>();
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_Project = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.Project>(reader, ReadRecordProjectSelectPK_0);
+                        result_Projects = await this.CommandReadQueryAsync<Replacement.Contracts.API.Project>(reader, ReadRecordProjectSelectPK_0);
                     }
                     if (idx == 1) {
                         result_ToDos = await this.CommandReadQueryAsync<Replacement.Contracts.API.ToDo>(reader, ReadRecordProjectSelectPK_1);
                     }
                 } , 2);
                 var result = new Replacement.Contracts.API.ProjectSelectPKResult(
-                    Project: result_Project,
+                    Projects: result_Projects,
                     ToDos: result_ToDos
                 );
                 return result;

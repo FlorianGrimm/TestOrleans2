@@ -1,71 +1,53 @@
 ﻿namespace Replacement.Repository.Service;
 
-public class TrackingSetProject : TrackingSet<ProjectPK, Project> {
+public sealed class TrackingSetProject : TrackingSet<ProjectPK, Project> {
     public TrackingSetProject(DBContext context, ITrackingSetApplyChanges<Project> trackingApplyChanges)
         : base(
-            extractKey: ProjectUtiltiy.ExtractKey,
+            extractKey: ProjectUtiltiy.Instance,
             comparer: ProjectUtiltiy.Instance,
             trackingContext: context,
             trackingApplyChanges: trackingApplyChanges) {
 
     }
 }
-
-public class TrackingSetApplyChangesProject : ITrackingSetApplyChanges<Project> {
+public sealed class TrackingSetApplyChangesProject : TrackingSetApplyChangesBase<Project, ProjectPK> {
     private static TrackingSetApplyChangesProject? _Instance;
     public static TrackingSetApplyChangesProject Instance => _Instance ??= new TrackingSetApplyChangesProject();
 
-    public TrackingSetApplyChangesProject() : base() {
+    private TrackingSetApplyChangesProject() : base() { }
 
+    protected override ProjectPK ExtractKey(Project value) => value.GetPrimaryKey();
+
+    public override Task<Project> Insert(Project value, ITrackingTransConnection trackingTransaction) {
+        return this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<Project> Insert(Project value, ITrackingTransConnection trackingTransaction) {
-        return await this.Upsert(value, trackingTransaction);
+    public override Task<Project> Update(Project value, ITrackingTransConnection trackingTransaction) {
+        return this.Upsert(value, trackingTransaction);
     }
 
-    public async Task<Project> Update(Project value, ITrackingTransConnection trackingTransaction) {
-        return await this.Upsert(value, trackingTransaction);
-    }
-
-    public async Task<Project> Upsert(Project value, ITrackingTransConnection trackingTransaction) {
+    private async Task<Project> Upsert(Project value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteProjectUpsertAsync(value);
-        if (result.OperationResult.ResultValue == ResultValue.Inserted) {
-            return result.DataResult;
-        }
-        if (result.OperationResult.ResultValue == ResultValue.NoNeedToUpdate) {
-            // Project: Log??
-            return result.DataResult;
-        }
-        if (result.OperationResult.ResultValue == ResultValue.RowVersionMismatch) {
-            throw new InvalidOperationException($"RowVersionMismatch {value.SerialVersion}!={result.DataResult.SerialVersion}");
-        }
-        throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} Project {value.ProjectId}");
+        return this.ValidateUpsertDataManipulationResult(value, result);
     }
 
-    public async Task Delete(Project value, ITrackingTransConnection trackingTransaction) {
+    public override async Task Delete(Project value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteProjectDeletePKAsync(value);
-        if (result.Count == 1) {
-            if (result[0].ProjectId == value.ProjectId) {
-                return;
-            } else {
-                throw new InvalidOperationException($"Unknown error Project {result[0].ProjectId} != {value.ProjectId}");
-            }
-        } else {
-            throw new InvalidOperationException($"Cannot delete Project {value.ProjectId}");
-        }
+        this.ValidateDelete(value, result);
     }
 }
 
 
 public sealed class ProjectUtiltiy
-    : IEqualityComparer<ProjectPK> {
+    : IEqualityComparer<ProjectPK>
+    , IExtractKey<Project, ProjectPK> {
     private static ProjectUtiltiy? _Instance;
     public static ProjectUtiltiy Instance => (_Instance ??= new ProjectUtiltiy());
     private ProjectUtiltiy() { }
 
-    public static ProjectPK ExtractKey(Project that) => new ProjectPK(that.ProjectId);
+    public ProjectPK ExtractKey(Project that) => that.GetPrimaryKey();
 
     bool IEqualityComparer<ProjectPK>.Equals(ProjectPK? x, ProjectPK? y) {
         if (object.ReferenceEquals(x, y)) {

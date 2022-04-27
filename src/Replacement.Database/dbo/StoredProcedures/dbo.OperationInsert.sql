@@ -1,25 +1,30 @@
 CREATE PROCEDURE [dbo].[OperationInsert]
     @OperationId uniqueidentifier,
     @Title nvarchar(20),
+    @EntityType nvarchar(100),
+    @EntityId nvarchar(100),
     @Data nvarchar(MAX),
-    @CreatedAt datetimeoffset
+    @CreatedAt datetimeoffset,
+    @UserId uniqueidentifier
 AS BEGIN
     SET NOCOUNT ON;
 
-    IF (@CreatedAt IS NULL) BEGIN
-        SET @CreatedAt = GETUTCDATE();
-    END;
-
-    INSERT INTO [dbo].[Operation] (
-        [OperationId],
-        [Title],
-        [Data],
-        [CreatedAt]
+    INSERT INTO [dbo].[Operation](
+        [OperationId]
+        ,[Title]
+        ,[EntityType]
+        ,[EntityId]
+        ,[Data]
+        ,[CreatedAt]
+        ,[UserId]
     ) Values (
-        @OperationId,
-        @Title,
-        @Data,
-        @CreatedAt
+        @OperationId
+        ,@Title
+        ,@EntityType
+        ,@EntityId
+        ,@Data
+        ,@CreatedAt
+        ,@UserId
     );
 
     -- Replace=SelectPKTempateBody.[dbo].[Operation] --

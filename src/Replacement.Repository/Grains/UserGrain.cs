@@ -79,7 +79,7 @@ public class UserGrain : Grain, IUserGrain {
         using (var dataAccess = await this._DBContext.GetDataAccessAsync()) {
             var result = await dataAccess.ExecuteUserSelectPKAsync(pk);
             if (result is null) {
-                this.DeactivateOnIdle();
+                this._User = null;
             } else {
                 this._User = result;
                 this._DBContext.User.Attach(result);
@@ -88,15 +88,14 @@ public class UserGrain : Grain, IUserGrain {
     }
 
     public Task<User?> GetUser(Operation operation) {
+        if (this._User is null) {
+            this.DeactivateOnIdle();
+        }
         return Task.FromResult(this._User);
     }
 
     public async Task<User?> UpsertUser(User value, User? currentUser, Operation operation) {
-        value = value with {
-            OperationId = operation.OperationId,
-            CreatedAt = operation.CreatedAt,
-            ModifiedAt = operation.CreatedAt
-        };
+        value = value.SetOperation(operation);
         this._DBContext.Operation.Add(operation);
         var resultTO = this._DBContext.User.Upsert(value);
         await this._DBContext.ApplyChangesAsync();
@@ -111,11 +110,7 @@ public class UserGrain : Grain, IUserGrain {
         if (this._User is null) {
             return false;
         } else {
-            var value = this._User with {
-                OperationId = operation.OperationId,
-                CreatedAt = operation.CreatedAt,
-                ModifiedAt = operation.CreatedAt
-            };
+            var value = this._User.SetOperation(operation);
             this._DBContext.Operation.Add(operation);
             this._DBContext.User.Delete(value);
             await this._DBContext.ApplyChangesAsync();

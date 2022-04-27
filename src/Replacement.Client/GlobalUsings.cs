@@ -15,5 +15,4 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Hosting;
 
 global using Replacement.Contracts.API;
-global using Replacement.Client;
 

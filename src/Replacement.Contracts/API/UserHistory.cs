@@ -21,19 +21,19 @@
 */
 [Table("UserHistory", Schema = "history")]
 public record class UserHistory(
-    [property:Key]
+    // [property:Key]
     Guid OperationId,
-    [property: Key]
+    // [property: Key]
     Guid UserId,
-    [property: StringLength(50)]
+    // [property: StringLength(50)]
     string UserName,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
-    [property: Key]
+    // [property: Key]
     DateTimeOffset ValidFrom,
-    [property: Key]
+    // [property: Key]
     DateTimeOffset ValidTo,
     long SerialVersion
 ) : IDataHistory;

@@ -25,22 +25,22 @@
 
 [Table("ToDoHistory", Schema = "history")]
 public record class ToDoHistory (
-    [property:Key]
+    // [property:Key]
     Guid OperationId,
-    [property:Key]
+    // [property:Key]
     Guid ToDoId,
     Guid? ProjectId,
     Guid? UserId,
-    [property:StringLength(50)]
+    // [property:StringLength(50)]
     string Title,
     bool Done,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
-    [property:Key]
+    // [property:Key]
     DateTimeOffset ValidFrom,
-    [property:Key]
+    // [property:Key]
     DateTimeOffset ValidTo,
     long SerialVersion
 ): IDataHistory;
