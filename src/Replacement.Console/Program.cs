@@ -3,13 +3,54 @@
 namespace Replacement.Console;
 
 public static class Program {
+    private static int cntProjectRead = 0;
+    private static int cntProjectWrite = 0;
+    private static int cntProjectUpdate = 0;
+
+    private static int cntThreads = 10;
+    private static int cntOuter = 100;
+    private static int cntInnerWrite = 10;
+    private static int cntInnerRead = 40;
+    private static int cntInnerUpdate = 10;
+
     public static async Task<int> Main(string[] args) {
         System.Console.Out.WriteLine("Replacement.Console!");
         var configuration = ConfigureApp(args);
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         ConfigureService(configuration, services);
         var appServiceProvider = services.BuildServiceProvider();
-        return await Run(appServiceProvider);
+
+        int result;
+        try {
+            var dtStart = System.DateTime.UtcNow;
+            System.Console.Out.WriteLine($"dtStart : {dtStart}");
+#if true
+            var tasks = System.Linq.Enumerable.Range(0, cntThreads).Select(
+                _ => Run(appServiceProvider)
+                ).ToArray();
+            var results = await Task.WhenAll(tasks);
+            result = results.Max();
+#else
+            result = await Run(appServiceProvider);
+#endif
+
+            var dtEnd = System.DateTime.UtcNow;
+            var tsDuration = dtEnd.Subtract(dtStart);
+            System.Console.Out.WriteLine($"duration total: {tsDuration.TotalSeconds} sec");
+
+            System.Console.Out.WriteLine($"cntProjectRead : {cntProjectRead}");
+            System.Console.Out.WriteLine($"cntProjectWrite: {cntProjectWrite}");
+            System.Console.Out.WriteLine($"cntProjectUpdate: {cntProjectUpdate}");
+
+            var durationPerRequest = tsDuration.TotalMilliseconds / (cntProjectRead + cntProjectWrite + cntProjectUpdate);
+            System.Console.Out.WriteLine($"duration per request: {durationPerRequest} ms");
+
+        } catch (System.Exception error) {
+            System.Console.Error.WriteLine(error.ToString());
+            result = 1;
+        }
+
+        return result;
     }
 
     private static IConfigurationRoot ConfigureApp(string[] args) {
@@ -65,19 +106,14 @@ public static class Program {
 
     private static async Task<int> Run(ServiceProvider appServiceProvider) {
         try {
-            var dtStart = System.DateTime.UtcNow;
-            System.Console.Out.WriteLine($"dtStart : {dtStart}");
-
-            var cntWrite = 0;
-            var cntRead = 0;
             IReplacementClient client = appServiceProvider.GetRequiredService<IReplacementClient>();
             List<Guid> lstProjectId = new List<Guid>();
             var dctProject = new Dictionary<ProjectPK, Project>();
-            int cntOuter = 100;
+
             for (int idxOuter = 0; idxOuter < cntOuter; idxOuter++) {
                 System.Console.Out.WriteLine($"idxOuter : {idxOuter} / {cntOuter} : {lstProjectId.Count}");
 
-                for (int idxWrite = 0; idxWrite < 10; idxWrite++) {
+                for (int idxWrite = 0; idxWrite < cntInnerWrite; idxWrite++) {
                     var projectId = Guid.NewGuid();
                     lstProjectId.Add(projectId);
                     var projectA = new Project(
@@ -91,15 +127,16 @@ public static class Program {
                             SerialVersion: 0
                             );
                     var projectB = await client.ProjectPostAsync(projectA);
-                    cntWrite++;
+                    cntProjectWrite++;
                     dctProject[projectB.GetPrimaryKey()] = projectB;
                 }
-                for (int idxRead = 0; idxRead < 40; idxRead++) {
+                //
+                for (int idxRead = 0; idxRead < cntInnerRead; idxRead++) {
                     int idxInner = Random.Shared.Next(lstProjectId.Count);
                     var projectId = lstProjectId[idxInner];
                     var projectA = dctProject[new ProjectPK(projectId)];
                     var projectB = await client.ProjectGetOneAsync(projectId);
-                    cntRead++;
+                    cntProjectRead++;
                     if (projectA.ProjectId == projectB.ProjectId) {
                         // OK
                     } else {
@@ -107,14 +144,15 @@ public static class Program {
                         return 1;
                     }
                 }
-                for (int idxRead = 0; idxRead < 10; idxRead++) {
+                //
+                for (int idxUpdate = 0; idxUpdate < cntInnerUpdate; idxUpdate++) {
                     int idxInner = Random.Shared.Next(lstProjectId.Count);
                     var projectId = lstProjectId[idxInner];
                     var projectA = dctProject[new ProjectPK(projectId)];
                     projectA = projectA with { Title = System.DateTime.Now.ToString() };
                     var projectB = await client.ProjectPostAsync(projectA);
                     dctProject[projectB.GetPrimaryKey()] = projectB;
-                    cntRead++;
+                    cntProjectUpdate++;
                     if (projectA.ProjectId == projectB.ProjectId) {
                         // OK
                     } else {
@@ -122,11 +160,22 @@ public static class Program {
                         return 1;
                     }
                 }
+                //
+                for (int idxRead = 0; idxRead < cntInnerRead; idxRead++) {
+                    int idxInner = Random.Shared.Next(lstProjectId.Count);
+                    var projectId = lstProjectId[idxInner];
+                    var projectA = dctProject[new ProjectPK(projectId)];
+                    var projectB = await client.ProjectGetOneAsync(projectId);
+                    cntProjectRead++;
+                    if (projectA.ProjectId == projectB.ProjectId) {
+                        // OK
+                    } else {
+                        System.Console.Error.WriteLine($"idxInner:{idxInner} {projectA.ProjectId}--{projectB.ProjectId}");
+                        return 1;
+                    }
+                }
+                //
             }
-            var dtEnd = System.DateTime.UtcNow;
-            System.Console.Out.WriteLine($"duration: {dtEnd.Subtract(dtStart).TotalSeconds} sec");
-            System.Console.Out.WriteLine($"cntWrite: {cntWrite}");
-            System.Console.Out.WriteLine($"cntRead : {cntRead}");
             return 0;
         } catch (System.Exception error) {
             System.Console.Error.WriteLine(error.ToString());

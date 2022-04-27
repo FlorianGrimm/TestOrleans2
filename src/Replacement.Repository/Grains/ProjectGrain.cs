@@ -19,30 +19,27 @@ public interface IProjectGrain : IGrainWithGuidKey {
     Task<bool> DeleteToDo(ToDoPK toDoPK, User user, Operation operation);
 }
 
-//
+public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGrain {
+    private LazyValue<List<Project>> _AllProjects;
 
-public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
-    private readonly IDBContext _DBContext;
-    private bool _IsDirty;
     private List<Project>? _GetAllProjects;
 
     public ProjectCollectionGrain(
-        IDBContext dBContext
-        ) {
-        this._DBContext = dBContext;
+        IDBContext dbContext
+        ) :base(dbContext) {
+        this._AllProjects = new LazyValue<List<Project>>();
     }
 
     public async Task<List<Project>> GetAllProjects(User user, Operation operation) {
-        if (this._IsDirty || this._GetAllProjects is null) {
-            List<Replacement.Contracts.API.Project> projects;
+        if (this._AllProjects.TryGetValue(out var result)) {
+            return result;
+        } else {
+            List<Project> projects;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
                 projects = await sqlAccess.ExecuteProjectSelectAllAsync();
             }
-            this._GetAllProjects = projects;
-            this._IsDirty = false;
-            return projects;
-        } else {
-            return this._GetAllProjects;
+            this._AllProjects = this._AllProjects.SetStatus(projects ?? new List<Project>());
+            return this._AllProjects.Value;
         }
     }
 
@@ -72,26 +69,13 @@ public class ProjectCollectionGrain : Grain, IProjectCollectionGrain {
     }
 }
 
-public class ProjectGrain : Grain, IProjectGrain {
-    private readonly IDBContext _DBContext;
-    private bool _IsDirty;
-    private Project? _State;
+public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
 
     public ProjectGrain(
-        IDBContext dBContext
-        ) {
-        this._DBContext = dBContext;
+        IDBContext dbContext
+        ):base(dbContext) {
     }
-
-    public override Task OnActivateAsync() {
-        return this.LoadAsync();
-    }
-
-    private async Task LoadAsync() {
-        if (this._IsDirty) {
-            this._DBContext.Clear();
-            this._IsDirty = false;
-        }
+    protected override async Task<Project?> Load() {
         var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
         List<Project> projects;
         List<ToDo> lstToDos;
@@ -100,26 +84,24 @@ public class ProjectGrain : Grain, IProjectGrain {
         }
         var project = projects.SingleOrDefault();
         if (project is null) {
-            this._IsDirty = false;
-            this._State = null;
+            return null;
         } else {
             this._DBContext.Project.Attach(project);
             this._DBContext.ToDo.AttachRange(lstToDos);
-            this._IsDirty = false;
-            this._State = project;
+            return project;
         }
     }
 
-    public Task<Project?> GetProject(User user, Operation operation) {
-        var state = this._State;
+    public async Task<Project?> GetProject(User user, Operation operation) {
+        var state = await this.GetState();
         if (state is null) {
             this.DeactivateOnIdle();
         }
-        return Task.FromResult<Project?>(state);
+        return state;
     }
 
     public async Task<Project?> UpsertProject(Project value, User user, Operation operation) {
-        var state = this._State;
+        var state = await this.GetState();
 
         if (state is null) {
             // new
@@ -141,7 +123,7 @@ public class ProjectGrain : Grain, IProjectGrain {
     }
 
     public async Task<bool> DeleteProject(User user, Operation operation) {
-        var state = this._State;
+        var state = await this.GetState();
         if (state is null) {
             return false;
         } else {
@@ -161,8 +143,8 @@ public class ProjectGrain : Grain, IProjectGrain {
         }
     }
 
-    public Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation) {
-        var state = this._State;
+    public async Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation) {
+        var state = await this.GetState();
         if (state is not null) {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var result)) {
                 return Task.FromResult<ToDo?>(result);
@@ -172,7 +154,7 @@ public class ProjectGrain : Grain, IProjectGrain {
     }
 
     public async Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation) {
-        var state = this._State;
+        var state = await this.GetState();
         if (state is not null) {
             TrackingObject<Operation> operationTO;
             TrackingObject<ToDo> result;
@@ -197,7 +179,7 @@ public class ProjectGrain : Grain, IProjectGrain {
     }
 
     public async Task<bool> DeleteToDo(ToDoPK toDoPK, User user, Operation operation) {
-        var state = this._State;
+        var state = await this.GetState();
         if (state is not null) {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var value)) {
                 var operationTO = this._DBContext.Operation.Add(operation);

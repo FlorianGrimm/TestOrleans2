@@ -39,6 +39,10 @@
 	  <Folder Include="Contracts\API\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Orleans_CodeGenInputs Remove="Grains\GrainBase.cs" />
+	</ItemGroup>
+
 	<!--
 		FrameworkReference Include="Microsoft.AspNetCore.App" 	  
 	-->
