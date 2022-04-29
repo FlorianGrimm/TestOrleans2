@@ -1,5 +1,4 @@
 ﻿namespace Replacement.Repository.Grains;
-
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
     Task<List<Project>> GetAllProjects(User user, Operation operation);
     Task<List<Project>> GetUsersProjects(User user, Operation operation);
@@ -70,10 +69,14 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
 }
 
 public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
+    private readonly ILogger<ProjectGrain> _Logger;
 
     public ProjectGrain(
-        IDBContext dbContext
+        IDBContext dbContext,
+        ILogger<ProjectGrain> logger
+
         ):base(dbContext) {
+        this._Logger = logger;
     }
     protected override async Task<Project?> Load() {
         var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
@@ -114,7 +117,42 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         var nextValue = value.SetOperation(operation);
         var operationTO = this._DBContext.Operation.Add(operation);
         var projectTO = this._DBContext.Project.Upsert(nextValue);
+
         await this._DBContext.ApplyChangesAsync();
+#if false
+        sqlException.ErrorCode
+        -2146232060
+        sqlException.Number
+        1205
+
+        try {
+            // when ((uint)sqlException.ErrorCode == 0x80131904)
+            //} catch (Microsoft.Data.SqlClient.SqlException sqlException)  {
+        } catch (Microsoft.Data.SqlClient.SqlException sqlException) {
+            this._Logger.LogError(sqlException, "x");
+            if (!System.Diagnostics.Debugger.IsAttached) {
+                System.Diagnostics.Debugger.Launch();
+            }
+            System.Diagnostics.Debugger.Break();
+            if (sqlException is not null) {
+                throw;
+            }
+        } catch (System.Exception exception) {
+            this._Logger.LogError(exception, "x");
+            if (!System.Diagnostics.Debugger.IsAttached) {
+                System.Diagnostics.Debugger.Launch();
+            }
+            System.Diagnostics.Debugger.Break();
+            if (exception is not null) {
+                throw;
+            }
+            //System.Console.Out.WriteLine($"ErrorCode:{sqlException.ErrorCode}; Number:{sqlException.Number};");
+
+            await Task.Delay(50);
+            //} catch (Microsoft.Data.SqlClient.SqlException sqlException) {
+            //    await Task.Delay(50);
+        }
+#endif
         this._State = projectTO.Value;
         this._DBContext.Operation.Detach(operationTO);
         await this.PopulateDirty();
@@ -135,7 +173,37 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
             }
             this._DBContext.Project.Delete(state.SetOperation(operation));
             this._State = null;
-            await this._DBContext.ApplyChangesAsync();
+                await this._DBContext.ApplyChangesAsync();
+#if false
+            try {
+                await this._DBContext.ApplyChangesAsync();
+                // when ((uint)sqlException.ErrorCode == 0x80131904)
+                //} catch (Microsoft.Data.SqlClient.SqlException sqlException)  {
+            } catch (Microsoft.Data.SqlClient.SqlException sqlException) {
+                this._Logger.LogError(sqlException, "x");
+                if (!System.Diagnostics.Debugger.IsAttached) {
+                    System.Diagnostics.Debugger.Launch();
+                }
+                System.Diagnostics.Debugger.Break();
+                if (sqlException is not null) {
+                    throw;
+                }
+            } catch (System.Exception exception) {
+                this._Logger.LogError(exception, "x");
+                if (!System.Diagnostics.Debugger.IsAttached) {
+                    System.Diagnostics.Debugger.Launch();
+                }
+                System.Diagnostics.Debugger.Break();
+                if (exception is not null) {
+                    throw;
+                }
+                //System.Console.Out.WriteLine($"ErrorCode:{sqlException.ErrorCode}; Number:{sqlException.Number};");
+
+                await Task.Delay(50);
+                //} catch (Microsoft.Data.SqlClient.SqlException sqlException) {
+                //    await Task.Delay(50);
+            }
+#endif
             this._DBContext.Operation.Detach(operationTO);
             await this.PopulateDirty();
             this.DeactivateOnIdle();
@@ -147,10 +215,10 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         var state = await this.GetState();
         if (state is not null) {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var result)) {
-                return Task.FromResult<ToDo?>(result);
+                return result;
             }
         }
-        return Task.FromResult<ToDo?>(null);
+        return null;
     }
 
     public async Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation) {

@@ -9,6 +9,16 @@ public class GrainCollectionBase : Grain {
         ) {
         this._DBContext = dbContext;
     }
+
+    public virtual async Task ApplyChangesAsync(ISqlAccess? sqlAccess = default, CancellationToken cancellationToken = default(CancellationToken)) {
+        try {
+            await this._DBContext.ApplyChangesAsync(sqlAccess, cancellationToken);
+        } catch {
+            this._IsDirty = true;
+            this._DBContext.Clear();
+            throw;
+        }
+    }
 }
 
 public record struct LazyValue<T>(

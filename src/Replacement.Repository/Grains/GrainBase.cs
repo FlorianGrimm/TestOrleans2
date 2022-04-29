@@ -2,9 +2,8 @@
 
 //
 
-public class GrainBase<TValue> : Grain 
-    where TValue: class
-    {
+public class GrainBase<TValue> : Grain
+    where TValue : class {
     protected IDBContext _DBContext;
     protected bool _IsDirty;
     protected TValue? _State;
@@ -16,11 +15,11 @@ public class GrainBase<TValue> : Grain
         this._IsDirty = true;
     }
 
-    public override async Task OnActivateAsync() {
-        await this.Load();
-        // no need to await Task.CompletedTask;
-        // return base.OnActivateAsync();
-    }
+    //public override async Task OnActivateAsync() {
+    //    await this.Load();
+    //    // no need to await Task.CompletedTask;
+    //    // return base.OnActivateAsync();
+    //}
 
     protected async Task<TValue?> GetState() {
         if (this._IsDirty) {

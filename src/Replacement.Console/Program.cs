@@ -6,12 +6,21 @@ public static class Program {
     private static int cntProjectRead = 0;
     private static int cntProjectWrite = 0;
     private static int cntProjectUpdate = 0;
+    private static TimeSpan tsTotal=TimeSpan.Zero;
 
+#if true
     private static int cntThreads = 10;
-    private static int cntOuter = 100;
+    private static int cntOuter = 200;
     private static int cntInnerWrite = 10;
     private static int cntInnerRead = 40;
     private static int cntInnerUpdate = 10;
+#else
+    private static int cntThreads = 1;
+    private static int cntOuter = 1;
+    private static int cntInnerWrite = 1;
+    private static int cntInnerRead = 1;
+    private static int cntInnerUpdate = 1;
+#endif
 
     public static async Task<int> Main(string[] args) {
         System.Console.Out.WriteLine("Replacement.Console!");
@@ -105,6 +114,7 @@ public static class Program {
     }
 
     private static async Task<int> Run(ServiceProvider appServiceProvider) {
+        var dtStart = System.DateTime.UtcNow;
         try {
             IReplacementClient client = appServiceProvider.GetRequiredService<IReplacementClient>();
             List<Guid> lstProjectId = new List<Guid>();
@@ -127,7 +137,7 @@ public static class Program {
                             SerialVersion: 0
                             );
                     var projectB = await client.ProjectPostAsync(projectA);
-                    cntProjectWrite++;
+                    System.Threading.Interlocked.Increment(ref cntProjectWrite);
                     dctProject[projectB.GetPrimaryKey()] = projectB;
                 }
                 //
@@ -136,7 +146,7 @@ public static class Program {
                     var projectId = lstProjectId[idxInner];
                     var projectA = dctProject[new ProjectPK(projectId)];
                     var projectB = await client.ProjectGetOneAsync(projectId);
-                    cntProjectRead++;
+                    System.Threading.Interlocked.Increment(ref cntProjectRead);
                     if (projectA.ProjectId == projectB.ProjectId) {
                         // OK
                     } else {
@@ -152,7 +162,7 @@ public static class Program {
                     projectA = projectA with { Title = System.DateTime.Now.ToString() };
                     var projectB = await client.ProjectPostAsync(projectA);
                     dctProject[projectB.GetPrimaryKey()] = projectB;
-                    cntProjectUpdate++;
+                    System.Threading.Interlocked.Increment(ref cntProjectUpdate);
                     if (projectA.ProjectId == projectB.ProjectId) {
                         // OK
                     } else {
@@ -166,7 +176,7 @@ public static class Program {
                     var projectId = lstProjectId[idxInner];
                     var projectA = dctProject[new ProjectPK(projectId)];
                     var projectB = await client.ProjectGetOneAsync(projectId);
-                    cntProjectRead++;
+                    System.Threading.Interlocked.Increment(ref cntProjectRead);
                     if (projectA.ProjectId == projectB.ProjectId) {
                         // OK
                     } else {
@@ -176,12 +186,18 @@ public static class Program {
                 }
                 //
             }
+            
             return 0;
         } catch (System.Exception error) {
             System.Console.Error.WriteLine(error.ToString());
             return 1;
+        } finally {
+            var dtEnd = System.DateTime.UtcNow;
+            var tsDuration = dtEnd.Subtract(dtStart);
+            lock (typeof(Program)) {
+                tsTotal += tsDuration;
+            }
         }
-
     }
 
 }

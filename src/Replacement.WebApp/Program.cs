@@ -29,7 +29,14 @@ public static class Program {
         //    services.AddTransient<IDBContext, DBContext>();
         //});
         hostBuilder.UseOrleans((ctx, builder) => {
-            builder.UseLocalhostClustering();
+            builder.UseLocalhostClustering()
+            //.Configure<Orleans.Configuration.SchedulingOptions>(o => { 
+            //    o.TurnWarningLengthThreshold= TimeSpan.FromMilliseconds(2000);
+            //})
+            ;
+            //TurnWarningLengthThreshold
+
+
         });
         hostBuilder.ConfigureWebHostDefaults(webBuilder => {
             webBuilder.UseStartup<Startup>();

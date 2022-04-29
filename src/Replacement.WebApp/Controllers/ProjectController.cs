@@ -107,7 +107,27 @@ public class ProjectController : ReplacementControllerBase {
         }
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var project = await grain.UpsertProject(value, user, operation);
+            Project? project = null;
+            for (int iWatchDog = 2; iWatchDog >= 0; iWatchDog--) {
+                try {
+                    project = await grain.UpsertProject(value, user, operation);
+                    // when ((uint)sqlException.ErrorCode == 0x80131904)
+                    //} catch (Microsoft.Data.SqlClient.SqlException sqlException)  {
+                } catch (System.Exception exception) {
+                    if (!System.Diagnostics.Debugger.IsAttached) {
+                        System.Diagnostics.Debugger.Launch();
+                    }
+                    System.Diagnostics.Debugger.Break();
+                    if (exception is not null) {
+                        throw exception;
+                    }
+                    //System.Console.Out.WriteLine($"ErrorCode:{sqlException.ErrorCode}; Number:{sqlException.Number};");
+
+                    await Task.Delay(50);
+                    //} catch (Microsoft.Data.SqlClient.SqlException sqlException) {
+                    //    await Task.Delay(50);
+                }
+            }
             if (project is not null) {
                 return this.Ok();
             } else {

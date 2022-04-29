@@ -59,7 +59,7 @@ public static class ReplacementControllerBaseExtensions {
         //    argument = string.Empty;
         //}
 
-        string argumentType = typeof(T).FullName ?? String.Empty;
+        var argumentType = typeof(T).FullName;
 
         var httpContextInfo = new HttpContextInfo(
                 Username: username,

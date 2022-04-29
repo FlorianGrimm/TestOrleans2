@@ -8,8 +8,8 @@ public record HttpContextInfo(
     string Method,
     string Path,
     List<KeyValuePair<string, List<string>>>? Form,
-    string ArgumentType,
-    object Argument
+    string? ArgumentType,
+    object? Argument
     //string Argument
     ) {
 
