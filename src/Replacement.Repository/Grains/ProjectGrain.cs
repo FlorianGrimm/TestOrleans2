@@ -10,6 +10,7 @@ public interface IProjectCollectionGrain : IGrainWithGuidKey {
 
 public interface IProjectGrain : IGrainWithGuidKey {
     Task<Project?> GetProject(User user, Operation operation);
+    Task<ProjectContext?> GetProjectContext(User user, Operation operation);
     Task<Project?> UpsertProject(Project value, User user, Operation operation);
     Task<bool> DeleteProject(User user, Operation operation);
 
@@ -25,7 +26,7 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
 
     public ProjectCollectionGrain(
         IDBContext dbContext
-        ) :base(dbContext) {
+        ) : base(dbContext) {
         this._AllProjects = new LazyValue<List<Project>>();
     }
 
@@ -75,7 +76,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         IDBContext dbContext,
         ILogger<ProjectGrain> logger
 
-        ):base(dbContext) {
+        ) : base(dbContext) {
         this._Logger = logger;
     }
     protected override async Task<Project?> Load() {
@@ -118,7 +119,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         var operationTO = this._DBContext.Operation.Add(operation);
         var projectTO = this._DBContext.Project.Upsert(nextValue);
 
-        await this._DBContext.ApplyChangesAsync();
+        await this.ApplyChangesAsync();
 #if false
         sqlException.ErrorCode
         -2146232060
@@ -173,7 +174,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
             }
             this._DBContext.Project.Delete(state.SetOperation(operation));
             this._State = null;
-                await this._DBContext.ApplyChangesAsync();
+            await this.ApplyChangesAsync();
 #if false
             try {
                 await this._DBContext.ApplyChangesAsync();
@@ -238,7 +239,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
                 value = value.SetOperation(operation);
                 result = this._DBContext.ToDo.Add(value);
             }
-            await this._DBContext.ApplyChangesAsync();
+            await this.ApplyChangesAsync();
             this._DBContext.Operation.Detach(operationTO);
             return result.Value;
         } else {
@@ -252,7 +253,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var value)) {
                 var operationTO = this._DBContext.Operation.Add(operation);
                 this._DBContext.ToDo.Delete(value);
-                await this._DBContext.ApplyChangesAsync();
+                await this.ApplyChangesAsync();
                 this._DBContext.Operation.Detach(operationTO);
                 return true;
             } else {
@@ -266,6 +267,20 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
     private async Task PopulateDirty() {
         var ProjectCollectionGrain = this.GrainFactory.GetGrain<IProjectCollectionGrain>(Guid.Empty);
         await ProjectCollectionGrain.SetDirty();
+    }
+
+    public async Task<ProjectContext?> GetProjectContext(User user, Operation operation) {
+        var state = await this.GetState();
+        if (state is null) {
+            return new ProjectContext(new List<Project>(), new List<ToDo>());
+        } else {
+            var projectPK = state.GetPrimaryKey();
+            return new ProjectContext(
+                Project: new List<Project>() { state }, 
+                ToDo: new List<ToDo>(
+                    this._DBContext.ToDo.Values.Where(todo => todo.GetProjectPK() == projectPK)
+                ));
+        }
     }
 }
 

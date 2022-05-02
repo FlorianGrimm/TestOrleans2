@@ -1,11 +1,8 @@
+begin transaction
 DELETE FROM [history].[ToDoHistory]
-GO
 DELETE FROM [history].[ProjectHistory]
-GO
 DELETE FROM [dbo].[ToDo]
-GO
 DELETE FROM [dbo].[Project]
-GO
 
 DELETE FROM dbo.Operation
 FROM dbo.Operation 
@@ -21,7 +18,11 @@ LEFT OUTER JOIN
 	[history].[UserHistory] as xx
 ON Operation.OperationId = xx.OperationId
 WHERE (x.OperationId IS NULL) AND (xx.OperationId IS NULL) 
+
+commit transaction
 GO
+
+
 
 --exec [dbo].[UserSelectByUserName] @UserName=N'GRIMMBART\flori'
 --go

@@ -67,6 +67,10 @@
     <Folder Include="history\Tables" />
     <Folder Include="Post-Deployment" />
     <Folder Include="Security" />
+    <Folder Include="Pre-Deployment" />
+    <Folder Include="Orleans" />
+    <Folder Include="Orleans\Tables" />
+    <Folder Include="Orleans\StoredProcedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\StoredProcedures\dbo.OperationInsert.sql" />
@@ -92,11 +96,21 @@
     <Build Include="dbo\StoredProcedures\dbo.ProjectSelectAll.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ToDoSelectAll.sql" />
     <Build Include="dbo\StoredProcedures\dbo.ToDoSelectProject.sql" />
+    <Build Include="Orleans\Tables\dbo.OrleansMembershipTable.sql" />
+    <Build Include="Orleans\Tables\dbo.OrleansMembershipVersionTable.sql" />
+    <Build Include="Orleans\Tables\dbo.OrleansRemindersTable.sql" />
+    <Build Include="Orleans\Tables\dbo.OrleansStorage.sql" />
+    <Build Include="Orleans\Tables\dbo.OrleansQuery.sql" />
+    <Build Include="Orleans\StoredProcedures\EnableReadCommittedSnapshot.sql" />
+    <Build Include="Orleans\StoredProcedures\OrleansQueryFill.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Replacement.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Pre-Deployment\Script.PreDeployment.sql" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Utility\HostExtensions.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Brimborium.Registrator" Version="1.1.79-g858c964373" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Negotiate" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.1">
@@ -42,6 +46,10 @@
 
 	<ItemGroup>
 	  <Orleans_CodeGenInputs Remove="Controllers\ReplacementControllerBase.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Utility\HostExtensions.cs" />
 	</ItemGroup>
 
 	<Target Name="SwaggerGenerate">

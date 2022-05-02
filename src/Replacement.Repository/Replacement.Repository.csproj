@@ -7,6 +7,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Contracts\**" />
+	  <EmbeddedResource Remove="Contracts\**" />
+	  <None Remove="Contracts\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Storage\MyGrainState.cs" />
 	  <Compile Remove="Storage\MyGrainStorageConfiguration.cs" />
 	</ItemGroup>
@@ -33,10 +39,6 @@
 	  <ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
 	  <ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
 	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Contracts\API\" />
 	</ItemGroup>
 
 	<ItemGroup>

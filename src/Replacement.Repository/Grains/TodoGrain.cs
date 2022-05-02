@@ -55,14 +55,11 @@ public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
     }
 }
 
-public class ToDoGrain : Grain, IToDoGrain {
-    private readonly IDBContext _DBContext;
-    private ToDo? _State;
-
+public class ToDoGrain : GrainBase<ToDo>, IToDoGrain {
     public ToDoGrain(
-        IDBContext dBContext
-        ) {
-        this._DBContext = dBContext;
+        IDBContext dbContext
+        ) :base(dbContext){
+        this._DBContext = dbContext;
     }
 
     private ToDoPK? GetGrainIdentityAsPK() {

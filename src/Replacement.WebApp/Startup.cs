@@ -27,15 +27,14 @@ public class Startup {
         AddAppSwaggerGen(services);
         AddAppServicesWithRegistrator(services);
         AddAppAuthentication(services);
-        services.AddOptions<DBContextOption>().Configure(options => {
-            options.ConnectionString = this.Configuration.GetValue<string>("Database");
-        });
+        AddAppOptions(services);
     }
 
     public void ConfigureSwaggerGeneratorServices(IServiceCollection services) {
         this.AddControllers(services);
         AddAppSwaggerGen(services);
         AddAppServicesWithRegistrator(services);
+        AddAppOptions(services);
     }
 
     private IMvcBuilder AddControllers(IServiceCollection services) {
@@ -70,6 +69,12 @@ public class Startup {
 
         services.AddAuthorization(options => {
             options.FallbackPolicy = options.DefaultPolicy;
+        });
+    }
+
+    private void AddAppOptions(IServiceCollection services) {
+        services.AddOptions<DBContextOption>().Configure(options => {
+            options.ConnectionString = this.Configuration.GetValue<string>("Database");
         });
     }
 

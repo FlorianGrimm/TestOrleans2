@@ -1,1 +1,2 @@
-﻿GO
+﻿EXECUTE [dbo].[OrleansQueryFill]
+GO

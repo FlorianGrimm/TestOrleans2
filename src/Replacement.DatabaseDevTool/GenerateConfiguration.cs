@@ -2,8 +2,6 @@
 
 namespace Replacement.DatabaseDevTool {
     public class GenerateConfiguration : Configuration {
-        public readonly KnownTemplates KT;
-
         // public readonly RenderTemplate<TableInfo> SelectColumnsParameterTempate;
 
         public readonly RenderTemplate<TableInfo> SelectColumnsParameterPKTempate;
@@ -35,12 +33,9 @@ namespace Replacement.DatabaseDevTool {
 
         public readonly RenderTemplate<TableDataHistory> DeletePKTempateParameter;
 
-        public readonly List<ReplacementTemplate<TableInfo>> ReplacementTableTemplates;
+        
 
         public GenerateConfiguration() {
-            this.ReplacementTableTemplates = new List<ReplacementTemplate<TableInfo>>();
-            this.KT = new KnownTemplates();
-
             //this.SelectColumnsParameterTempate = new RenderTemplate<TableInfo>(
             //    NameFn: (t) => $"SelectColumnsParameterTempate.{t.GetNameQ()}",
             //    Render: (data, ctxt) => {
@@ -118,7 +113,7 @@ namespace Replacement.DatabaseDevTool {
                              ctxt,
                              top: 1,
                              columnsBlock: (data, ctxt) => {
-                                 this.KT.SelectTableColumns.Render(data, ctxt);
+                                 this.KnownTemplates.SelectTableColumns.Render(data, ctxt);
                              },
                              fromBlock: (data, ctxt) => {
                                  ctxt.AppendLine(data.GetNameQ());
@@ -148,7 +143,7 @@ namespace Replacement.DatabaseDevTool {
                         parameter: (data, ctxt) => {
                             ctxt.RenderTemplate(
                                 data.PrimaryKeyColumns
-                                , this.KT.ColumnsAsParameter);
+                                , this.KnownTemplates.ColumnsAsParameter);
                         },
                         bodyBlock: (data, ctxt) => {
                             this.SelectPKTempateBody.Render(data, ctxt);
@@ -233,7 +228,7 @@ namespace Replacement.DatabaseDevTool {
                         parameter: (data, ctxt) => {
                             ctxt.RenderTemplate(
                                 data.ForeignKeyColumnsReferenced
-                                , this.KT.ColumnsAsParameter);
+                                , this.KnownTemplates.ColumnsAsParameter);
                         },
                         bodyBlock: (data, ctxt) => {
                             KnownTemplates.SqlSelect(
@@ -241,8 +236,8 @@ namespace Replacement.DatabaseDevTool {
                                 ctxt,
                                 top: null,
                                 columnsBlock: (data, ctxt) => {
-                                    this.KT.Columns.Render(data.TableInfo.Columns, ctxt);
-                                    this.KT.ColumnRowversion.Render(data.TableInfo, ctxt);
+                                    this.KnownTemplates.Columns.Render(data.TableInfo.Columns, ctxt);
+                                    this.KnownTemplates.ColumnRowversion.Render(data.TableInfo, ctxt);
                                 },
                                 fromBlock: (data, ctxt) => {
                                     ctxt.AppendLine(data.TableInfo.GetNameQ());
@@ -273,13 +268,13 @@ namespace Replacement.DatabaseDevTool {
                         parameter: (data, ctxt) => {
                             ctxt.RenderTemplate(
                                 (columns: data.TableData.Columns, columnRowVersion: data.TableData.ColumnRowversion),
-                                this.KT.ColumnsAsParameterWithRowVersion
+                                this.KnownTemplates.ColumnsAsParameterWithRowVersion
                                 );
                         },
                         bodyBlock: (data, ctxt) => {
                             ctxt.RenderTemplate(
                                 (columns: data.TableData.Columns, columnRowVersion: data.TableData.ColumnRowversion, prefix: "@Current"),
-                                this.KT.ColumnsAsDeclareParameterWithRowVersion
+                                this.KnownTemplates.ColumnsAsDeclareParameterWithRowVersion
                                 );
                             ctxt.AppendLine("DECLARE @ResultValue INT;");
                             ctxt.AppendLine("");
@@ -658,7 +653,7 @@ namespace Replacement.DatabaseDevTool {
 
                             ctxt.RenderTemplate(
                                 (columns: data.TableData.Columns, columnRowVersion: data.TableData.ColumnRowversion, prefix: "@Current"),
-                                this.KT.ColumnsAsDeclareParameterWithRowVersion
+                                this.KnownTemplates.ColumnsAsDeclareParameterWithRowVersion
                                 );
 
                             ctxt.AppendLine("DECLARE @Result AS TABLE (");
@@ -849,7 +844,7 @@ namespace Replacement.DatabaseDevTool {
         }
 
         public override ConfigurationBound Build(DatabaseInfo databaseInfo) {
-            var result = new ConfigurationBound();
+            var result = base.Build(databaseInfo);
             var stringComparer = System.StringComparer.OrdinalIgnoreCase;
             var hsExcludeFromCompare = new HashSet<string>(stringComparer);
             hsExcludeFromCompare.Add("OperationId");
@@ -978,29 +973,14 @@ namespace Replacement.DatabaseDevTool {
                             t => t.TableData,
                             this.DeletePKTempateParameter)));
 
-            result.AddReplacementBindings(
-                "SelectTableColumns",
-                databaseInfo.Tables.Select(
-                    t => new TableBinding(t, this.KT.SelectTableColumns)));
-
-            /*
-            result.AddReplacementBindings(
-                "ReplacementTableTemplates",
-                ConfigurationBound.CreateReplacementBinding(
-                    this.ReplacementTableTemplates,
-                    databaseInfo.Tables));
-            */
-            result.ReplacementBindings.AddRange(
-                ConfigurationBound.CreateReplacementBinding(
-                    this.ReplacementTableTemplates,
-                    databaseInfo.Tables));
-            //
+            
             return result;
         }
 
         private static bool IsADataTable(TableInfo t) {
             return !(IsOperationTable(t) || IsAHistoryTable(t));
         }
+     
         private static bool IsAHistoryTable(TableInfo t) {
             return string.Equals(t.Schema, "history", System.StringComparison.Ordinal);
         }

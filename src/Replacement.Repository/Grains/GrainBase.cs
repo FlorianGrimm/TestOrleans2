@@ -33,6 +33,17 @@ public class GrainBase<TValue> : Grain
     protected virtual Task<TValue?> Load() {
         return Task.FromResult<TValue?>(null);
     }
+
+
+    public virtual async Task ApplyChangesAsync(ISqlAccess? sqlAccess = default, CancellationToken cancellationToken = default(CancellationToken)) {
+        try {
+            await this._DBContext.ApplyChangesAsync(sqlAccess, cancellationToken);
+        } catch {
+            this._IsDirty = true;
+            this._DBContext.Clear();
+            throw;
+        }
+    }
 }
 
 //

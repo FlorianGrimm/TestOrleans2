@@ -62,60 +62,60 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
     }
 }
 
-public class UserGrain : Grain, IUserGrain {
-    private readonly IDBContext _DBContext;
-    private User? _User;
+public class UserGrain : GrainBase<User>, IUserGrain {
 
     public UserGrain(
-        IDBContext dBContext
-        ) {
-        this._DBContext = dBContext;
+        IDBContext dbContext
+        ):base(dbContext) {
     }
 
-    public override async Task OnActivateAsync() {
+    protected override async Task<User?> Load() {
         var pk = new UserPK(
                 this.GetGrainIdentity().PrimaryKey
             );
         using (var dataAccess = await this._DBContext.GetDataAccessAsync()) {
             var result = await dataAccess.ExecuteUserSelectPKAsync(pk);
             if (result is null) {
-                this._User = null;
+                return null;
             } else {
-                this._User = result;
                 this._DBContext.User.Attach(result);
+                return result;
             }
         }
     }
 
-    public Task<User?> GetUser(Operation operation) {
-        if (this._User is null) {
+    public async Task<User?> GetUser(Operation operation) {
+        var user = await this.GetState();
+        if (user is null) {
             this.DeactivateOnIdle();
         }
-        return Task.FromResult(this._User);
+        return user;
     }
 
     public async Task<User?> UpsertUser(User value, User? currentUser, Operation operation) {
+        var user = await this.GetState();
         value = value.SetOperation(operation);
         this._DBContext.Operation.Add(operation);
         var resultTO = this._DBContext.User.Upsert(value);
         await this._DBContext.ApplyChangesAsync();
 
         var result = resultTO.Value;
-        this._User = result;
+        this._State = result;
         await this.PopulateDirty(result);
         return result;
     }
 
     public async Task<bool> DeleteUser(User? currentUser, Operation operation) {
-        if (this._User is null) {
+        var user = await this.GetState();
+        if (user is null) {
             return false;
         } else {
-            var value = this._User.SetOperation(operation);
+            var value = user.SetOperation(operation);
             this._DBContext.Operation.Add(operation);
             this._DBContext.User.Delete(value);
             await this._DBContext.ApplyChangesAsync();
 
-            this._User = null;
+            this._State = null;
             await this.PopulateDirty(null);
             this.DeactivateOnIdle();
             return true;

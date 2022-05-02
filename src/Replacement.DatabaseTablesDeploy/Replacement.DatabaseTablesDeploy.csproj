@@ -39,7 +39,10 @@
 		<Content Include="..\Replacement.Database\history\Tables\*.sql">
 			<Link>\history\Tables\%(RecursiveDir)\%(FileName)%(extension)</Link>
 		</Content>
-		<Content Include="..\Replacement.Database\Security\*.sql">
+    <Content Include="..\Replacement.Database\Orleans\Tables\*.sql">
+      <Link>\Orleans\Tables\%(RecursiveDir)\%(FileName)%(extension)</Link>
+    </Content>
+    <Content Include="..\Replacement.Database\Security\*.sql">
 			<Link>\Security\%(RecursiveDir)\%(FileName)%(extension)</Link>
 		</Content>
 	</ItemGroup>

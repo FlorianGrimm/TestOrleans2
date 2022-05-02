@@ -1,30 +1,49 @@
 ﻿using Brimborium.TypedStoredProcedure;
 
-using Microsoft.Extensions.Configuration;
-
 namespace Replacement.DatabaseDevTool;
 
 public static partial class Program {
+
     public static int Main(string[] args) {
-        bool isForce = args.Contains("--force");
-        if (isForce) {
-            args = args.Where(a => (a != "--force")).ToArray();
-            System.Console.Out.WriteLine("update with --force");
+        if (args.Contains("--help")) {
+            System.Console.Out.WriteLine("dotnet run -- --force --verbose --steps 1,2,3,4,5");
+            System.Console.Out.WriteLine("");
+            System.Console.Out.WriteLine("--ConnectionString - required.");
+            System.Console.Out.WriteLine("--OutputFolder     - for the sql files.");
+            System.Console.Out.WriteLine("--force            - force update database.");
+            System.Console.Out.WriteLine("--verbose");
+            System.Console.Out.WriteLine("--steps 1,2,3,4,5");
+            printSteps(0);
+
+            System.Console.Out.WriteLine("");
+            System.Console.Out.WriteLine("User secrets");
+            System.Console.Out.WriteLine("--------------");
+            System.Console.Out.WriteLine("{");
+            System.Console.Out.WriteLine("    \"ConnectionString\": \"Data Source=.;Initial Catalog=...;Integrated Security=true;TrustServerCertificate=True;\"");
+            System.Console.Out.WriteLine("}");
+            return 0;
         }
         try {
             var configuration = GetConfiguration(args);
+            bool isForce = configuration.GetValue<bool>("force");
+            bool verbose = configuration.GetValue<bool>("verbose");
+            string steps = configuration.GetValue<string>("steps");
+            if (string.IsNullOrEmpty(steps)) {
+                steps = "1,2,3,4,5";
+            }
+            var hsSteps = new HashSet<string>(steps.Split(','));
 
             var connectionString = configuration.GetValue<string>("ConnectionString");
             var outputFolder = configuration.GetValue<string>("OutputFolder")
                 ?? configuration.GetValue<string>("App:OutputFolder");
             var sqlProjectName = configuration.GetValue<string>("SqlProject");
             var sqlProjectTablesName = configuration.GetValue<string>("SqlProjectTables");
+            var sqlProjectDatabaseDevTool = configuration.GetValue<string>("SqlProjectDatabaseDevTool");
 
             if (string.IsNullOrEmpty(connectionString)) {
                 System.Console.Error.WriteLine("ConnectionString is empty");
                 return 1;
             }
-            // System.Console.Out.WriteLine(connectionString);
 
             var upperDirectoryPath = GetUpperDirectoryPath();
 
@@ -37,10 +56,21 @@ public static partial class Program {
             if (string.IsNullOrEmpty(sqlProjectTablesName)) {
                 sqlProjectTablesName = "Replacement.DatabaseTablesDeploy"; // change this
             }
+            if (string.IsNullOrEmpty(sqlProjectDatabaseDevTool)) {
+                sqlProjectDatabaseDevTool = "Replacement.DatabaseDevTool"; // change this
+            }
 
             if (string.IsNullOrEmpty(outputFolder)) {
                 System.Console.Error.WriteLine("outputFolder is empty");
                 return 1;
+            }
+
+
+            if (verbose) {
+                System.Console.Out.WriteLine($"outputFolder:{outputFolder}");
+                System.Console.Out.WriteLine($"connectionString:{connectionString}");
+                System.Console.Out.WriteLine($"sqlProjectName:{sqlProjectName}");
+                System.Console.Out.WriteLine($"sqlProjectTablesName:{sqlProjectTablesName}");
             }
 
             // MainGenerateSql
@@ -51,7 +81,8 @@ public static partial class Program {
                 System.Console.Error.WriteLine("dotnet not found");
                 return 1;
             }
-            {
+            if (hsSteps.Contains("1")) {
+                printSteps(1);
                 var sqlProjectTables_csproj = System.IO.Path.Combine(
                     upperDirectoryPath,
                     sqlProjectTablesName,
@@ -61,13 +92,14 @@ public static partial class Program {
                     upperDirectoryPath,
                     sqlProjectTablesName
                     );
-
-                System.Console.Out.WriteLine($"Update tables in database.");
+                
                 var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectTables_csproj, sqlProjectTablesDirectory, isForce);
                 if (subresult != 0) { return subresult; }
             }
 #if true
-            {
+            if (hsSteps.Contains("2")) {
+                printSteps(2);
+
                 if (!System.IO.Path.IsPathFullyQualified(outputFolder)) {
                     outputFolder = System.IO.Path.Combine(upperDirectoryPath, outputFolder);
                 }
@@ -81,7 +113,8 @@ public static partial class Program {
 #endif
 
 #if true
-            {
+            if (hsSteps.Contains("3")) {
+                printSteps(3);
                 var sqlProjectComplete_csproj = System.IO.Path.Combine(
                     upperDirectoryPath,
                     sqlProjectName,
@@ -105,26 +138,49 @@ public static partial class Program {
 #endif
             // GenerateSqlAccess
 #if true
-            {
-                AddNativeTypeConverter();
+            AddNativeTypeConverter();
+            if (hsSteps.Contains("4")) {
+                printSteps(4);
 
                 {
                     var (outputPath, outputNamespace) = Replacement.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
                     var subResult = MainGeneratePrimaryKey(connectionString, outputPath, outputNamespace);
                     if (subResult) {
+
                         System.Console.Out.WriteLine("PrimaryKey modified.");
-                        System.Console.Out.WriteLine("Please rerun.");
-                        System.Console.Out.WriteLine("terminate");
+                        //
+                        if (hsSteps.Contains("5")) {
+                            System.Console.Out.WriteLine("Trying to rerun.");
+                            System.Console.Out.WriteLine("stay tunned");
+                            var sqlProject_csproj = System.IO.Path.Combine(
+                                upperDirectoryPath,
+                                sqlProjectDatabaseDevTool,
+                                $"{sqlProjectDatabaseDevTool}.csproj"
+                                );
+                            var sqlProjectDirectory = System.IO.Path.Combine(
+                                upperDirectoryPath,
+                                sqlProjectDatabaseDevTool
+                                );
+                            var psi = new System.Diagnostics.ProcessStartInfo(
+                                dotnetPath, $"run \"{sqlProject_csproj}\" -- --steps 5");
+                            psi.WorkingDirectory = sqlProjectDirectory;
+                            System.Diagnostics.Process.Start(psi);
+                            // do not check exit because this prg is already running.
+                        } else { 
+                            System.Console.Out.WriteLine("terminate");
+                        }
                         return 0;
                     }
                 }
-                {
-                    var defintions = GetDefintion();
+            }
+            if (hsSteps.Contains("5")) { // 5 MainGenerateSqlAccess
+                printSteps(5);
 
-                    var (outputPath, outputNamespace, outputClassName) = Replacement.Repository.Service.SqlAccessLocation.GetPrimaryKeyOutputInfo();
+                var defintions = GetDefintion();
 
-                    MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
-                }
+                var (outputPath, outputNamespace, outputClassName) = Replacement.Repository.Service.SqlAccessLocation.GetPrimaryKeyOutputInfo();
+
+                MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
             }
 #endif
 
@@ -136,13 +192,31 @@ public static partial class Program {
             return 1;
         }
     }
-
+    private static void printSteps(int currentStep) {
+        var steps = new string[] {
+            "",
+            " 1) Update tables in database.",
+            " 2) Generate Sql files.",
+            " 3) Update tables & store procedures in database.",
+            " 4) Generate PrimaryKey.",
+            " 5) Generate SqlAccess C#.",
+        };
+        System.Console.Out.WriteLine("");
+        for (int step= 1; step <= 5; step++){
+            if (currentStep == step) {
+                System.Console.Out.WriteLine("*" + steps[step]);
+            } else { 
+                System.Console.Out.WriteLine("-" + steps[step]);
+            }
+        }
+    }
     private static int UpdateDatabase(
         string connectionString,
         string dotnetPath,
         string sqlProject_csproj,
         string sqlProjectDirectory,
         bool isForce) {
+        var start = System.DateTime.Now;
         var diBin = new System.IO.DirectoryInfo(
             System.IO.Path.Combine(
                 sqlProjectDirectory,
@@ -203,6 +277,8 @@ public static partial class Program {
             var process = System.Diagnostics.Process.Start(psi);
             if (process is not null) {
                 process.WaitForExit(30_000);
+                var stop = System.DateTime.Now;
+                System.Console.Out.WriteLine($"{(stop-start).TotalSeconds} sec");
                 if (process.ExitCode == 0) {
                     System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} OK");
                 } else {
@@ -231,7 +307,7 @@ public static partial class Program {
             connectionString,
             outputFolder,
             cfg,
-            templateVariables, 
+            templateVariables,
             isForce);
     }
 
@@ -250,7 +326,7 @@ public static partial class Program {
         DatabaseDefintion dbDefs,
         string outputPath,
         string outputNamespace,
-        string outputClassName, 
+        string outputClassName,
         bool isForce
         ) {
         var refType = typeof(Replacement.Contracts.API.PrimaryKeyLocation);

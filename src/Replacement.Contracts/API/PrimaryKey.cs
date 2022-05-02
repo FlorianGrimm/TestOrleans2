@@ -10,6 +10,27 @@ namespace Replacement.Contracts.API {
         Guid OperationId
         ) : IPrimaryKey;
 
+    public sealed partial record OrleansMembershipTablePK (
+        string DeploymentId,
+        string Address,
+        int Port,
+        int Generation
+        ) : IPrimaryKey;
+
+    public sealed partial record OrleansMembershipVersionTablePK (
+        string DeploymentId
+        ) : IPrimaryKey;
+
+    public sealed partial record OrleansQueryPK (
+        string QueryKey
+        ) : IPrimaryKey;
+
+    public sealed partial record OrleansRemindersTablePK (
+        string ServiceId,
+        string GrainId,
+        string ReminderName
+        ) : IPrimaryKey;
+
     public sealed partial record ProjectPK (
         Guid ProjectId
         ) : IPrimaryKey;
