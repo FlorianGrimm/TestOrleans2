@@ -5,7 +5,7 @@
 
         public IndexModel(ILogger<IndexModel> logger)
         {
-            _logger = logger;
+            this._logger = logger;
         }
 
         public void OnGet()

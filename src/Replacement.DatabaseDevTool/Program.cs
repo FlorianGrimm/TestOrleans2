@@ -10,8 +10,8 @@ public static partial class Program {
             System.Console.Out.WriteLine("");
             System.Console.Out.WriteLine("--ConnectionString - required.");
             System.Console.Out.WriteLine("--OutputFolder     - for the sql files.");
-            System.Console.Out.WriteLine("--force            - force update database.");
-            System.Console.Out.WriteLine("--verbose");
+            System.Console.Out.WriteLine("--force true       - force update database.");
+            System.Console.Out.WriteLine("--verbose true");
             System.Console.Out.WriteLine("--steps 1,2,3,4,5");
             printSteps(0);
 
@@ -24,6 +24,7 @@ public static partial class Program {
             return 0;
         }
         try {
+            //System.Diagnostics.Debugger.Launch();
             var configuration = GetConfiguration(args);
             bool isForce = configuration.GetValue<bool>("force");
             bool verbose = configuration.GetValue<bool>("verbose");
@@ -223,6 +224,9 @@ public static partial class Program {
                 "bin"
                 )
             );
+        if (!diBin.Exists) {
+            diBin.Create();
+        }
 
         var dacpacFilesBefore = diBin.EnumerateFiles(
             System.IO.Path.GetFileNameWithoutExtension(sqlProject_csproj) + ".dacpac",

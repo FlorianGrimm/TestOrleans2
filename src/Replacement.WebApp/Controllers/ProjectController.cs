@@ -13,16 +13,15 @@ public class ProjectController : ReplacementControllerBase {
     // GET: api/Project
     [HttpGet(Name = "ProjectGetAll")]
     public async Task<ActionResult<IEnumerable<Project>>> Get() {
-        var operation = new Operation(
-               OperationId: Guid.NewGuid(),
-               Title: this.GetOperationTitle(),
-               EntityType: nameof(Project),
-               EntityId: "",
-               Data: this.GetOperationData(),
-               UserId: null,
-               CreatedAt: DateTimeOffset.Now,
-               SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: "",
+            argument: (Project?)null
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -35,16 +34,15 @@ public class ProjectController : ReplacementControllerBase {
     // GET api/Project/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{projectId}", Name = "ProjectGetOne")]
     public async Task<ActionResult<Project?>> Get(Guid projectId) {
-        var operation = new Operation(
-                OperationId: Guid.NewGuid(),
-                Title: this.GetOperationTitle(),
-                EntityType: nameof(Project),
-                EntityId: projectId.ToString(),
-                Data: this.GetOperationData(projectId),
-                UserId: null,
-                CreatedAt: DateTimeOffset.Now,
-                SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: projectId,
+            argument: (Project?)null
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -60,19 +58,20 @@ public class ProjectController : ReplacementControllerBase {
     public async Task<ActionResult<Project?>> Post([FromBody] Project value) {
         if (value.ProjectId == Guid.Empty) {
             value = value with {
-                ProjectId = Guid.NewGuid()
+                ProjectId = Guid.NewGuid(),
+                SerialVersion = 0
             };
         }
-        var operation = new Operation(
-            OperationId: Guid.NewGuid(),
-            Title: this.GetOperationTitle(),
-            EntityType: nameof(Project),
-            EntityId: value.ProjectId.ToString(),
-            Data: this.GetOperationData(value),
-            UserId: null,
-            CreatedAt: DateTimeOffset.Now,
-            SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+
+        var requestOperation = this.CreateRequestOperation(
+            pk: value.ProjectId,
+            argument: value
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: true,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -92,21 +91,22 @@ public class ProjectController : ReplacementControllerBase {
     [HttpPut("{projectId}", Name = "ProjectPut")]
     public async Task<ActionResult<Project?>> Put(Guid projectId, [FromBody] Project value) {
         value = value with { ProjectId = projectId };
-        var operation = new Operation(
-            OperationId: Guid.NewGuid(),
-            Title: this.GetOperationTitle(),
-            EntityType: nameof(Project),
-            EntityId: projectId.ToString(),
-            Data: this.GetOperationData(value),
-            UserId: null,
-            CreatedAt: DateTimeOffset.Now,
-            SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: projectId,
+            argument: value
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: true,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
+            var project = await grain.UpsertProject(value, user, operation);
+#if false
             Project? project = null;
             for (int iWatchDog = 2; iWatchDog >= 0; iWatchDog--) {
                 try {
@@ -128,6 +128,7 @@ public class ProjectController : ReplacementControllerBase {
                     //    await Task.Delay(50);
                 }
             }
+#endif
             if (project is not null) {
                 return this.Ok();
             } else {
@@ -140,27 +141,27 @@ public class ProjectController : ReplacementControllerBase {
     [HttpDelete("{projectId}", Name = "ProjectDelete")]
     public async Task<ActionResult> Delete(Guid projectId) {
         if (projectId == Guid.Empty) {
-            return NotFound();
+            return this.NotFound();
         }
-        var operation = new Operation(
-            OperationId: Guid.NewGuid(),
-            Title: this.GetOperationTitle(),
-            EntityType: nameof(Project),
-            EntityId: projectId.ToString(),
-            Data: this.GetOperationData(projectId),
-            UserId: null,
-            CreatedAt: DateTimeOffset.Now,
-            SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+
+        var requestOperation = this.CreateRequestOperation(
+            pk: projectId,
+            argument: (Project?)null
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: true,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
         {
             var result = await this.Client.GetProjectGrain(projectId).DeleteProject(user, operation);
             if (result) {
-                return Ok();
+                return this.Ok();
             } else {
-                return NotFound();
+                return this.NotFound();
             }
         }
     }

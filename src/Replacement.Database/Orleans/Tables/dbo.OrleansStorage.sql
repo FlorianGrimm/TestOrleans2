@@ -47,11 +47,17 @@ GO
 -- See more information at https://www.littlekendra.com/2016/02/04/why-rowlock-hints-can-make-queries-slower-and-blocking-worse-in-sql-server/.
 ALTER TABLE dbo.OrleansStorage SET(LOCK_ESCALATION = DISABLE);
 GO
--- A feature with ID is compression. If it is supported, it is used for OrleansStorage table. This is an Enterprise feature.
--- This consumes more processor cycles, but should save on space on GrainIdString, GrainTypeString and ServiceId, which
--- contain mainly the same values. Also the payloads will be compressed.
-IF EXISTS (SELECT 1 FROM sys.dm_db_persisted_sku_features WHERE feature_id = 100)
-BEGIN
-    ALTER TABLE dbo.OrleansStorage REBUILD PARTITION = ALL WITH(DATA_COMPRESSION = PAGE);
-END
+
+CREATE PROCEDURE dbo.OrleansStorageEnableDataCompression
+AS BEGIN
+    -- A feature with ID is compression. If it is supported, it is used for OrleansStorage table. This is an Enterprise feature.
+    -- This consumes more processor cycles, but should save on space on GrainIdString, GrainTypeString and ServiceId, which
+    -- contain mainly the same values. Also the payloads will be compressed.
+    EXECUTE (N'
+    IF EXISTS (SELECT 1 FROM sys.dm_db_persisted_sku_features WHERE feature_id = 100)
+    BEGIN
+        ALTER TABLE dbo.OrleansStorage REBUILD PARTITION = ALL WITH(DATA_COMPRESSION = PAGE);
+    END;
+    ');
+END;
 GO

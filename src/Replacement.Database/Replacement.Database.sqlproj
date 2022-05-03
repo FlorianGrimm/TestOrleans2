@@ -16,12 +16,11 @@
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <TargetLanguage>CS</TargetLanguage>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -103,6 +102,9 @@
     <Build Include="Orleans\Tables\dbo.OrleansQuery.sql" />
     <Build Include="Orleans\StoredProcedures\EnableReadCommittedSnapshot.sql" />
     <Build Include="Orleans\StoredProcedures\OrleansQueryFill.sql" />
+    <Build Include="dbo\Tables\RequestLog.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.RequestLogSelectPK.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.RequestLogInsert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />
@@ -112,5 +114,20 @@
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Pre-Deployment\Script.PreDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="snippets.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ArtifactReference Include="..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac">
+      <HintPath>..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\master.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>master</DatabaseVariableLiteralValue>
+    </ArtifactReference>
+    <ArtifactReference Include="..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\msdb.dacpac">
+      <HintPath>..\..\..\..\..\Program Files\Microsoft Visual Studio\2022\Preview\Common7\IDE\Extensions\Microsoft\SQLDB\Extensions\SqlServer\130\SqlSchemas\msdb.dacpac</HintPath>
+      <SuppressMissingDependenciesErrors>False</SuppressMissingDependenciesErrors>
+      <DatabaseVariableLiteralValue>msdb</DatabaseVariableLiteralValue>
+    </ArtifactReference>
   </ItemGroup>
 </Project>

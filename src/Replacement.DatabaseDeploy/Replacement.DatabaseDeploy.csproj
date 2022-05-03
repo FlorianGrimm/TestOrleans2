@@ -46,4 +46,11 @@
 	  <Content Remove="obj\**" />
 	  <None Remove="obj\**" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <Content Remove="..\Replacement.Database\snippets.sql" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="..\Replacement.Database\snippets.sql" />
+	</ItemGroup>
 </Project>

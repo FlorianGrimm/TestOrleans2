@@ -13,16 +13,15 @@ public class MeController : ReplacementControllerBase {
     // GET api/Me
     [HttpGet()]
     public async Task<ActionResult<User?>> Get() {
-        var operation = new Operation(
-                OperationId: Guid.NewGuid(),
-                Title: this.GetOperationTitle(),
-                EntityType: nameof(User),
-                EntityId: "",
-                Data: this.GetOperationData(),
-                UserId: null,
-                CreatedAt: DateTimeOffset.Now,
-                SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: "",
+            argument: (User?)null
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -34,16 +33,15 @@ public class MeController : ReplacementControllerBase {
     // GET api/Me
     [HttpGet("Project")]
     public async Task<ActionResult<IEnumerable<Project>>> GetMeProject() {
-        var operation = new Operation(
-                OperationId: Guid.NewGuid(),
-                Title: this.GetOperationTitle(),
-                EntityType: nameof(User),
-                EntityId: "",
-                Data: this.GetOperationData(),
-                UserId: null,
-                CreatedAt: DateTimeOffset.Now,
-                SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: string.Empty,
+            argument: (Project?)null
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -55,16 +53,15 @@ public class MeController : ReplacementControllerBase {
     // GET api/Me
     [HttpGet("ToDo")]
     public async Task<ActionResult<IEnumerable<ToDo>>> GetMeToDo() {
-        var operation = new Operation(
-                OperationId: Guid.NewGuid(),
-                Title: this.GetOperationTitle(),
-                EntityType: nameof(User),
-                EntityId: "",
-                Data: this.GetOperationData(),
-                UserId: null,
-                CreatedAt: DateTimeOffset.Now,
-                SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: "",
+            argument: (ToDo?)null
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }

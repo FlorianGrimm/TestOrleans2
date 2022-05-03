@@ -3,7 +3,7 @@ CREATE PROCEDURE [dbo].[UserDeletePK]
     @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @ModifiedBy uniqueidentifier,
-    @SerialVersion bigint
+    @SerialVersion BIGINT
 AS BEGIN
     SET NOCOUNT ON;
 
@@ -65,7 +65,8 @@ AS BEGIN
             [ModifiedBy],
             [ValidFrom],
             [ValidTo]
-        ) Values (
+        )
+        VALUES (
             @CurrentUserId,
             @CurrentUserName,
             @OperationId,

@@ -4,17 +4,17 @@ AS BEGIN
 
     SELECT
             -- Replace=SelectTableColumns.[dbo].[ToDo] --
-            [ProjectId],
-            [ToDoId],
-            [UserId],
-            [Title],
-            [Done],
-            [OperationId],
-            [CreatedAt],
-            [CreatedBy],
-            [ModifiedAt],
-            [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] as BIGINT)
+            [ProjectId] = [ProjectId],
+            [ToDoId] = [ToDoId],
+            [UserId] = [UserId],
+            [Title] = [Title],
+            [Done] = [Done],
+            [OperationId] = [OperationId],
+            [CreatedAt] = [CreatedAt],
+            [CreatedBy] = [CreatedBy],
+            [ModifiedAt] = [ModifiedAt],
+            [ModifiedBy] = [ModifiedBy],
+            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
             -- Replace#SelectTableColumns.[dbo].[ToDo] --
         FROM
             [dbo].[ToDo]

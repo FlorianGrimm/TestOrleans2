@@ -36,7 +36,6 @@ public static class Program {
             ;
             //TurnWarningLengthThreshold
 
-
         });
         hostBuilder.ConfigureWebHostDefaults(webBuilder => {
             webBuilder.UseStartup<Startup>();

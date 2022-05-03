@@ -1,6 +1,3 @@
-using Replacement.Contracts.API;
-using Replacement.Repository.Service;
-
 namespace Replacement.WebApp;
 
 public class Startup {
@@ -14,43 +11,45 @@ public class Startup {
             }
         };
     public Startup(IConfiguration configuration) {
-        Configuration = configuration;
+        this.Configuration = configuration;
     }
 
     public IConfiguration Configuration { get; }
 
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services) {
-        var mvcBuilderControllers = this.AddControllers(services);
+        var mvcBuilderControllers = this.AddAppControllers(services);
         // AddAppOData(mvcBuilderControllers);
         services.AddRazorPages();
-        AddAppSwaggerGen(services);
-        AddAppServicesWithRegistrator(services);
-        AddAppAuthentication(services);
-        AddAppOptions(services);
+        
+        this.AddAppSwaggerGen(services);
+        this.AddAppServicesWithRegistrator(services);
+        this.AddAppAuthentication(services);
+        this.AddAppOptions(services);
+        this.AddAppRequestLog(services);
     }
 
     public void ConfigureSwaggerGeneratorServices(IServiceCollection services) {
-        this.AddControllers(services);
-        AddAppSwaggerGen(services);
-        AddAppServicesWithRegistrator(services);
-        AddAppOptions(services);
+        this.AddAppControllers(services);
+        this.AddAppSwaggerGen(services);
+        this.AddAppServicesWithRegistrator(services);
+        this.AddAppOptions(services);
     }
 
-    private IMvcBuilder AddControllers(IServiceCollection services) {
+    private IMvcBuilder AddAppControllers(IServiceCollection services) {
         return services.AddControllers((MvcOptions options) => {
             options.RespectBrowserAcceptHeader = true;
         });
     }
 
-    private static void AddAppSwaggerGen(IServiceCollection services) {
+    private void AddAppSwaggerGen(IServiceCollection services) {
         var swaggerOptions = GetSwaggerOptions();
         services.AddSwaggerGen(c => {
             c.SwaggerDoc(swaggerOptions.DocumentName, swaggerOptions.OpenApiInfo);
         });
     }
 
-    private static void AddAppServicesWithRegistrator(IServiceCollection services) {
+    private void AddAppServicesWithRegistrator(IServiceCollection services) {
         services.AddServicesWithRegistrator(
             actionAdd: (typeSourceSelector) => {
                 services.AddAttributtedServices(
@@ -78,6 +77,15 @@ public class Startup {
         });
     }
 
+    private void AddAppRequestLog(IServiceCollection services) {
+        services.AddOptions<RequestLogServiceOptions>().Configure(options => {
+            this.Configuration.Bind("RequestLog", options);
+        });
+        services.AddSingleton<IRequestLogService, RequestLogService>();
+        services.AddSingleton<IRequestLogServiceBulk, RequestLogServiceBulk>();
+        services.AddHostedService<RequestLogHostedService>();
+
+    }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
@@ -100,7 +108,7 @@ public class Startup {
         app.UseRouting();
 
         app.UseAuthentication();
-        
+
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints => {

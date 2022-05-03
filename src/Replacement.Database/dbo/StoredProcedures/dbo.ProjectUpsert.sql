@@ -43,7 +43,8 @@ AS BEGIN
             [CreatedBy],
             [ModifiedAt],
             [ModifiedBy]
-        ) Values (
+        )
+        VALUES (
             @ProjectId,
             @Title,
             @OperationId,
@@ -63,7 +64,8 @@ AS BEGIN
             [ModifiedBy],
             [ValidFrom],
             [ValidTo]
-        ) Values (
+        )
+        VALUES (
             @ProjectId,
             @Title,
             @OperationId,
@@ -120,7 +122,8 @@ AS BEGIN
                     [ModifiedBy],
                     [ValidFrom],
                     [ValidTo]
-                ) Values (
+                )
+                VALUES (
                     @ProjectId,
                     @Title,
                     @OperationId,

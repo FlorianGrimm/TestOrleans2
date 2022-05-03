@@ -43,7 +43,8 @@ AS BEGIN
             [CreatedBy],
             [ModifiedAt],
             [ModifiedBy]
-        ) Values (
+        )
+        VALUES (
             @UserId,
             @UserName,
             @OperationId,
@@ -63,7 +64,8 @@ AS BEGIN
             [ModifiedBy],
             [ValidFrom],
             [ValidTo]
-        ) Values (
+        )
+        VALUES (
             @UserId,
             @UserName,
             @OperationId,
@@ -120,7 +122,8 @@ AS BEGIN
                     [ModifiedBy],
                     [ValidFrom],
                     [ValidTo]
-                ) Values (
+                )
+                VALUES (
                     @UserId,
                     @UserName,
                     @OperationId,

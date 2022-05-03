@@ -12,14 +12,14 @@ AS BEGIN
         ;
     -- Replace=SelectPKTempateBody.[dbo].[User] --        
     SELECT TOP(1)
-            [UserId],
-            [UserName],
-            [OperationId],
-            [CreatedAt],
-            [CreatedBy],
-            [ModifiedAt],
-            [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] as BIGINT)
+            [UserId] = [UserId],
+            [UserName] = [UserName],
+            [OperationId] = [OperationId],
+            [CreatedAt] = [CreatedAt],
+            [CreatedBy] = [CreatedBy],
+            [ModifiedAt] = [ModifiedAt],
+            [ModifiedBy] = [ModifiedBy],
+            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
         FROM
             [dbo].[User]
         WHERE

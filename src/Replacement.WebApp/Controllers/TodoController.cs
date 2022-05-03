@@ -11,16 +11,14 @@ public class ToDoController : ReplacementControllerBase {
     // GET: api/ToDo
     [HttpGet]
     public async Task<ActionResult<IEnumerable<ToDo>>> Get() {
-        var operation = new Operation(
-               OperationId: Guid.NewGuid(),
-               Title: this.GetOperationTitle(),
-               EntityType: nameof(ToDo),
-               EntityId: "",
-               Data: this.GetOperationData(),
-               UserId: null,
-               CreatedAt: DateTimeOffset.Now,
-               SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+           pk: string.Empty,
+           argument: (ToDo?)null
+           );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
         if (user is null) {
             return this.Forbid();
         }
@@ -33,16 +31,15 @@ public class ToDoController : ReplacementControllerBase {
     [HttpGet("{projectId}/{todoId}")]
     public async Task<ActionResult<ToDo?>> Get(Guid projectId, Guid toDoId) {
         var toDoPK = new ToDoPK(projectId, toDoId);
-        var operation = new Operation(
-                OperationId: Guid.NewGuid(),
-                Title: this.GetOperationTitle(),
-                EntityType: nameof(ToDo),
-                EntityId: toDoPK.ToString(),
-                Data: this.GetOperationData(toDoId),
-                UserId: null,
-                CreatedAt: DateTimeOffset.Now,
-                SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+           pk: toDoPK,
+           argument: toDoPK
+           );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: false,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -62,16 +59,15 @@ public class ToDoController : ReplacementControllerBase {
             };
         }
         var toDoPK = value.GetPrimaryKey();
-        var operation = new Operation(
-            OperationId: Guid.NewGuid(),
-            Title: this.GetOperationTitle(),
-            EntityType: nameof(ToDo),
-            EntityId: toDoPK.ToString(),
-            Data: this.GetOperationData(value),
-            UserId: null,
-            CreatedAt: DateTimeOffset.Now,
-            SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+           pk: toDoPK,
+           argument: value
+           );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: true,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -95,16 +91,15 @@ public class ToDoController : ReplacementControllerBase {
         };
         var toDoPK = value.GetPrimaryKey();
 
-        var operation = new Operation(
-            OperationId: Guid.NewGuid(),
-            Title: this.GetOperationTitle(),
-            EntityType: nameof(ToDo),
-            EntityId: toDoPK.ToString(),
-            Data: this.GetOperationData(value),
-            UserId: null,
-            CreatedAt: DateTimeOffset.Now,
-            SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+            pk: toDoPK,
+            argument: value
+            );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: true,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
@@ -123,29 +118,28 @@ public class ToDoController : ReplacementControllerBase {
     [HttpDelete("{projectId}/{todoId}")]
     public async Task<ActionResult> Delete(Guid projectId, Guid todoId) {
         if ((projectId == Guid.Empty) || (todoId == Guid.Empty)) {
-            return NotFound();
+            return this.NotFound();
         }
         var toDoPK = new ToDoPK(projectId, todoId);
 
-        var operation = new Operation(
-            OperationId: Guid.NewGuid(),
-            Title: this.GetOperationTitle(),
-            EntityType: nameof(ToDo),
-            EntityId: toDoPK.ToString(),
-            Data: this.GetOperationData(toDoPK),
-            UserId: null,
-            CreatedAt: DateTimeOffset.Now,
-            SerialVersion: 0);
-        (operation, User? user) = await this.GetUserByUserName(operation);
+        var requestOperation = this.CreateRequestOperation(
+           pk: toDoPK,
+           argument: toDoPK
+           );
+        var (operation, user) = await this.InitializeOperation(
+            requestOperation: requestOperation,
+            canModifyState: true,
+            createUserIfNeeded: true);
+
         if (user is null) {
             return this.Forbid();
         }
         {
             var result = await this.Client.GetProjectGrain(todoId).DeleteToDo(toDoPK, user, operation);
             if (result) {
-                return Ok();
+                return this.Ok();
             } else {
-                return NotFound();
+                return this.NotFound();
             }
         }
     }

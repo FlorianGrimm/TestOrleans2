@@ -1,10 +1,6 @@
 #if true
 
 namespace Replacement.Contracts.API {
-    public sealed partial record __EFMigrationsHistoryPK (
-        string MigrationId
-        ) : IPrimaryKey;
-
     public sealed partial record OperationPK (
         System.DateTimeOffset CreatedAt,
         Guid OperationId
@@ -33,6 +29,10 @@ namespace Replacement.Contracts.API {
 
     public sealed partial record ProjectPK (
         Guid ProjectId
+        ) : IPrimaryKey;
+
+    public sealed partial record RequestLogPK (
+        Guid RequestLogId
         ) : IPrimaryKey;
 
     public sealed partial record ToDoPK (

@@ -5,7 +5,7 @@
 
         public PrivacyModel(ILogger<PrivacyModel> logger)
         {
-            _logger = logger;
+            this._logger = logger;
         }
 
         public void OnGet()

@@ -67,7 +67,7 @@ public static partial class Program {
     }
     public static DatabaseDefintion GetDefintion() {
         return new DatabaseDefintion(
-             StoredProcedures: new StoredProcedureDefintion[] {
+            StoredProcedures: new StoredProcedureDefintion[] {
                 new StoredProcedureDefintion("dbo", "OperationInsert",
                     CSTypeDefinition.TypeOf<Operation>(),
                     ExecutionMode.QuerySingle,
@@ -78,10 +78,16 @@ public static partial class Program {
                     ExecutionMode.QuerySingleOrDefault,
                     CSTypeDefinition.TypeOf<Operation>(isList:false, isAsync: true)),
 
+                new StoredProcedureDefintion("dbo", "RequestLogInsert", 
+                    CSTypeDefinition.TypeOf<RequestLog>(), 
+                    ExecutionMode.ExecuteNonQuery, 
+                    CSTypeDefinition.VoidAsync),
+
                 new StoredProcedureDefintion("dbo", "ProjectDeletePK",
                     CSTypeDefinition.TypeOf<Project>(),
                     ExecutionMode.Query,
                     CSTypeDefinition.TypeOf<ProjectPK>(isList:true, isAsync:true)),
+
                 new StoredProcedureDefintion("dbo", "ProjectSelectPK",
                     CSTypeDefinition.TypeOf<ProjectPK>(),
                     ExecutionMode.QueryMultiple,
@@ -139,6 +145,11 @@ public static partial class Program {
                     CSTypeDefinition.TypeOf<UserSelectByUserNameArg>(),
                     ExecutionMode.QuerySingleOrDefault,
                     CSTypeDefinition.TypeOf<User>(isList:false, isAsync:true)),
+
+                new StoredProcedureDefintion("dbo", "EnableReadCommittedSnapshot", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
+                new StoredProcedureDefintion("dbo", "OrleansQueryFill", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
+                new StoredProcedureDefintion("dbo", "OrleansStorageEnableDataCompression", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
+                new StoredProcedureDefintion("dbo", "RequestLogSelectPK", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
 
                 new StoredProcedureDefintion("dbo", "sp_alterdiagram", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
                 new StoredProcedureDefintion("dbo", "sp_creatediagram", CSTypeDefinition.None, ExecutionMode.Ignore, CSTypeDefinition.None),
