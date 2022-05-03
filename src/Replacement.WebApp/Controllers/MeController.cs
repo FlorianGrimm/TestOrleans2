@@ -37,7 +37,7 @@ public class MeController : ReplacementControllerBase {
     public async Task<ActionResult<IEnumerable<ProjectAPI>>> GetMeProject() {
         var requestOperation = this.CreateRequestOperation(
             pk: string.Empty,
-            argument: (ProjectEntity?)null
+            argument: (ProjectAPI?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,

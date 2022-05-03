@@ -93,22 +93,19 @@ foreach ($typeEntity in $typesEntity) {
                 #(if ($idx -eq $lastIdx) { $suffix="" } else { $suffix="," })
                 [string] $suffix = if ($idx -eq $lastIdx) { "" } else { "," }
                 
-                [string]$propertyName=$propertyEntityAPI.PropertyName
+                [string]$propertyName = $propertyEntityAPI.PropertyName
                 $output.AppendLine("                $($propertyName): that.$($propertyName)$($suffix)") | Out-Null
             }
-            # $propertiesEntity | ForEach-Object {
-            #     $propertyEntity = $_
-            #     $propertyAPI = $propertiesAPI | Where-Object {$_.Name -eq $propertyEntity.Name } | Select-Object -First 1
-            #     if ($null -ne $propertyAPI) {
-            #         [string] $propertyName = $propertyEntity.Name
-            #         if ($propertyName -ne "SerialVersion"){
-            #             $output.AppendLine("                $($propertyName): that.$($propertyName),") | Out-Null
-            #         }
-            #     }
-            # }    
-            #$output.AppendLine("                SerialVersion: that.SerialVersion") | Out-Null
             $output.AppendLine("                );") | Out-Null
             $output.AppendLine("        }") | Out-Null
+            $output.AppendLine("    }") | Out-Null
+            $output.AppendLine("") | Out-Null
+            $output.AppendLine("    public static List<$($nameAPI)> ToList$($nameAPI)(this IEnumerable<$($nameEntity)> that) {") | Out-Null
+            $output.AppendLine("        var result = new List<$($nameAPI)>();") | Out-Null
+            $output.AppendLine("        foreach (var item in that) { ") | Out-Null
+            $output.AppendLine("            result.Add(item.To$($nameAPI)());") | Out-Null
+            $output.AppendLine("        }") | Out-Null
+            $output.AppendLine("        return result;") | Out-Null
             $output.AppendLine("    }") | Out-Null
             $output.AppendLine("") | Out-Null
         }
@@ -129,24 +126,5 @@ if ([System.IO.File]::Exists($outputlocation)){
 if ($newContent -ne $oldContent) {
     [System.IO.File]::WriteAllText($outputlocation, $newContent) | Out-Null
 }
-
-
-<#
-[System.Type] $typeIDataOperationRelated = [Replacement.Contracts.Entity.IDataOperationRelated]
-$typesDataOperationRelated = $types | Where-Object {
-    [System.Type] $type = $_ 
-    if ($null -ne ($type.GetInterfaces() | Where-Object {$_ -eq $typeIDataOperationRelated})) {
-        $type        
-    }
-}
-
-$typesDataOperationRelated| ForEach-Object {
-    [System.Type] $type = $_ 
-    
-    Write-Host $type.FullName
-}
-#>
-
-# G:\github\FlorianGrimm\TestOrleans2\src\Replacement.Contracts\bin\Debug\net6.0\Replacement.Contracts.dll
 
 #

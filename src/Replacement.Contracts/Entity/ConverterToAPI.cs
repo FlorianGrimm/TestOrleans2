@@ -19,6 +19,14 @@ public static partial class ConverterToAPI {
         }
     }
 
+    public static List<OperationAPI> ToListOperationAPI(this IEnumerable<OperationEntity> that) {
+        var result = new List<OperationAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToOperationAPI());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static ProjectAPI? ToProjectAPI(this ProjectEntity? that) {
         if (that is null) {
@@ -35,6 +43,14 @@ public static partial class ConverterToAPI {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<ProjectAPI> ToListProjectAPI(this IEnumerable<ProjectEntity> that) {
+        var result = new List<ProjectAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToProjectAPI());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -57,6 +73,14 @@ public static partial class ConverterToAPI {
         }
     }
 
+    public static List<ProjectHistoryAPI> ToListProjectHistoryAPI(this IEnumerable<ProjectHistoryEntity> that) {
+        var result = new List<ProjectHistoryAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToProjectHistoryAPI());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static RequestLogAPI? ToRequestLogAPI(this RequestLogEntity? that) {
         if (that is null) {
@@ -75,6 +99,14 @@ public static partial class ConverterToAPI {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<RequestLogAPI> ToListRequestLogAPI(this IEnumerable<RequestLogEntity> that) {
+        var result = new List<RequestLogAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToRequestLogAPI());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -98,6 +130,14 @@ public static partial class ConverterToAPI {
         }
     }
 
+    public static List<RequestOperationAPI> ToListRequestOperationAPI(this IEnumerable<RequestOperationEntity> that) {
+        var result = new List<RequestOperationAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToRequestOperationAPI());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static ToDoAPI? ToToDoAPI(this ToDoEntity? that) {
         if (that is null) {
@@ -117,6 +157,14 @@ public static partial class ConverterToAPI {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<ToDoAPI> ToListToDoAPI(this IEnumerable<ToDoEntity> that) {
+        var result = new List<ToDoAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToToDoAPI());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -142,6 +190,14 @@ public static partial class ConverterToAPI {
         }
     }
 
+    public static List<ToDoHistoryAPI> ToListToDoHistoryAPI(this IEnumerable<ToDoHistoryEntity> that) {
+        var result = new List<ToDoHistoryAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToToDoHistoryAPI());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static UserAPI? ToUserAPI(this UserEntity? that) {
         if (that is null) {
@@ -158,6 +214,14 @@ public static partial class ConverterToAPI {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<UserAPI> ToListUserAPI(this IEnumerable<UserEntity> that) {
+        var result = new List<UserAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToUserAPI());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -178,6 +242,14 @@ public static partial class ConverterToAPI {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<UserHistoryAPI> ToListUserHistoryAPI(this IEnumerable<UserHistoryEntity> that) {
+        var result = new List<UserHistoryAPI>();
+        foreach (var item in that) { 
+            result.Add(item.ToUserHistoryAPI());
+        }
+        return result;
     }
 
 }

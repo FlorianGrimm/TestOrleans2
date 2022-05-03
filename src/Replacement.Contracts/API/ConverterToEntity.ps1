@@ -4,11 +4,7 @@ Write-Host "scriptlocation $scriptlocation"
 [string] $projectDirectory = [System.IO.Path]::GetDirectoryName([System.IO.Path]::GetDirectoryName($scriptlocation))
 Write-Host "projectDirectory $projectDirectory"
 
-<#
-
-#>
 $csproj = "$projectDirectory\Replacement.Contracts.csproj"
-
 dotnet build -p:ExtraDefineConstants=NOConverterToAPI -p:OutDir=bin\Debug\NOConverterToAPI\ $csproj 
 
 [string] $outputlocation=$scriptlocation.Substring(0, $scriptlocation.Length-4)+".cs"
@@ -89,21 +85,19 @@ foreach ($typeEntity in $typesEntity) {
                 [string]$propertyName=$propertyEntityAPI.PropertyName
                 $output.AppendLine("                $($propertyName): that.$($propertyName)$($suffix)") | Out-Null
             }
-            # $propertiesEntity | ForEach-Object {
-            #     $propertyEntity = $_
-            #     $propertyAPI = $propertiesAPI | Where-Object {$_.Name -eq $propertyEntity.Name } | Select-Object -First 1
-            #     if ($null -ne $propertyAPI) {
-            #         [string] $propertyName = $propertyEntity.Name
-            #         if ($propertyName -ne "SerialVersion"){
-            #             $output.AppendLine("                $($propertyName): that.$($propertyName),") | Out-Null
-            #         }
-            #     }
-            # }    
-            #$output.AppendLine("                SerialVersion: that.SerialVersion") | Out-Null
             $output.AppendLine("                );") | Out-Null
             $output.AppendLine("        }") | Out-Null
             $output.AppendLine("    }") | Out-Null
             $output.AppendLine("") | Out-Null
+            $output.AppendLine("    public static List<$($nameEntity)> ToList$($nameEntity)(this IEnumerable<$($nameAPI)> that) {") | Out-Null
+            $output.AppendLine("        var result = new List<$($nameEntity)>();") | Out-Null
+            $output.AppendLine("        foreach (var item in that) { ") | Out-Null
+            $output.AppendLine("            result.Add(item.To$($nameEntity)());") | Out-Null
+            $output.AppendLine("        }") | Out-Null
+            $output.AppendLine("        return result;") | Out-Null
+            $output.AppendLine("    }") | Out-Null
+            $output.AppendLine("") | Out-Null
+
         }
     }
 }

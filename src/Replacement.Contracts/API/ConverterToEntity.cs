@@ -19,6 +19,14 @@ public static partial class ConverterToEntity {
         }
     }
 
+    public static List<OperationEntity> ToListOperationEntity(this IEnumerable<OperationAPI> that) {
+        var result = new List<OperationEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToOperationEntity());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static ProjectEntity? ToProjectEntity(this ProjectAPI? that) {
         if (that is null) {
@@ -35,6 +43,14 @@ public static partial class ConverterToEntity {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<ProjectEntity> ToListProjectEntity(this IEnumerable<ProjectAPI> that) {
+        var result = new List<ProjectEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToProjectEntity());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -57,6 +73,14 @@ public static partial class ConverterToEntity {
         }
     }
 
+    public static List<ProjectHistoryEntity> ToListProjectHistoryEntity(this IEnumerable<ProjectHistoryAPI> that) {
+        var result = new List<ProjectHistoryEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToProjectHistoryEntity());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static RequestLogEntity? ToRequestLogEntity(this RequestLogAPI? that) {
         if (that is null) {
@@ -75,6 +99,14 @@ public static partial class ConverterToEntity {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<RequestLogEntity> ToListRequestLogEntity(this IEnumerable<RequestLogAPI> that) {
+        var result = new List<RequestLogEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToRequestLogEntity());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -98,6 +130,14 @@ public static partial class ConverterToEntity {
         }
     }
 
+    public static List<RequestOperationEntity> ToListRequestOperationEntity(this IEnumerable<RequestOperationAPI> that) {
+        var result = new List<RequestOperationEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToRequestOperationEntity());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static ToDoEntity? ToToDoEntity(this ToDoAPI? that) {
         if (that is null) {
@@ -117,6 +157,14 @@ public static partial class ConverterToEntity {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<ToDoEntity> ToListToDoEntity(this IEnumerable<ToDoAPI> that) {
+        var result = new List<ToDoEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToToDoEntity());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -142,6 +190,14 @@ public static partial class ConverterToEntity {
         }
     }
 
+    public static List<ToDoHistoryEntity> ToListToDoHistoryEntity(this IEnumerable<ToDoHistoryAPI> that) {
+        var result = new List<ToDoHistoryEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToToDoHistoryEntity());
+        }
+        return result;
+    }
+
     [return: NotNullIfNotNull("that")]
     public static UserEntity? ToUserEntity(this UserAPI? that) {
         if (that is null) {
@@ -158,6 +214,14 @@ public static partial class ConverterToEntity {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<UserEntity> ToListUserEntity(this IEnumerable<UserAPI> that) {
+        var result = new List<UserEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToUserEntity());
+        }
+        return result;
     }
 
     [return: NotNullIfNotNull("that")]
@@ -178,6 +242,14 @@ public static partial class ConverterToEntity {
                 SerialVersion: that.SerialVersion
                 );
         }
+    }
+
+    public static List<UserHistoryEntity> ToListUserHistoryEntity(this IEnumerable<UserHistoryAPI> that) {
+        var result = new List<UserHistoryEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToUserHistoryEntity());
+        }
+        return result;
     }
 
 }
