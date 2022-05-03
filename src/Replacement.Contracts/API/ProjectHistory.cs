@@ -1,0 +1,13 @@
+﻿namespace Replacement.Contracts.API;
+public record class ProjectHistoryAPI(
+    Guid OperationId,
+    Guid ProjectId,
+    string Title,
+    DateTimeOffset CreatedAt,
+    Guid? CreatedBy,
+    DateTimeOffset ModifiedAt,
+    Guid? ModifiedBy,
+    DateTimeOffset ValidFrom,
+    DateTimeOffset ValidTo,
+    long SerialVersion
+) : IDataHistory;
