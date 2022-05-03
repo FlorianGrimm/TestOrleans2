@@ -68,26 +68,6 @@ public record class UserEntity(
     }
 }
 
-partial class ConverterToAPI {
-    [return:NotNullIfNotNull("that")]
-    public static UserAPI? ToUserAPI(this UserEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new UserAPI(
-                UserId: that.UserId,
-                UserName: that.UserName,
-                OperationId: that.OperationId,
-                CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-}
-
 public record class UserSelectByUserNameArg(
     [property: StringLength(50)]
     string UserName

@@ -44,28 +44,3 @@ public record class ToDoHistoryEntity(
     DateTimeOffset ValidTo,
     long SerialVersion
 ) : IDataHistory;
-
-partial class ConverterToAPI {
-    [return: NotNullIfNotNull("that")]
-    public static ToDoHistoryAPI? ToToDoHistoryAPI(this ToDoHistoryEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new ToDoHistoryAPI(
-                OperationId:that.OperationId,
-                ToDoId:that.ToDoId,
-                ProjectId:that.ProjectId,
-                UserId:that.UserId,
-                Title:that.Title,
-                Done:that.Done,
-                CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
-                ValidFrom: that.ValidFrom,
-                ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-}

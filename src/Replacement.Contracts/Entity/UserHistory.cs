@@ -37,25 +37,3 @@ public record class UserHistoryEntity(
     DateTimeOffset ValidTo,
     long SerialVersion
 ) : IDataHistory;
-
-partial class ConverterToAPI {
-    [return: NotNullIfNotNull("that")]
-    public static UserHistoryAPI? ToUserHistoryAPI(this UserHistoryEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new UserHistoryAPI(
-                OperationId: that.OperationId,
-                UserId: that.UserId,
-                UserName: that.UserName,
-                CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
-                ValidFrom: that.ValidFrom,
-                ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-}

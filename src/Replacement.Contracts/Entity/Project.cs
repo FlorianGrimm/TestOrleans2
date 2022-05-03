@@ -51,38 +51,6 @@ public record class ProjectEntity(
     }
 }
 
-partial class ConverterToAPI {
-    [return: NotNullIfNotNull("that")]
-    public static ProjectAPI? ToProjectAPI(this ProjectEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new ProjectAPI(
-                ProjectId: that.ProjectId,
-                Title: that.Title,
-                OperationId: that.OperationId,
-                CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-
-    public static List<ProjectAPI> ToListProjectAPI(
-        this IEnumerable<ProjectEntity> that) {
-        var result = new List<ProjectAPI>();
-        foreach (var e in that) {
-            if (e is not null) {
-                var a = e.ToProjectAPI();
-                result.Add(a);
-            }
-        }
-        return result;
-    }
-}
-
 public record class ProjectSelectPKResult(
     List<ProjectEntity> Projects,
     List<ToDoEntity> ToDos

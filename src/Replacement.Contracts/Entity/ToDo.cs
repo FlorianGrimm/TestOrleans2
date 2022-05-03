@@ -61,40 +61,4 @@ public record class ToDoEntity(
             ProjectId = value.ProjectId
         };
     }
-
-}
-
-partial class ConverterToAPI {
-    [return: NotNullIfNotNull("that")]
-    public static ToDoAPI? ToToDoAPI(this ToDoEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new ToDoAPI(
-                ToDoId: that.ToDoId,
-                ProjectId: that.ProjectId,
-                UserId: that.UserId,
-                Title: that.Title,
-                Done: that.Done,
-                OperationId: that.OperationId,
-                CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-
-    public static List<ToDoAPI> ToListToDoAPI(
-        this IEnumerable<ToDoEntity> that) {
-        var result = new List<ToDoAPI>();
-        foreach (var e in that) {
-            if (e is not null) {
-                var a = e.ToToDoAPI();
-                result.Add(a);
-            }
-        }
-        return result;
-    }
 }

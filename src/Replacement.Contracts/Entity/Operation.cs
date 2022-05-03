@@ -62,22 +62,3 @@ public record class OperationEntity(
     DateTimeOffset CreatedAt,
     long SerialVersion
 );
-
-partial class ConverterToAPI {
-    [return: NotNullIfNotNull("that")]
-    public static OperationAPI? ToOperationAPI(this OperationEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new OperationAPI(
-                OperationId: that.OperationId,
-                OperationName: that.OperationName,
-                EntityType: that.EntityType,
-                EntityId: that.EntityId,
-                UserId: that.UserId,
-                CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-}
