@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 /*
     [Table("UserHistory", Schema = "history")]
     public partial class UserHistory {

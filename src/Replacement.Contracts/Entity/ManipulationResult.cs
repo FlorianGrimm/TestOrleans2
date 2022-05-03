@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 
 public sealed record ProjectManipulationResult(
         Project DataResult,

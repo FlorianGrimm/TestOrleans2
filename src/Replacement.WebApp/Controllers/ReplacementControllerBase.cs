@@ -1,5 +1,7 @@
 ﻿// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
+using Replacement.Contracts.Entity;
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace Replacement.WebApp.Controllers;

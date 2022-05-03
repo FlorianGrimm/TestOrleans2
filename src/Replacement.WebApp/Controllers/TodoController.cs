@@ -1,4 +1,6 @@
-﻿namespace Replacement.WebApp.Controllers;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.WebApp.Controllers;
 //https://localhost:5001/api/ToDo
 //https://localhost:5001/api/ToDo/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
 [Route("api/[controller]")]

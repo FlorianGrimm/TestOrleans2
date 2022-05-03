@@ -23,6 +23,7 @@ global using Orleans.Configuration.Overrides;
 global using Brimborium.Registrator;
 
 global using Replacement.Contracts.API;
+global using Replacement.Contracts.Entity;
 global using Replacement.Repository.Service;
 global using Replacement.TestExtensions;
 

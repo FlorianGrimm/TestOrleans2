@@ -1,4 +1,6 @@
-﻿using System.Threading.Channels;
+﻿using Replacement.Contracts.Entity;
+
+using System.Threading.Channels;
 
 namespace Replacement.Repository.Service;
 

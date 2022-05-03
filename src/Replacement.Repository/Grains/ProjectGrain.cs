@@ -1,4 +1,6 @@
-﻿namespace Replacement.Repository.Grains;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Repository.Grains;
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
     Task<List<Project>> GetAllProjects(User user, Operation operation);
     Task<List<Project>> GetUsersProjects(User user, Operation operation);
@@ -45,7 +47,7 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
 
     public async Task<List<Project>> GetUsersProjects(User user, Operation operation) {
         if (this._IsDirty || this._GetAllProjects is null) {
-            List<Replacement.Contracts.API.Project> projects;
+            List<Project> projects;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
 #warning TODO
                 projects = await sqlAccess.ExecuteProjectSelectAllAsync();

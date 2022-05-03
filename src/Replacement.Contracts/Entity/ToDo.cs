@@ -1,4 +1,6 @@
-﻿namespace Replacement.Contracts.API;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Contracts.Entity;
 /*
     public partial class ToDo {
         [Key]
@@ -49,8 +51,8 @@ public record class ToDo(
     public ToDo SetOperation(Operation value) {
         return this with {
             OperationId = value.OperationId,
-            CreatedAt = (this.SerialVersion == 0) ? value.CreatedAt : this.CreatedAt,
-            CreatedBy = (this.SerialVersion == 0) ? value.UserId : this.CreatedBy,
+            CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = this.SerialVersion == 0 ? value.UserId : this.CreatedBy,
             ModifiedAt = value.CreatedAt,
             ModifiedBy = value.UserId
         };

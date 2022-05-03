@@ -1,6 +1,8 @@
 #if true
 
-namespace Replacement.Contracts.API {
+using Replacement.Contracts.Entity;
+
+namespace Replacement.Contracts.Entity {
     public sealed partial record OperationPK (
         System.DateTimeOffset CreatedAt,
         Guid OperationId

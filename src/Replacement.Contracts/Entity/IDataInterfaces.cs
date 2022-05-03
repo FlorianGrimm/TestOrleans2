@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 
 public interface IDataCommon {
     long SerialVersion { get; init; }

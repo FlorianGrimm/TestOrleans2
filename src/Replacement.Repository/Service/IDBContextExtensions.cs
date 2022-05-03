@@ -1,4 +1,6 @@
-﻿namespace Replacement.Repository.Service;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Repository.Service;
 
 public static class IDBContextExtensions {
     public static Project? GetProject(this IDBContext that, ProjectPK pk) {

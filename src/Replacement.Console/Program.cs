@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using Replacement.Contracts.Entity;
+
+using System.Net.Http;
 
 namespace Replacement.Console;
 

@@ -1,4 +1,6 @@
-﻿namespace Replacement.Repository.Service;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Repository.Service;
 
 public interface IDBContext : ITrackingContext {
     ITrackingSet<OperationPK, Operation> Operation { get; }

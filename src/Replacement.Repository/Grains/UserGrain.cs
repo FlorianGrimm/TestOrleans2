@@ -1,4 +1,6 @@
-﻿namespace Replacement.Repository.Grains;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Repository.Grains;
 
 public interface IUserCollectionGrain : IGrainWithGuidKey {
     Task<List<User>> GetAllUsers(Operation operation);

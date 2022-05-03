@@ -1,13 +1,16 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 /*
-    [Table("ProjectHistory", Schema = "history")]
-    public partial class ProjectHistory {
+    [Table("ToDoHistory", Schema = "history")]
+    public partial class ToDoHistory {
         [Key]
         public Guid OperationId { get; set; }
         [Key]
         public Guid Id { get; set; }
+        public Guid? ProjectId { get; set; }
+        public Guid? UserId { get; set; }
         [StringLength(50)]
         public string Title { get; set; } = null!;
+        public bool Done { get; set; }
         [Key]
         public DateTimeOffset ValidFrom { get; set; }
         [Key]
@@ -15,19 +18,22 @@
         public long SerialVersion { get; set; }
 
         [ForeignKey("ValidFrom,OperationId")]
-        [InverseProperty("ProjectHistory")]
+        [InverseProperty("ToDoHistory")]
         public virtual Operation Operation { get; set; } = null!;
     }
 */
 
-[Table("ProjectHistory", Schema = "history")]
-public record class ProjectHistory(
+[Table("ToDoHistory", Schema = "history")]
+public record class ToDoHistory(
     // [property:Key]
     Guid OperationId,
     // [property:Key]
-    Guid ProjectId,
+    Guid ToDoId,
+    Guid? ProjectId,
+    Guid? UserId,
     // [property:StringLength(50)]
     string Title,
+    bool Done,
     DateTimeOffset CreatedAt,
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
@@ -37,5 +43,4 @@ public record class ProjectHistory(
     // [property:Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-): IDataHistory;
-        
+) : IDataHistory;

@@ -1,10 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace Replacement.Contracts.API;
-public static class PrimaryKeyExtensions {
-
-}
-
+﻿namespace Replacement.Contracts.Entity;
 partial record ToDoPK {
     public static bool Parse(string value, out ToDoPK result) {
         Guid projectId;

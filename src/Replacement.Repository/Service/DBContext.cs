@@ -1,4 +1,6 @@
-﻿namespace Replacement.Repository.Service;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Repository.Service;
 
 [Transient]
 public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {

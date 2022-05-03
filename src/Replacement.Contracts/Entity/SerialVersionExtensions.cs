@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 
 public static class SerialVersionExtensions {
     public static bool SerialVersionDoesMatch(this long currentSerialVersion, long newSerialVersion) {
@@ -8,7 +8,7 @@ public static class SerialVersionExtensions {
         //if (currentSerialVersion == newSerialVersion) {
         //    return true;
         //}
-        return (currentSerialVersion == newSerialVersion);
+        return currentSerialVersion == newSerialVersion;
     }
 }
 

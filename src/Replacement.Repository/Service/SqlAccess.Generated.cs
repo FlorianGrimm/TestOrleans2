@@ -2,9 +2,11 @@
 #nullable enable
 
 
+using Replacement.Contracts.Entity;
+
 namespace Replacement.Repository.Service {
     partial class SqlAccess {
-        public async Task<Replacement.Contracts.API.Operation> ExecuteOperationInsertAsync(Replacement.Contracts.API.Operation args)  {
+        public async Task<Operation> ExecuteOperationInsertAsync(Operation args)  {
             using(var cmd = this.CreateCommand("[dbo].[OperationInsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterString(cmd, "@OperationName", SqlDbType.VarChar, 100, args.OperationName);
@@ -12,12 +14,12 @@ namespace Replacement.Repository.Service {
                 this.AddParameterString(cmd, "@EntityId", SqlDbType.NVarChar, 100, args.EntityId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
-                return await this.CommandQuerySingleAsync<Replacement.Contracts.API.Operation>(cmd, ReadRecordOperationInsert);
+                return await this.CommandQuerySingleAsync<Replacement.Contracts.Entity.Operation>(cmd, ReadRecordOperationInsert);
             }
         } 
 
-        protected Replacement.Contracts.API.Operation ReadRecordOperationInsert(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.Operation(
+        protected Operation ReadRecordOperationInsert(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.Operation(
                 @OperationId: this.ReadGuid(reader, 0),
                 @OperationName: this.ReadString(reader, 1),
                 @EntityType: this.ReadString(reader, 2),
@@ -29,16 +31,16 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.Operation?> ExecuteOperationSelectPKAsync(Replacement.Contracts.API.OperationPK args)  {
+        public async Task<Operation?> ExecuteOperationSelectPKAsync(Replacement.Contracts.Entity.OperationPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[OperationSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.API.Operation>(cmd, ReadRecordOperationSelectPK);
+                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.Operation>(cmd, ReadRecordOperationSelectPK);
             }
         } 
 
-        protected Replacement.Contracts.API.Operation ReadRecordOperationSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.Operation(
+        protected Operation ReadRecordOperationSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.Operation(
                 @OperationId: this.ReadGuid(reader, 0),
                 @OperationName: this.ReadString(reader, 1),
                 @EntityType: this.ReadString(reader, 2),
@@ -50,32 +52,32 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(Replacement.Contracts.API.Project args)  {
+        public async Task<List<Replacement.Contracts.Entity.ProjectPK>> ExecuteProjectDeletePKAsync(Project args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectDeletePK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.ProjectPK>(cmd, ReadRecordProjectDeletePK);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ProjectPK>(cmd, ReadRecordProjectDeletePK);
             }
         } 
 
-        protected Replacement.Contracts.API.ProjectPK ReadRecordProjectDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ProjectPK(
+        protected Replacement.Contracts.Entity.ProjectPK ReadRecordProjectDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ProjectPK(
                 @ProjectId: this.ReadGuid(reader, 0)
             );
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.Project>> ExecuteProjectSelectAllAsync()  {
+        public async Task<List<Project>> ExecuteProjectSelectAllAsync()  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectSelectAll]", CommandType.StoredProcedure)) {
-                return await this.CommandQueryAsync<Replacement.Contracts.API.Project>(cmd, ReadRecordProjectSelectAll);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.Project>(cmd, ReadRecordProjectSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.API.Project ReadRecordProjectSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.Project(
+        protected Project ReadRecordProjectSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.Project(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -88,20 +90,20 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.API.ProjectPK args)  {
+        public async Task<ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.Entity.ProjectPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
-                System.Collections.Generic.List<Replacement.Contracts.API.Project> result_Projects = new System.Collections.Generic.List<Replacement.Contracts.API.Project>();
-                System.Collections.Generic.List<Replacement.Contracts.API.ToDo> result_ToDos = new System.Collections.Generic.List<Replacement.Contracts.API.ToDo>();
+                System.Collections.Generic.List<Replacement.Contracts.Entity.Project> result_Projects = new System.Collections.Generic.List<Replacement.Contracts.Entity.Project>();
+                System.Collections.Generic.List<Replacement.Contracts.Entity.ToDo> result_ToDos = new System.Collections.Generic.List<Replacement.Contracts.Entity.ToDo>();
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_Projects = await this.CommandReadQueryAsync<Replacement.Contracts.API.Project>(reader, ReadRecordProjectSelectPK_0);
+                        result_Projects = await this.CommandReadQueryAsync<Replacement.Contracts.Entity.Project>(reader, ReadRecordProjectSelectPK_0);
                     }
                     if (idx == 1) {
-                        result_ToDos = await this.CommandReadQueryAsync<Replacement.Contracts.API.ToDo>(reader, ReadRecordProjectSelectPK_1);
+                        result_ToDos = await this.CommandReadQueryAsync<Replacement.Contracts.Entity.ToDo>(reader, ReadRecordProjectSelectPK_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.API.ProjectSelectPKResult(
+                var result = new Replacement.Contracts.Entity.ProjectSelectPKResult(
                     Projects: result_Projects,
                     ToDos: result_ToDos
                 );
@@ -109,8 +111,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.API.Project ReadRecordProjectSelectPK_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.Project(
+        protected Project ReadRecordProjectSelectPK_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.Project(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -123,8 +125,8 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.API.ToDo ReadRecordProjectSelectPK_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDo(
+        protected ToDo ReadRecordProjectSelectPK_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ToDo(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -140,7 +142,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.ProjectManipulationResult> ExecuteProjectUpsertAsync(Replacement.Contracts.API.Project args)  {
+        public async Task<ProjectManipulationResult> ExecuteProjectUpsertAsync(Project args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectUpsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterString(cmd, "@Title", SqlDbType.NVarChar, 50, args.Title);
@@ -150,17 +152,17 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
-                Replacement.Contracts.API.Project result_DataResult = default!;
-                Replacement.Contracts.API.OperationResult result_OperationResult = default!;
+                Project result_DataResult = default!;
+                OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_DataResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.Project>(reader, ReadRecordProjectUpsert_0);
+                        result_DataResult = await this.CommandReadQuerySingleAsync<Project>(reader, ReadRecordProjectUpsert_0);
                     }
                     if (idx == 1) {
-                        result_OperationResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.OperationResult>(reader, ReadRecordProjectUpsert_1);
+                        result_OperationResult = await this.CommandReadQuerySingleAsync<OperationResult>(reader, ReadRecordProjectUpsert_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.API.ProjectManipulationResult(
+                var result = new Replacement.Contracts.Entity.ProjectManipulationResult(
                     DataResult: result_DataResult,
                     OperationResult: result_OperationResult
                 );
@@ -168,8 +170,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.API.Project ReadRecordProjectUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.Project(
+        protected Project ReadRecordProjectUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.Project(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -182,16 +184,16 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.API.OperationResult ReadRecordProjectUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.OperationResult(
-                @resultValue: (Replacement.Contracts.API.ResultValue) (this.ReadInt32(reader, 0))
+        protected OperationResult ReadRecordProjectUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.OperationResult(
+                @resultValue: (ResultValue) (this.ReadInt32(reader, 0))
             ) {
                 Message = this.ReadString(reader, 1)
             } ;
             return result;
         } 
 
-        public async Task ExecuteRequestLogInsertAsync(Replacement.Contracts.API.RequestLog args)  {
+        public async Task ExecuteRequestLogInsertAsync(RequestLog args)  {
             using(var cmd = this.CreateCommand("[dbo].[RequestLogInsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@RequestLogId", args.RequestLogId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
@@ -207,7 +209,7 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        public async Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.API.ToDo args)  {
+        public async Task<List<Replacement.Contracts.Entity.ToDoPK>> ExecuteToDoDeletePKAsync(ToDo args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoDeletePK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
@@ -215,26 +217,26 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.ToDoPK>(cmd, ReadRecordToDoDeletePK);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ToDoPK>(cmd, ReadRecordToDoDeletePK);
             }
         } 
 
-        protected Replacement.Contracts.API.ToDoPK ReadRecordToDoDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDoPK(
+        protected Replacement.Contracts.Entity.ToDoPK ReadRecordToDoDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ToDoPK(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1)
             );
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.ToDo>> ExecuteToDoSelectAllAsync()  {
+        public async Task<List<ToDo>> ExecuteToDoSelectAllAsync()  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectAll]", CommandType.StoredProcedure)) {
-                return await this.CommandQueryAsync<Replacement.Contracts.API.ToDo>(cmd, ReadRecordToDoSelectAll);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ToDo>(cmd, ReadRecordToDoSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.API.ToDo ReadRecordToDoSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDo(
+        protected ToDo ReadRecordToDoSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ToDo(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -250,16 +252,16 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.ToDo?> ExecuteToDoSelectPKAsync(Replacement.Contracts.API.ToDoPK args)  {
+        public async Task<ToDo?> ExecuteToDoSelectPKAsync(Replacement.Contracts.Entity.ToDoPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.API.ToDo>(cmd, ReadRecordToDoSelectPK);
+                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.ToDo>(cmd, ReadRecordToDoSelectPK);
             }
         } 
 
-        protected Replacement.Contracts.API.ToDo ReadRecordToDoSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDo(
+        protected ToDo ReadRecordToDoSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ToDo(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -275,15 +277,15 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.ToDo>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.API.ToDoPK args)  {
+        public async Task<List<ToDo>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.Entity.ToDoPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectProject]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.ToDo>(cmd, ReadRecordToDoSelectProject);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ToDo>(cmd, ReadRecordToDoSelectProject);
             }
         } 
 
-        protected Replacement.Contracts.API.ToDo ReadRecordToDoSelectProject(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDo(
+        protected ToDo ReadRecordToDoSelectProject(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ToDo(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -299,7 +301,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.ToDoManipulationResult> ExecuteToDoUpsertAsync(Replacement.Contracts.API.ToDo args)  {
+        public async Task<ToDoManipulationResult> ExecuteToDoUpsertAsync(ToDo args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoUpsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
@@ -312,17 +314,17 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
-                Replacement.Contracts.API.ToDo result_DataResult = default!;
-                Replacement.Contracts.API.OperationResult result_OperationResult = default!;
+                ToDo result_DataResult = default!;
+                OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_DataResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.ToDo>(reader, ReadRecordToDoUpsert_0);
+                        result_DataResult = await this.CommandReadQuerySingleAsync<ToDo>(reader, ReadRecordToDoUpsert_0);
                     }
                     if (idx == 1) {
-                        result_OperationResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.OperationResult>(reader, ReadRecordToDoUpsert_1);
+                        result_OperationResult = await this.CommandReadQuerySingleAsync<OperationResult>(reader, ReadRecordToDoUpsert_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.API.ToDoManipulationResult(
+                var result = new Replacement.Contracts.Entity.ToDoManipulationResult(
                     DataResult: result_DataResult,
                     OperationResult: result_OperationResult
                 );
@@ -330,8 +332,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.API.ToDo ReadRecordToDoUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDo(
+        protected ToDo ReadRecordToDoUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.ToDo(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -347,42 +349,42 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.API.OperationResult ReadRecordToDoUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.OperationResult(
-                @resultValue: (Replacement.Contracts.API.ResultValue) (this.ReadInt32(reader, 0))
+        protected OperationResult ReadRecordToDoUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.OperationResult(
+                @resultValue: (ResultValue) (this.ReadInt32(reader, 0))
             ) {
                 Message = this.ReadString(reader, 1)
             } ;
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(Replacement.Contracts.API.User args)  {
+        public async Task<List<Replacement.Contracts.Entity.UserPK>> ExecuteUserDeletePKAsync(User args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserDeletePK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.UserPK>(cmd, ReadRecordUserDeletePK);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.UserPK>(cmd, ReadRecordUserDeletePK);
             }
         } 
 
-        protected Replacement.Contracts.API.UserPK ReadRecordUserDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.UserPK(
+        protected Replacement.Contracts.Entity.UserPK ReadRecordUserDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.UserPK(
                 @UserId: this.ReadGuid(reader, 0)
             );
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.User?> ExecuteUserSelectByUserNameAsync(Replacement.Contracts.API.UserSelectByUserNameArg args)  {
+        public async Task<User?> ExecuteUserSelectByUserNameAsync(UserSelectByUserNameArg args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserSelectByUserName]", CommandType.StoredProcedure)) {
                 this.AddParameterString(cmd, "@UserName", SqlDbType.NVarChar, 50, args.UserName);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.API.User>(cmd, ReadRecordUserSelectByUserName);
+                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.User>(cmd, ReadRecordUserSelectByUserName);
             }
         } 
 
-        protected Replacement.Contracts.API.User ReadRecordUserSelectByUserName(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.User(
+        protected User ReadRecordUserSelectByUserName(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.User(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -395,15 +397,15 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.User?> ExecuteUserSelectPKAsync(Replacement.Contracts.API.UserPK args)  {
+        public async Task<User?> ExecuteUserSelectPKAsync(Replacement.Contracts.Entity.UserPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.API.User>(cmd, ReadRecordUserSelectPK);
+                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.User>(cmd, ReadRecordUserSelectPK);
             }
         } 
 
-        protected Replacement.Contracts.API.User ReadRecordUserSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.User(
+        protected User ReadRecordUserSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.User(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -416,7 +418,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.API.UserManipulationResult> ExecuteUserUpsertAsync(Replacement.Contracts.API.User args)  {
+        public async Task<UserManipulationResult> ExecuteUserUpsertAsync(User args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserUpsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterString(cmd, "@UserName", SqlDbType.NVarChar, 50, args.UserName);
@@ -426,17 +428,17 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
-                Replacement.Contracts.API.User result_DataResult = default!;
-                Replacement.Contracts.API.OperationResult result_OperationResult = default!;
+                User result_DataResult = default!;
+                OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_DataResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.User>(reader, ReadRecordUserUpsert_0);
+                        result_DataResult = await this.CommandReadQuerySingleAsync<User>(reader, ReadRecordUserUpsert_0);
                     }
                     if (idx == 1) {
-                        result_OperationResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.API.OperationResult>(reader, ReadRecordUserUpsert_1);
+                        result_OperationResult = await this.CommandReadQuerySingleAsync<OperationResult>(reader, ReadRecordUserUpsert_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.API.UserManipulationResult(
+                var result = new Replacement.Contracts.Entity.UserManipulationResult(
                     DataResult: result_DataResult,
                     OperationResult: result_OperationResult
                 );
@@ -444,8 +446,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.API.User ReadRecordUserUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.User(
+        protected User ReadRecordUserUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.User(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -458,9 +460,9 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.API.OperationResult ReadRecordUserUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.OperationResult(
-                @resultValue: (Replacement.Contracts.API.ResultValue) (this.ReadInt32(reader, 0))
+        protected OperationResult ReadRecordUserUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.OperationResult(
+                @resultValue: (ResultValue) (this.ReadInt32(reader, 0))
             ) {
                 Message = this.ReadString(reader, 1)
             } ;
@@ -469,22 +471,22 @@ namespace Replacement.Repository.Service {
 
     }
     partial interface ISqlAccess {
-        Task<Replacement.Contracts.API.Operation> ExecuteOperationInsertAsync(Replacement.Contracts.API.Operation args);
-        Task<Replacement.Contracts.API.Operation?> ExecuteOperationSelectPKAsync(Replacement.Contracts.API.OperationPK args);
-        Task<List<Replacement.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(Replacement.Contracts.API.Project args);
-        Task<List<Replacement.Contracts.API.Project>> ExecuteProjectSelectAllAsync();
-        Task<Replacement.Contracts.API.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.API.ProjectPK args);
-        Task<Replacement.Contracts.API.ProjectManipulationResult> ExecuteProjectUpsertAsync(Replacement.Contracts.API.Project args);
-        Task ExecuteRequestLogInsertAsync(Replacement.Contracts.API.RequestLog args);
-        Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.API.ToDo args);
-        Task<List<Replacement.Contracts.API.ToDo>> ExecuteToDoSelectAllAsync();
-        Task<Replacement.Contracts.API.ToDo?> ExecuteToDoSelectPKAsync(Replacement.Contracts.API.ToDoPK args);
-        Task<List<Replacement.Contracts.API.ToDo>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.API.ToDoPK args);
-        Task<Replacement.Contracts.API.ToDoManipulationResult> ExecuteToDoUpsertAsync(Replacement.Contracts.API.ToDo args);
-        Task<List<Replacement.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(Replacement.Contracts.API.User args);
-        Task<Replacement.Contracts.API.User?> ExecuteUserSelectByUserNameAsync(Replacement.Contracts.API.UserSelectByUserNameArg args);
-        Task<Replacement.Contracts.API.User?> ExecuteUserSelectPKAsync(Replacement.Contracts.API.UserPK args);
-        Task<Replacement.Contracts.API.UserManipulationResult> ExecuteUserUpsertAsync(Replacement.Contracts.API.User args);
+        Task<Operation> ExecuteOperationInsertAsync(Operation args);
+        Task<Operation?> ExecuteOperationSelectPKAsync(Replacement.Contracts.Entity.OperationPK args);
+        Task<List<Replacement.Contracts.Entity.ProjectPK>> ExecuteProjectDeletePKAsync(Project args);
+        Task<List<Project>> ExecuteProjectSelectAllAsync();
+        Task<ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.Entity.ProjectPK args);
+        Task<ProjectManipulationResult> ExecuteProjectUpsertAsync(Project args);
+        Task ExecuteRequestLogInsertAsync(RequestLog args);
+        Task<List<Replacement.Contracts.Entity.ToDoPK>> ExecuteToDoDeletePKAsync(ToDo args);
+        Task<List<ToDo>> ExecuteToDoSelectAllAsync();
+        Task<ToDo?> ExecuteToDoSelectPKAsync(Replacement.Contracts.Entity.ToDoPK args);
+        Task<List<ToDo>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.Entity.ToDoPK args);
+        Task<ToDoManipulationResult> ExecuteToDoUpsertAsync(ToDo args);
+        Task<List<Replacement.Contracts.Entity.UserPK>> ExecuteUserDeletePKAsync(User args);
+        Task<User?> ExecuteUserSelectByUserNameAsync(UserSelectByUserNameArg args);
+        Task<User?> ExecuteUserSelectPKAsync(Replacement.Contracts.Entity.UserPK args);
+        Task<UserManipulationResult> ExecuteUserUpsertAsync(User args);
     }
 }
 

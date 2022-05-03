@@ -144,7 +144,7 @@ public static partial class Program {
                 printSteps(4);
 
                 {
-                    var (outputPath, outputNamespace) = Replacement.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
+                    var (outputPath, outputNamespace) = Replacement.Contracts.Entity.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
                     var subResult = MainGeneratePrimaryKey(connectionString, outputPath, outputNamespace);
                     if (subResult) {
 
@@ -333,7 +333,7 @@ public static partial class Program {
         string outputClassName,
         bool isForce
         ) {
-        var refType = typeof(Replacement.Contracts.API.PrimaryKeyLocation);
+        var refType = typeof(Replacement.Contracts.Entity.PrimaryKeyLocation);
         var refTypeNamespace = refType.Namespace;
         var types = refType.Assembly.GetTypes()
             .Where(t => t.Namespace == refTypeNamespace)

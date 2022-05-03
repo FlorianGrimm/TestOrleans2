@@ -1,3 +1,4 @@
 ﻿namespace Replacement.Contracts.API;
+public class Class1 {
+}
 
-public interface IPrimaryKey { }

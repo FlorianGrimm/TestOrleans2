@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 
 internal static class PrimaryKeyLocation {
     internal static (string outputPath, string outputNamespace) GetPrimaryKeyOutputInfo()

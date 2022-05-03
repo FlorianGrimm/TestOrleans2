@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 
 public interface IDataManipulationResult<T> {
     T DataResult { get; }

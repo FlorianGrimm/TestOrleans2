@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 public class PrimaryKeyExtensionsTests {
     [Fact]
     public void ToDoPK_Parse() {

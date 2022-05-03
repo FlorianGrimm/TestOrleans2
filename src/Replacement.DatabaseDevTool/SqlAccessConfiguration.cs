@@ -1,6 +1,6 @@
 ﻿using Brimborium.TypedStoredProcedure;
 
-using Replacement.Contracts.API;
+using Replacement.Contracts.Entity;
 
 namespace Replacement.DatabaseDevTool;
 public static partial class Program {

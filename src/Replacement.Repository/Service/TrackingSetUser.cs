@@ -1,4 +1,6 @@
-﻿namespace Replacement.Repository.Service;
+﻿using Replacement.Contracts.Entity;
+
+namespace Replacement.Repository.Service;
 
 public sealed class TrackingSetUser : TrackingSet<UserPK, User> {
     public TrackingSetUser(DBContext context, ITrackingSetApplyChanges<User> trackingApplyChanges)

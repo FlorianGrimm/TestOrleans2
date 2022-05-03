@@ -1,11 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-//using Microsoft.EntityFrameworkCore;
-
-namespace Replacement.Contracts.API;
+﻿namespace Replacement.Contracts.Entity;
 /*
     public partial class Project {
         public Project() {
@@ -50,8 +43,8 @@ public record class Project(
     public Project SetOperation(Operation value) {
         return this with {
             OperationId = value.OperationId,
-            CreatedAt = (this.SerialVersion == 0) ? value.CreatedAt : this.CreatedAt,
-            CreatedBy = (this.SerialVersion == 0) ? value.UserId : this.CreatedBy,
+            CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = this.SerialVersion == 0 ? value.UserId : this.CreatedBy,
             ModifiedAt = value.CreatedAt,
             ModifiedBy = value.UserId
         };
