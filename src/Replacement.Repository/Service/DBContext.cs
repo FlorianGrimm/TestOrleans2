@@ -7,10 +7,10 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
     private ISqlAccessFactory _SqlAccessFactory;
     private DBContextOption _Options;
 
-    public ITrackingSet<OperationPK, Operation> Operation { get; }
-    public ITrackingSet<UserPK, User> User { get; }
-    public ITrackingSet<ProjectPK, Project> Project { get; }
-    public ITrackingSet<ToDoPK, ToDo> ToDo { get; }
+    public ITrackingSet<OperationPK, OperationEntity> Operation { get; }
+    public ITrackingSet<UserPK, UserEntity> User { get; }
+    public ITrackingSet<ProjectPK, ProjectEntity> Project { get; }
+    public ITrackingSet<ToDoPK, ToDoEntity> ToDo { get; }
 
 
     public DBContext(

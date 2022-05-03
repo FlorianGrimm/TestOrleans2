@@ -21,7 +21,7 @@
         public virtual ICollection<ToDo> ToDo { get; set; }
     }
 */
-public record class User(
+public record class UserEntity(
     // [property:Key]
     Guid UserId,
     // [property: StringLength(50)]
@@ -37,12 +37,12 @@ public record class User(
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
     public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
-    public static User Create(
-        Operation operation,
+    public static UserEntity Create(
+        OperationEntity operation,
         Guid userId,
         string userName
         ) {
-        return new User(
+        return new UserEntity(
             UserId: userId,
             UserName: userName,
             OperationId: operation.OperationId,
@@ -53,7 +53,7 @@ public record class User(
             SerialVersion: 0
             );
     }
-    public User SetOperation(Operation value) {
+    public UserEntity SetOperation(OperationEntity value) {
         return this with {
             OperationId = value.OperationId,
             CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
@@ -62,8 +62,31 @@ public record class User(
             ModifiedBy = value.UserId
         };
     }
+
+    public UserAPI ToAPI() {
+        throw new NotImplementedException();
+    }
 }
 
+partial class ConverterToAPI {
+    [return:NotNullIfNotNull("that")]
+    public static UserAPI? ToUserAPI(this UserEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new UserAPI(
+                UserId: that.UserId,
+                UserName: that.UserName,
+                OperationId: that.OperationId,
+                CreatedAt: that.CreatedAt,
+                CreatedBy: that.CreatedBy,
+                ModifiedAt: that.ModifiedAt,
+                ModifiedBy: that.ModifiedBy,
+                SerialVersion: that.SerialVersion
+                );
+        }
+    }
+}
 
 public record class UserSelectByUserNameArg(
     [property: StringLength(50)]

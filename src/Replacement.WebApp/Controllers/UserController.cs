@@ -13,10 +13,10 @@ public class UserController : ReplacementControllerBase {
 
     // GET: api/User
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<User>>> Get() {
+    public async Task<ActionResult<IEnumerable<UserEntity>>> Get() {
         var requestOperation = this.CreateRequestOperation(
                     pk: "",
-                    argument: (User?)null
+                    argument: (UserEntity?)null
                     );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -34,10 +34,10 @@ public class UserController : ReplacementControllerBase {
 
     // GET api/User/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{userId}")]
-    public async Task<ActionResult<User?>> Get(Guid userId) {
+    public async Task<ActionResult<UserEntity?>> Get(Guid userId) {
         var requestOperation = this.CreateRequestOperation(
                     pk: userId,
-                    argument: (User?)null
+                    argument: (UserEntity?)null
                     );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -56,7 +56,7 @@ public class UserController : ReplacementControllerBase {
 
     // POST api/User
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] User value) {
+    public async Task<ActionResult> Post([FromBody] UserEntity value) {
         if (value.UserId == Guid.Empty) {
             value = value with {
                 UserId = Guid.NewGuid()
@@ -88,7 +88,7 @@ public class UserController : ReplacementControllerBase {
 
     // PUT api/User/5
     [HttpPut("{userId}")]
-    public async Task<ActionResult> Put(Guid userId, [FromBody] User value) {
+    public async Task<ActionResult> Put(Guid userId, [FromBody] UserEntity value) {
         value = value with { UserId = userId };
 
         var requestOperation = this.CreateRequestOperation(
@@ -123,7 +123,7 @@ public class UserController : ReplacementControllerBase {
 
         var requestOperation = this.CreateRequestOperation(
             pk: userId,
-            argument: (User?) null
+            argument: (UserEntity?) null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,

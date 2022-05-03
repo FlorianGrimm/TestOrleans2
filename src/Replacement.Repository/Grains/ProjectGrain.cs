@@ -2,8 +2,8 @@
 
 namespace Replacement.Repository.Grains;
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
-    Task<List<Project>> GetAllProjects(User user, Operation operation);
-    Task<List<Project>> GetUsersProjects(User user, Operation operation);
+    Task<List<ProjectEntity>> GetAllProjects(UserEntity user, OperationEntity operation);
+    Task<List<ProjectEntity>> GetUsersProjects(UserEntity user, OperationEntity operation);
 
     Task<Guid?> GetProjectIdFromToDoId(Guid toDoId);
 
@@ -11,43 +11,43 @@ public interface IProjectCollectionGrain : IGrainWithGuidKey {
 }
 
 public interface IProjectGrain : IGrainWithGuidKey {
-    Task<Project?> GetProject(User user, Operation operation);
-    Task<ProjectContext?> GetProjectContext(User user, Operation operation);
-    Task<Project?> UpsertProject(Project value, User user, Operation operation);
-    Task<bool> DeleteProject(User user, Operation operation);
+    Task<ProjectEntity?> GetProject(UserEntity user, OperationEntity operation);
+    Task<ProjectContext?> GetProjectContext(UserEntity user, OperationEntity operation);
+    Task<ProjectEntity?> UpsertProject(ProjectEntity value, UserEntity user, OperationEntity operation);
+    Task<bool> DeleteProject(UserEntity user, OperationEntity operation);
 
-    Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation);
-    Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation);
-    Task<bool> DeleteToDo(ToDoPK toDoPK, User user, Operation operation);
+    Task<ToDoEntity?> GetToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation);
+    Task<ToDoEntity?> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation);
+    Task<bool> DeleteToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation);
 }
 
 public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGrain {
-    private LazyValue<List<Project>> _AllProjects;
+    private LazyValue<List<ProjectEntity>> _AllProjects;
 
-    private List<Project>? _GetAllProjects;
+    private List<ProjectEntity>? _GetAllProjects;
 
     public ProjectCollectionGrain(
         IDBContext dbContext
         ) : base(dbContext) {
-        this._AllProjects = new LazyValue<List<Project>>();
+        this._AllProjects = new LazyValue<List<ProjectEntity>>();
     }
 
-    public async Task<List<Project>> GetAllProjects(User user, Operation operation) {
+    public async Task<List<ProjectEntity>> GetAllProjects(UserEntity user, OperationEntity operation) {
         if (this._AllProjects.TryGetValue(out var result)) {
             return result;
         } else {
-            List<Project> projects;
+            List<ProjectEntity> projects;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
                 projects = await sqlAccess.ExecuteProjectSelectAllAsync();
             }
-            this._AllProjects = this._AllProjects.SetStatus(projects ?? new List<Project>());
+            this._AllProjects = this._AllProjects.SetStatus(projects ?? new List<ProjectEntity>());
             return this._AllProjects.Value;
         }
     }
 
-    public async Task<List<Project>> GetUsersProjects(User user, Operation operation) {
+    public async Task<List<ProjectEntity>> GetUsersProjects(UserEntity user, OperationEntity operation) {
         if (this._IsDirty || this._GetAllProjects is null) {
-            List<Project> projects;
+            List<ProjectEntity> projects;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
 #warning TODO
                 projects = await sqlAccess.ExecuteProjectSelectAllAsync();
@@ -71,7 +71,7 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
     }
 }
 
-public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
+public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     private readonly ILogger<ProjectGrain> _Logger;
 
     public ProjectGrain(
@@ -81,10 +81,10 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         ) : base(dbContext) {
         this._Logger = logger;
     }
-    protected override async Task<Project?> Load() {
+    protected override async Task<ProjectEntity?> Load() {
         var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
-        List<Project> projects;
-        List<ToDo> lstToDos;
+        List<ProjectEntity> projects;
+        List<ToDoEntity> lstToDos;
         using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
             (projects, lstToDos) = await sqlAccess.ExecuteProjectSelectPKAsync(projectPK);
         }
@@ -98,7 +98,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         }
     }
 
-    public async Task<Project?> GetProject(User user, Operation operation) {
+    public async Task<ProjectEntity?> GetProject(UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is null) {
             this.DeactivateOnIdle();
@@ -106,7 +106,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         return state;
     }
 
-    public async Task<Project?> UpsertProject(Project value, User user, Operation operation) {
+    public async Task<ProjectEntity?> UpsertProject(ProjectEntity value, UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
 
         if (state is null) {
@@ -163,7 +163,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         return projectTO.Value;
     }
 
-    public async Task<bool> DeleteProject(User user, Operation operation) {
+    public async Task<bool> DeleteProject(UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is null) {
             return false;
@@ -214,7 +214,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         }
     }
 
-    public async Task<ToDo?> GetToDo(ToDoPK toDoPK, User user, Operation operation) {
+    public async Task<ToDoEntity?> GetToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is not null) {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var result)) {
@@ -224,11 +224,11 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         return null;
     }
 
-    public async Task<ToDo?> UpsertToDo(ToDo value, User user, Operation operation) {
+    public async Task<ToDoEntity?> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is not null) {
-            TrackingObject<Operation> operationTO;
-            TrackingObject<ToDo> result;
+            TrackingObject<OperationEntity> operationTO;
+            TrackingObject<ToDoEntity> result;
             if (this._DBContext.ToDo.TryGetValue(value.GetPrimaryKey(), out var currentToDo)) {
                 if (!currentToDo.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
                     return null;
@@ -249,7 +249,7 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         }
     }
 
-    public async Task<bool> DeleteToDo(ToDoPK toDoPK, User user, Operation operation) {
+    public async Task<bool> DeleteToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is not null) {
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var value)) {
@@ -271,15 +271,15 @@ public sealed class ProjectGrain : GrainBase<Project>, IProjectGrain {
         await ProjectCollectionGrain.SetDirty();
     }
 
-    public async Task<ProjectContext?> GetProjectContext(User user, Operation operation) {
+    public async Task<ProjectContext?> GetProjectContext(UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is null) {
-            return new ProjectContext(new List<Project>(), new List<ToDo>());
+            return new ProjectContext(new List<ProjectEntity>(), new List<ToDoEntity>());
         } else {
             var projectPK = state.GetPrimaryKey();
             return new ProjectContext(
-                Project: new List<Project>() { state }, 
-                ToDo: new List<ToDo>(
+                Project: new List<ProjectEntity>() { state }, 
+                ToDo: new List<ToDoEntity>(
                     this._DBContext.ToDo.Values.Where(todo => todo.GetProjectPK() == projectPK)
                 ));
         }

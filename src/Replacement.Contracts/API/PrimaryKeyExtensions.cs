@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.Entity;
+﻿namespace Replacement.Contracts.API;
 partial record ToDoPK {
     public static bool Parse(string value, out ToDoPK result) {
         Guid projectId;

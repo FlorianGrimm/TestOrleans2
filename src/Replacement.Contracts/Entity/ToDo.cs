@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.Contracts.Entity;
+﻿namespace Replacement.Contracts.Entity;
 /*
     public partial class ToDo {
         [Key]
@@ -26,7 +24,7 @@ namespace Replacement.Contracts.Entity;
         public virtual User? User { get; set; }
     }
 */
-public record class ToDo(
+public record class ToDoEntity(
     // [property: Key]
     Guid ToDoId,
     // [property: Key]
@@ -48,7 +46,7 @@ public record class ToDo(
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
     public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
-    public ToDo SetOperation(Operation value) {
+    public ToDoEntity SetOperation(OperationEntity value) {
         return this with {
             OperationId = value.OperationId,
             CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
@@ -58,10 +56,45 @@ public record class ToDo(
         };
     }
 
-    public ToDo SetProject(ProjectPK value) {
+    public ToDoEntity SetProject(ProjectPK value) {
         return this with {
             ProjectId = value.ProjectId
         };
     }
 
+}
+
+partial class ConverterToAPI {
+    [return: NotNullIfNotNull("that")]
+    public static ToDoAPI? ToToDoAPI(this ToDoEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new ToDoAPI(
+                ToDoId: that.ToDoId,
+                ProjectId: that.ProjectId,
+                UserId: that.UserId,
+                Title: that.Title,
+                Done: that.Done,
+                OperationId: that.OperationId,
+                CreatedAt: that.CreatedAt,
+                CreatedBy: that.CreatedBy,
+                ModifiedAt: that.ModifiedAt,
+                ModifiedBy: that.ModifiedBy,
+                SerialVersion: that.SerialVersion
+                );
+        }
+    }
+
+    public static List<ToDoAPI> ToListToDoAPI(
+        this IEnumerable<ToDoEntity> that) {
+        var result = new List<ToDoAPI>();
+        foreach (var e in that) {
+            if (e is not null) {
+                var a = e.ToToDoAPI();
+                result.Add(a);
+            }
+        }
+        return result;
+    }
 }

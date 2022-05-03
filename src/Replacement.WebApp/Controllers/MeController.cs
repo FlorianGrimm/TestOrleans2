@@ -14,10 +14,10 @@ public class MeController : ReplacementControllerBase {
 
     // GET api/Me
     [HttpGet()]
-    public async Task<ActionResult<User?>> Get() {
+    public async Task<ActionResult<UserAPI?>> Get() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (User?)null
+            argument: (UserAPI?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -28,16 +28,16 @@ public class MeController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            return user;
+            return user.ToAPI();
         }
     }
 
     // GET api/Me
     [HttpGet("Project")]
-    public async Task<ActionResult<IEnumerable<Project>>> GetMeProject() {
+    public async Task<ActionResult<IEnumerable<ProjectAPI>>> GetMeProject() {
         var requestOperation = this.CreateRequestOperation(
             pk: string.Empty,
-            argument: (Project?)null
+            argument: (ProjectEntity?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -48,16 +48,17 @@ public class MeController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            return await this.Client.GetProjectCollectionGrain().GetUsersProjects(user, operation);
+            var result = await this.Client.GetProjectCollectionGrain().GetUsersProjects(user, operation);
+            return result.ToListProjectAPI();
         }
     }
 
     // GET api/Me
     [HttpGet("ToDo")]
-    public async Task<ActionResult<IEnumerable<ToDo>>> GetMeToDo() {
+    public async Task<ActionResult<IEnumerable<ToDoAPI>>> GetMeToDo() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (ToDo?)null
+            argument: (ToDoEntity?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -68,7 +69,8 @@ public class MeController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            return await this.Client.GetToDoCollectionGrain().GetUsersToDos(user, operation);
+            var result = await this.Client.GetToDoCollectionGrain().GetUsersToDos(user, operation);
+            return result.ToListToDoAPI();
         }
     }
 }

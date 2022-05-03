@@ -12,10 +12,10 @@ public class ToDoController : ReplacementControllerBase {
 
     // GET: api/ToDo
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ToDo>>> Get() {
+    public async Task<ActionResult<IEnumerable<ToDoEntity>>> Get() {
         var requestOperation = this.CreateRequestOperation(
            pk: string.Empty,
-           argument: (ToDo?)null
+           argument: (ToDoEntity?)null
            );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -31,7 +31,7 @@ public class ToDoController : ReplacementControllerBase {
 
     // GET api/ToDo/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{projectId}/{todoId}")]
-    public async Task<ActionResult<ToDo?>> Get(Guid projectId, Guid toDoId) {
+    public async Task<ActionResult<ToDoEntity?>> Get(Guid projectId, Guid toDoId) {
         var toDoPK = new ToDoPK(projectId, toDoId);
         var requestOperation = this.CreateRequestOperation(
            pk: toDoPK,
@@ -54,7 +54,7 @@ public class ToDoController : ReplacementControllerBase {
 
     // POST api/ToDo
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ToDo value) {
+    public async Task<ActionResult> Post([FromBody] ToDoEntity value) {
         if (value.ToDoId == Guid.Empty) {
             value = value with {
                 ToDoId = Guid.NewGuid()
@@ -86,7 +86,7 @@ public class ToDoController : ReplacementControllerBase {
 
     // PUT api/ToDo/5
     [HttpPut("{projectId}/{toDoId}")]
-    public async Task<ActionResult> Put(Guid projectId, Guid toDoId, [FromBody] ToDo value) {
+    public async Task<ActionResult> Put(Guid projectId, Guid toDoId, [FromBody] ToDoEntity value) {
         value = value with {
             ProjectId = projectId,
             ToDoId = toDoId

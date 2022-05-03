@@ -2,7 +2,7 @@
 
 using Replacement.Contracts.Entity;
 
-namespace Replacement.Contracts.Entity {
+namespace Replacement.Contracts.API {
     public sealed partial record OperationPK (
         System.DateTimeOffset CreatedAt,
         Guid OperationId

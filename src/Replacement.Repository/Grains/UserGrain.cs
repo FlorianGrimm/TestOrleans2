@@ -3,20 +3,20 @@
 namespace Replacement.Repository.Grains;
 
 public interface IUserCollectionGrain : IGrainWithGuidKey {
-    Task<List<User>> GetAllUsers(Operation operation);
-    Task<(User? user, bool created)> GetUserByUserName(string username, bool createIfNeeded, Operation operation);
-    Task SetDirty(User? user);
+    Task<List<UserEntity>> GetAllUsers(OperationEntity operation);
+    Task<(UserEntity? user, bool created)> GetUserByUserName(string username, bool createIfNeeded, OperationEntity operation);
+    Task SetDirty(UserEntity? user);
 }
 
 public interface IUserGrain : IGrainWithGuidKey {
-    Task<User?> GetUser(Operation operation);
-    Task<User?> UpsertUser(User value, User? currentUser, Operation operation);
-    Task<bool> DeleteUser(User? currentUser, Operation operation);
+    Task<UserEntity?> GetUser(OperationEntity operation);
+    Task<UserEntity?> UpsertUser(UserEntity value, UserEntity? currentUser, OperationEntity operation);
+    Task<bool> DeleteUser(UserEntity? currentUser, OperationEntity operation);
 }
 
 public class UserCollectionGrain : Grain, IUserCollectionGrain {
     private readonly IDBContext _DBContext;
-    private Dictionary<string, User>? _Cache;
+    private Dictionary<string, UserEntity>? _Cache;
 
     public UserCollectionGrain(
         IDBContext dBContext
@@ -24,12 +24,12 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
         this._DBContext = dBContext;
     }
 
-    public Task<List<User>> GetAllUsers(Operation operation) {
+    public Task<List<UserEntity>> GetAllUsers(OperationEntity operation) {
         throw new NotImplementedException();
     }
 
-    public async Task<(User? user, bool created)> GetUserByUserName(string username, bool createIfNeeded, Operation operation) {
-        var cache = this._Cache ??= new Dictionary<string, User>(StringComparer.OrdinalIgnoreCase);
+    public async Task<(UserEntity? user, bool created)> GetUserByUserName(string username, bool createIfNeeded, OperationEntity operation) {
+        var cache = this._Cache ??= new Dictionary<string, UserEntity>(StringComparer.OrdinalIgnoreCase);
         if (cache.TryGetValue(username, out var user)) {
             return (user: user, created: false);
         } else {
@@ -41,7 +41,7 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
                 return (user: user, created: false);
             }
             if (createIfNeeded) {
-                user = User.Create(
+                user = UserEntity.Create(
                     operation: operation,
                     userId: Guid.NewGuid(),
                     userName: username
@@ -54,7 +54,7 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
         }
     }
 
-    public Task SetDirty(User? user) {
+    public Task SetDirty(UserEntity? user) {
         if (user is null) {
             this._Cache = null;
         } else if (this._Cache is not null) {
@@ -64,14 +64,14 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
     }
 }
 
-public class UserGrain : GrainBase<User>, IUserGrain {
+public class UserGrain : GrainBase<UserEntity>, IUserGrain {
 
     public UserGrain(
         IDBContext dbContext
         ):base(dbContext) {
     }
 
-    protected override async Task<User?> Load() {
+    protected override async Task<UserEntity?> Load() {
         var pk = new UserPK(
                 this.GetGrainIdentity().PrimaryKey
             );
@@ -86,7 +86,7 @@ public class UserGrain : GrainBase<User>, IUserGrain {
         }
     }
 
-    public async Task<User?> GetUser(Operation operation) {
+    public async Task<UserEntity?> GetUser(OperationEntity operation) {
         var user = await this.GetState();
         if (user is null) {
             this.DeactivateOnIdle();
@@ -94,7 +94,7 @@ public class UserGrain : GrainBase<User>, IUserGrain {
         return user;
     }
 
-    public async Task<User?> UpsertUser(User value, User? currentUser, Operation operation) {
+    public async Task<UserEntity?> UpsertUser(UserEntity value, UserEntity? currentUser, OperationEntity operation) {
         var user = await this.GetState();
         value = value.SetOperation(operation);
         this._DBContext.Operation.Add(operation);
@@ -107,7 +107,7 @@ public class UserGrain : GrainBase<User>, IUserGrain {
         return result;
     }
 
-    public async Task<bool> DeleteUser(User? currentUser, Operation operation) {
+    public async Task<bool> DeleteUser(UserEntity? currentUser, OperationEntity operation) {
         var user = await this.GetState();
         if (user is null) {
             return false;
@@ -124,7 +124,7 @@ public class UserGrain : GrainBase<User>, IUserGrain {
         }
     }
 
-    private async Task PopulateDirty(User? user) {
+    private async Task PopulateDirty(UserEntity? user) {
         var userCollectionGrain = this.GrainFactory.GetUserCollectionGrain();
         await userCollectionGrain.SetDirty(user);
     }
@@ -144,7 +144,7 @@ public static partial class GrainExtensions {
     }
 
 #warning here
-    public static async Task<(User? user, bool created)> GetUserByUserName(this IClusterClient client, string username, bool createIfNeeded, Operation operation) {
+    public static async Task<(UserEntity? user, bool created)> GetUserByUserName(this IClusterClient client, string username, bool createIfNeeded, OperationEntity operation) {
         return await client.GetUserCollectionGrain().GetUserByUserName(username, createIfNeeded, operation);
     }
 }

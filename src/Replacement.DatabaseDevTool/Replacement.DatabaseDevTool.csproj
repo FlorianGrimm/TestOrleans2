@@ -21,14 +21,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Compile Include="..\Replacement.Contracts\API\*.cs">
+			<Link>External\Replacement.Contracts\API\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		</Compile>
 		<Compile Include="..\Replacement.Contracts\Entity\*.cs">
 			<Link>External\Replacement.Contracts\Entity\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Compile>
-		
-		<None Include="..\Replacement.Contracts\Entity\PrimaryKey.cs" Link="Generated\PrimaryKey.cs" />
+<!--
+		<Compile Include="..\Replacement.Contracts\API\PrimaryKey.cs" Link="Generated\API\PrimaryKey.cs" />
+		<Compile Include="..\Replacement.Contracts\API\PrimaryKeyLocation.cs" Link="External\API\PrimaryKeyLocation.cs" />
+-->
 		
 		<Compile Include="..\Replacement.Repository\Service\SqlAccessLocation.cs" Link="External\Replacement.Repository\Service\SqlAccessLocation.cs" />
-		<None Include="..\Replacement.Repository\Service\SqlAccess.Generated.cs" Link="Generated\SqlAccess.Generated.cs" />
+		<None Include="..\Replacement.Repository\Service\SqlAccess.Generated.cs" Link="Generated\Service\SqlAccess.Generated.cs" />
 	</ItemGroup>
 
 </Project>

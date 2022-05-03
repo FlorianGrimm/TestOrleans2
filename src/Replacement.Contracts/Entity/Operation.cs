@@ -49,7 +49,7 @@ CREATE TABLE [dbo].[Operation] (
     CONSTRAINT [PK_dbo_Operation] PRIMARY KEY CLUSTERED ([CreatedAt] ASC,[OperationId] ASC)
 );
 */
-public record class Operation(
+public record class OperationEntity(
     Guid OperationId,
     // [property:StringLength(100)]
     string OperationName,
@@ -63,58 +63,21 @@ public record class Operation(
     long SerialVersion
 );
 
-
-/*
- CREATE TABLE [dbo].[Request]
-(
-	[RequestId]     UNIQUEIDENTIFIER   NOT NULL,
-	[OperationId]   UNIQUEIDENTIFIER   NOT NULL,
-    [ActivityId]    VARCHAR (200)      NOT NULL,
-    [OperationName] VARCHAR (100)      NOT NULL,
-    [EntityType]    VARCHAR (50)       NOT NULL,
-    [EntityId]      NVARCHAR (100)     NOT NULL,
-    [Argument]      NVARCHAR (MAX)     NULL,
-    [CreatedAt]     DATETIMEOFFSET (7) NOT NULL,
-    [UserId]        UNIQUEIDENTIFIER   NULL,
-    [SerialVersion] ROWVERSION         NOT NULL,
-    CONSTRAINT [PK_dbo_Request] PRIMARY KEY CLUSTERED ([RequestId] ASC)
-)
-
-*/
-
-public record class RequestLog(
-    Guid RequestLogId,
-    Guid OperationId,
-    // [property:StringLength(200)]
-    string ActivityId,
-    // [property:StringLength(100)]
-    string OperationName,
-    // [property: StringLength(50)]
-    string EntityType,
-    // [property: StringLength(100)]
-    string EntityId,
-    string? Argument,
-    Guid? UserId,
-    // [property: Key]
-    DateTimeOffset CreatedAt,
-    long SerialVersion
-);
-
-public record class RequestOperation(
-    Guid RequestLogId,
-    Guid OperationId,
-    // [property:StringLength(200)]
-    string ActivityId,
-    // [property:StringLength(100)]
-    string OperationName,
-    // [property: StringLength(50)]
-    string EntityType,
-    // [property: StringLength(100)]
-    string EntityId,
-    string? Argument,
-    string? UserName,
-    Guid? UserId,
-    // [property: Key]
-    DateTimeOffset CreatedAt,
-    long SerialVersion
-);
+partial class ConverterToAPI {
+    [return: NotNullIfNotNull("that")]
+    public static OperationAPI? ToOperationAPI(this OperationEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new OperationAPI(
+                OperationId: that.OperationId,
+                OperationName: that.OperationName,
+                EntityType: that.EntityType,
+                EntityId: that.EntityId,
+                UserId: that.UserId,
+                CreatedAt: that.CreatedAt,
+                SerialVersion: that.SerialVersion
+                );
+        }
+    }
+}

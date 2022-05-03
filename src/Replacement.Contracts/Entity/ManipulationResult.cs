@@ -1,16 +1,16 @@
 ﻿namespace Replacement.Contracts.Entity;
 
 public sealed record ProjectManipulationResult(
-        Project DataResult,
+        ProjectEntity DataResult,
         OperationResult OperationResult
-    ) : IDataManipulationResult<Project>;
+    ) : IDataManipulationResult<ProjectEntity>;
 
 public sealed record UserManipulationResult(
-        User DataResult,
+        UserEntity DataResult,
         OperationResult OperationResult
-    ) : IDataManipulationResult<User>;
+    ) : IDataManipulationResult<UserEntity>;
 
 public sealed record ToDoManipulationResult(
-        ToDo DataResult,
+        ToDoEntity DataResult,
         OperationResult OperationResult
-    ) : IDataManipulationResult<ToDo>;
+    ) : IDataManipulationResult<ToDoEntity>;

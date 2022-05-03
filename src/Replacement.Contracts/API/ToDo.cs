@@ -18,7 +18,7 @@ public record class ToDoAPI(
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
     public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
-    public ToDoAPI SetOperation(Operation value) {
+    public ToDoAPI SetOperation(OperationEntity value) {
         return this with {
             OperationId = value.OperationId,
             CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
@@ -28,7 +28,7 @@ public record class ToDoAPI(
         };
     }
 
-    public ToDo SetProject(ProjectPK value) {
+    public ToDoAPI SetProject(ProjectPK value) {
         return this with {
             ProjectId = value.ProjectId
         };

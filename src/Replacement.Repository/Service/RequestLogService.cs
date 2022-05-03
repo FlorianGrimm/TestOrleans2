@@ -5,7 +5,7 @@ using System.Threading.Channels;
 namespace Replacement.Repository.Service;
 
 public interface IRequestLogService {
-    Task InsertAsync(RequestLog requestLog, bool canModifyState);
+    Task InsertAsync(RequestLogEntity requestLog, bool canModifyState);
 }
 public interface IRequestLogServiceBulk : IRequestLogService {
     //Task InsertAsync(RequestLog requestLog, bool canModifyState);
@@ -21,7 +21,7 @@ public class RequestLogService : IRequestLogService {
         this._RequestLogServiceBulk = requestLogServiceBulk;
     }
 
-    public Task InsertAsync(RequestLog requestLog, bool canModifyState) {
+    public Task InsertAsync(RequestLogEntity requestLog, bool canModifyState) {
         return this._RequestLogServiceBulk.InsertAsync(requestLog, canModifyState);
     }
 }
@@ -37,7 +37,7 @@ public class RequestLogServiceOptions {
 
 public class RequestLogServiceBulk : IRequestLogServiceBulk {
     private readonly RequestLogServiceOptions _Options;
-    private readonly Channel<RequestLog> _Channel;
+    private readonly Channel<RequestLogEntity> _Channel;
     private readonly ISqlAccessFactory _SqlAccessFactory;
     private volatile Task _ChainingTask;
 
@@ -47,13 +47,13 @@ public class RequestLogServiceBulk : IRequestLogServiceBulk {
         ) {
         this._Options = options.Value;
         this._SqlAccessFactory = sqlAccessFactory;
-        this._Channel = System.Threading.Channels.Channel.CreateUnbounded<RequestLog>(new System.Threading.Channels.UnboundedChannelOptions() {
+        this._Channel = System.Threading.Channels.Channel.CreateUnbounded<RequestLogEntity>(new System.Threading.Channels.UnboundedChannelOptions() {
             SingleReader = true
         });
         this._ChainingTask = Task.CompletedTask;
     }
 
-    public async Task InsertAsync(RequestLog requestLog, bool canModifyState) {
+    public async Task InsertAsync(RequestLogEntity requestLog, bool canModifyState) {
         if (canModifyState || this._Options.AllLogs) {
             await this._Channel.Writer.WriteAsync(requestLog);
         }
@@ -84,7 +84,7 @@ public class RequestLogServiceBulk : IRequestLogServiceBulk {
         await this.Flush1Async(reader, stoppingToken);
     }
 
-    private async Task<bool> Flush1Async(ChannelReader<RequestLog> reader, CancellationToken stoppingToken) {
+    private async Task<bool> Flush1Async(ChannelReader<RequestLogEntity> reader, CancellationToken stoppingToken) {
         Task<bool> flushTask;
         lock (this) {
             flushTask = this._ChainingTask.ContinueWith(async t => {
@@ -103,7 +103,7 @@ public class RequestLogServiceBulk : IRequestLogServiceBulk {
             }
         }
     }
-    private async Task<bool> Flush2Async(ChannelReader<RequestLog> reader, CancellationToken stoppingToken) {
+    private async Task<bool> Flush2Async(ChannelReader<RequestLogEntity> reader, CancellationToken stoppingToken) {
         if (reader.TryRead(out var requestLog)) {
             using (var dataAccess = await this._SqlAccessFactory.CreateDataAccessAsync(stoppingToken)) {
                 await dataAccess.ExecuteRequestLogInsertAsync(requestLog);

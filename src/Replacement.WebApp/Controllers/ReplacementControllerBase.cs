@@ -1,6 +1,6 @@
 ﻿// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-using Replacement.Contracts.Entity;
+using Replacement.Contracts.Service;
 
 using System.Diagnostics.CodeAnalysis;
 
@@ -115,13 +115,13 @@ public static class ReplacementControllerBaseExtensions {
         return $"{controllerName}.{callerMemberName}";
     }
 
-    public static async Task<(Operation operation, User? user)> InitializeOperation(
+    public static async Task<(OperationEntity operation, UserEntity? user)> InitializeOperation(
         this ReplacementControllerBase that,
         RequestOperation requestOperation,
         bool canModifyState,
         bool createUserIfNeeded) {
 
-        var operation = new Operation(
+        var operation = new OperationEntity(
             OperationId: requestOperation.OperationId,
             OperationName: requestOperation.OperationName,
             EntityType: requestOperation.EntityType,
@@ -131,7 +131,7 @@ public static class ReplacementControllerBaseExtensions {
             SerialVersion: 0);
         if (operation.UserId.HasValue
             || string.IsNullOrEmpty(requestOperation.UserName)) {
-            var requestLog = new RequestLog(
+            var requestLog = new RequestLogEntity(
                 RequestLogId: requestOperation.RequestLogId,
                 OperationId: requestOperation.OperationId,
                 ActivityId: requestOperation.ActivityId,
@@ -153,7 +153,7 @@ public static class ReplacementControllerBaseExtensions {
                     UserId = user?.UserId,
                     CreatedAt = DateTimeOffset.Now
                 };
-                var requestLog = new RequestLog(
+                var requestLog = new RequestLogEntity(
                     RequestLogId: requestOperation.RequestLogId,
                     OperationId: operationNext.OperationId,
                     ActivityId: requestOperation.ActivityId,
@@ -170,7 +170,7 @@ public static class ReplacementControllerBaseExtensions {
                 var operationNext = operation with {
                     UserId = user?.UserId
                 };
-                var requestLog = new RequestLog(
+                var requestLog = new RequestLogEntity(
                     RequestLogId: requestOperation.RequestLogId,
                     OperationId: requestOperation.OperationId,
                     ActivityId: requestOperation.ActivityId,
@@ -189,7 +189,7 @@ public static class ReplacementControllerBaseExtensions {
 
     private static async Task InsertRequestLog(
         this ReplacementControllerBase that,
-        RequestLog requestLog, 
+        RequestLogEntity requestLog, 
         bool canModifyState) {
         var service = that.HttpContext.RequestServices.GetService<IRequestLogService>();
         if (service is not null) {

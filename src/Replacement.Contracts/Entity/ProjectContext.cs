@@ -1,11 +1,11 @@
 ﻿namespace Replacement.Contracts.Entity;
 
 public interface IProjectContext {
-    List<Project> Project { get; }
-    List<ToDo> ToDo { get; }
+    List<ProjectEntity> Project { get; }
+    List<ToDoEntity> ToDo { get; }
 }
 
 public record class ProjectContext(
-    List<Project> Project,
-    List<ToDo> ToDo
+    List<ProjectEntity> Project,
+    List<ToDoEntity> ToDo
 ) : IProjectContext;

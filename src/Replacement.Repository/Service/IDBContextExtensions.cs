@@ -3,12 +3,12 @@
 namespace Replacement.Repository.Service;
 
 public static class IDBContextExtensions {
-    public static Project? GetProject(this IDBContext that, ProjectPK pk) {
+    public static ProjectEntity? GetProject(this IDBContext that, ProjectPK pk) {
         that.Project.TryGetValue(pk, out var result);
         return result;
     }
 
-    public static IEnumerable<Project> GetProjectOfUserCreatedBy(this IDBContext that, UserPK userPK) {
+    public static IEnumerable<ProjectEntity> GetProjectOfUserCreatedBy(this IDBContext that, UserPK userPK) {
         return that.Project.Values.Where(
                 project => userPK.Equals(project.GetCreatedByUserPK())
             );
@@ -23,7 +23,7 @@ public static class IDBContextExtensions {
     }
 #endif
 
-    public static IEnumerable<ToDo> GetToDoOfProject(this IDBContext that, ProjectPK projectPK) {
+    public static IEnumerable<ToDoEntity> GetToDoOfProject(this IDBContext that, ProjectPK projectPK) {
         return that.ToDo.Values.Where(
                 toDo => toDo.GetProjectPK().Equals(projectPK)
             );

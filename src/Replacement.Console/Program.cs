@@ -120,7 +120,7 @@ public static class Program {
         try {
             IReplacementClient client = appServiceProvider.GetRequiredService<IReplacementClient>();
             List<Guid> lstProjectId = new List<Guid>();
-            var dctProject = new Dictionary<ProjectPK, Project>();
+            var dctProject = new Dictionary<ProjectPK, ProjectEntity>();
 
             for (int idxOuter = 0; idxOuter < cntOuter; idxOuter++) {
                 System.Console.Out.WriteLine($"idxOuter : {idxOuter} / {cntOuter} : {lstProjectId.Count}");
@@ -128,7 +128,7 @@ public static class Program {
                 for (int idxWrite = 0; idxWrite < cntInnerWrite; idxWrite++) {
                     var projectId = Guid.NewGuid();
                     lstProjectId.Add(projectId);
-                    var projectA = new Project(
+                    var projectA = new ProjectEntity(
                             ProjectId: projectId,
                             Title: projectId.ToString(),
                             OperationId: Guid.Empty,

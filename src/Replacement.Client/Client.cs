@@ -23,12 +23,12 @@ namespace Replacement.Client {
     {
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> MeAsync();
+        System.Threading.Tasks.Task<UserEntity> MeAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> MeAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UserEntity> MeAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -41,12 +41,12 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAllAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAllAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAllAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -95,30 +95,30 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAll22Async();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAll22Async();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAll22Async(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAll22Async(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDo body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDo body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ToDo> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId);
+        System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDoEntity body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ToDo> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDoEntity body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ToDoEntity> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ToDoEntity> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -131,48 +131,48 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDo body);
+        System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDoEntity body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDo body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDoEntity body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> UserAllAllAsync();
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> UserAllAllAsync(System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task UserPOSTPOSTAsync(User body);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserEntity>> UserAllAllAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task UserPOSTPOSTAsync(User body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserEntity>> UserAllAllAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> UserGETGETAsync(System.Guid userId);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<User> UserGETGETAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, User body);
+        System.Threading.Tasks.Task UserPOSTPOSTAsync(UserEntity body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, User body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task UserPOSTPOSTAsync(UserEntity body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserEntity> UserGETGETAsync(System.Guid userId);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UserEntity> UserGETGETAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, UserEntity body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, UserEntity body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -222,7 +222,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> MeAsync()
+        public virtual System.Threading.Tasks.Task<UserEntity> MeAsync()
         {
             return MeAsync(System.Threading.CancellationToken.None);
         }
@@ -230,7 +230,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> MeAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserEntity> MeAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Me");
@@ -267,7 +267,7 @@ namespace Replacement.Client {
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<User>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<UserEntity>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -370,7 +370,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAllAsync()
         {
             return ToDoAllAllAsync(System.Threading.CancellationToken.None);
         }
@@ -378,7 +378,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Me/ToDo");
@@ -415,7 +415,7 @@ namespace Replacement.Client {
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ToDo>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ToDoEntity>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -826,7 +826,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAll22Async()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAll22Async()
         {
             return ToDoAllAll22Async(System.Threading.CancellationToken.None);
         }
@@ -834,7 +834,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDo>> ToDoAllAll22Async(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ToDoEntity>> ToDoAllAll22Async(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ToDo");
@@ -871,7 +871,7 @@ namespace Replacement.Client {
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ToDo>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ToDoEntity>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -900,7 +900,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDo body)
+        public virtual System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDoEntity body)
         {
             return ToDoPOSTPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -908,7 +908,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDo body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ToDoPOSTPOSTAsync(ToDoEntity body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ToDo");
@@ -971,7 +971,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ToDo> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId)
+        public virtual System.Threading.Tasks.Task<ToDoEntity> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId)
         {
             return ToDoGETGETAsync(projectId, toDoId, System.Threading.CancellationToken.None);
         }
@@ -979,7 +979,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ToDo> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ToDoEntity> ToDoGETGETAsync(System.Guid projectId, System.Guid toDoId, System.Threading.CancellationToken cancellationToken)
         {
             if (projectId == null)
                 throw new System.ArgumentNullException("projectId");
@@ -1024,7 +1024,7 @@ namespace Replacement.Client {
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ToDo>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ToDoEntity>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1129,7 +1129,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDo body)
+        public virtual System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDoEntity body)
         {
             return ToDoPUTPUTAsync(projectId, toDoId, body, System.Threading.CancellationToken.None);
         }
@@ -1137,7 +1137,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDo body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task ToDoPUTPUTAsync(System.Guid projectId, System.Guid toDoId, ToDoEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (projectId == null)
                 throw new System.ArgumentNullException("projectId");
@@ -1208,7 +1208,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> UserAllAllAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserEntity>> UserAllAllAsync()
         {
             return UserAllAllAsync(System.Threading.CancellationToken.None);
         }
@@ -1216,7 +1216,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> UserAllAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserEntity>> UserAllAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User");
@@ -1253,7 +1253,7 @@ namespace Replacement.Client {
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<User>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<UserEntity>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1282,7 +1282,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UserPOSTPOSTAsync(User body)
+        public virtual System.Threading.Tasks.Task UserPOSTPOSTAsync(UserEntity body)
         {
             return UserPOSTPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1290,7 +1290,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UserPOSTPOSTAsync(User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task UserPOSTPOSTAsync(UserEntity body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/User");
@@ -1353,7 +1353,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> UserGETGETAsync(System.Guid userId)
+        public virtual System.Threading.Tasks.Task<UserEntity> UserGETGETAsync(System.Guid userId)
         {
             return UserGETGETAsync(userId, System.Threading.CancellationToken.None);
         }
@@ -1361,7 +1361,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> UserGETGETAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UserEntity> UserGETGETAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1402,7 +1402,7 @@ namespace Replacement.Client {
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<User>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<UserEntity>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1431,7 +1431,7 @@ namespace Replacement.Client {
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, User body)
+        public virtual System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, UserEntity body)
         {
             return UserPUTPUTAsync(userId, body, System.Threading.CancellationToken.None);
         }
@@ -1439,7 +1439,7 @@ namespace Replacement.Client {
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task UserPUTPUTAsync(System.Guid userId, UserEntity body, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");

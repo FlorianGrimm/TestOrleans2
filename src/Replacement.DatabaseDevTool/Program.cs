@@ -144,7 +144,7 @@ public static partial class Program {
                 printSteps(4);
 
                 {
-                    var (outputPath, outputNamespace) = Replacement.Contracts.Entity.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
+                    var (outputPath, outputNamespace) = Replacement.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
                     var subResult = MainGeneratePrimaryKey(connectionString, outputPath, outputNamespace);
                     if (subResult) {
 
@@ -333,10 +333,12 @@ public static partial class Program {
         string outputClassName,
         bool isForce
         ) {
-        var refType = typeof(Replacement.Contracts.Entity.PrimaryKeyLocation);
-        var refTypeNamespace = refType.Namespace;
-        var types = refType.Assembly.GetTypes()
-            .Where(t => t.Namespace == refTypeNamespace)
+        var refTypeAPI = typeof(Replacement.Contracts.API.PrimaryKeyLocation);
+        var refTypeEntity = typeof(Replacement.Contracts.Entity.ProjectEntity);
+        var refTypeAPINamespace = refTypeAPI.Namespace;
+        var refTypeEntityNamespace = refTypeEntity.Namespace;
+        var types = refTypeEntity.Assembly.GetTypes()
+            .Where(t => (t.Namespace == refTypeAPINamespace) || (t.Namespace == refTypeEntityNamespace))
             .ToArray()
             ;
         var printClass = new PrintClass(

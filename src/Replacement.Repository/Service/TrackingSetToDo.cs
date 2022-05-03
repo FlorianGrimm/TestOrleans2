@@ -2,8 +2,8 @@
 
 namespace Replacement.Repository.Service;
 
-public sealed class TrackingSetToDo : TrackingSet<ToDoPK, ToDo> {
-    public TrackingSetToDo(DBContext context, ITrackingSetApplyChanges<ToDo> trackingApplyChanges)
+public sealed class TrackingSetToDo : TrackingSet<ToDoPK, ToDoEntity> {
+    public TrackingSetToDo(DBContext context, ITrackingSetApplyChanges<ToDoEntity> trackingApplyChanges)
         : base(
             extractKey: ToDoUtiltiy.Instance,
             comparer: ToDoUtiltiy.Instance,
@@ -12,29 +12,29 @@ public sealed class TrackingSetToDo : TrackingSet<ToDoPK, ToDo> {
     }
 }
 
-public sealed class TrackingSetApplyChangesToDo : TrackingSetApplyChangesBase<ToDo, ToDoPK> {
+public sealed class TrackingSetApplyChangesToDo : TrackingSetApplyChangesBase<ToDoEntity, ToDoPK> {
     private static TrackingSetApplyChangesToDo? _Instance;
     public static TrackingSetApplyChangesToDo Instance => _Instance ??= new TrackingSetApplyChangesToDo();
 
     private TrackingSetApplyChangesToDo() : base() { }
 
-    protected override ToDoPK ExtractKey(ToDo value) => value.GetPrimaryKey();
+    protected override ToDoPK ExtractKey(ToDoEntity value) => value.GetPrimaryKey();
 
-    public override Task<ToDo> Insert(ToDo value, ITrackingTransConnection trackingTransaction) {
+    public override Task<ToDoEntity> Insert(ToDoEntity value, ITrackingTransConnection trackingTransaction) {
         return this.Upsert(value, trackingTransaction);
     }
 
-    public override Task<ToDo> Update(ToDo value, ITrackingTransConnection trackingTransaction) {
+    public override Task<ToDoEntity> Update(ToDoEntity value, ITrackingTransConnection trackingTransaction) {
         return this.Upsert(value, trackingTransaction);
     }
 
-    private async Task<ToDo> Upsert(ToDo value, ITrackingTransConnection trackingTransaction) {
+    private async Task<ToDoEntity> Upsert(ToDoEntity value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteToDoUpsertAsync(value);
         return this.ValidateUpsertDataManipulationResult(value, result);
     }
 
-    public override async Task Delete(ToDo value, ITrackingTransConnection trackingTransaction) {
+    public override async Task Delete(ToDoEntity value, ITrackingTransConnection trackingTransaction) {
         var sqlAccess = (ISqlAccess)trackingTransaction;
         var result = await sqlAccess.ExecuteToDoDeletePKAsync(value);
         this.ValidateDelete(value, result);
@@ -43,12 +43,12 @@ public sealed class TrackingSetApplyChangesToDo : TrackingSetApplyChangesBase<To
 
 public sealed class ToDoUtiltiy
     : IEqualityComparer<ToDoPK>
-    , IExtractKey<ToDo, ToDoPK> {
+    , IExtractKey<ToDoEntity, ToDoPK> {
     private static ToDoUtiltiy? _Instance;
     public static ToDoUtiltiy Instance => (_Instance ??= new ToDoUtiltiy());
     private ToDoUtiltiy() { }
 
-    public ToDoPK ExtractKey(ToDo that) => that.GetPrimaryKey();
+    public ToDoPK ExtractKey(ToDoEntity that) => that.GetPrimaryKey();
 
     bool IEqualityComparer<ToDoPK>.Equals(ToDoPK? x, ToDoPK? y) {
         if (object.ReferenceEquals(x, y)) {

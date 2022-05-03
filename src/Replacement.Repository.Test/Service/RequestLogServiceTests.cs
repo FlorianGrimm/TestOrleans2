@@ -14,7 +14,7 @@ public class RequestLogServiceTests {
             sqlAccessFactory);
         var requestLogService = new RequestLogService(requestLogServiceBulk);
         var requestLogs = System.Linq.Enumerable.Range(1, 10)
-            .Select(i => new RequestLog(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid().ToString(), i.ToString(), i.ToString(), i.ToString(), i.ToString(), null, DateTimeOffset.MinValue, i))
+            .Select(i => new RequestLogEntity(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid().ToString(), i.ToString(), i.ToString(), i.ToString(), i.ToString(), null, DateTimeOffset.MinValue, i))
             .ToList();
         var cts = new CancellationTokenSource();
         var bulkTask = requestLogServiceBulk.ExecuteAsync(cts.Token);
@@ -56,13 +56,13 @@ public class RequestLogServiceTests {
     }
 
     class TestISqlAccessFactory : ISqlAccessFactory, ISqlAccess {
-        public List<(TimeSpan ts, RequestLog rl)> RequestLogs { get; }
+        public List<(TimeSpan ts, RequestLogEntity rl)> RequestLogs { get; }
         public DateTime StartedAt { get; }
         public bool Commited { get; private set; }
 
         public TestISqlAccessFactory() {
             this.StartedAt = DateTime.UtcNow;
-            this.RequestLogs = new List<(TimeSpan ts, RequestLog rl)>();
+            this.RequestLogs = new List<(TimeSpan ts, RequestLogEntity rl)>();
         }
         public DBContextOption Options { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -78,7 +78,7 @@ public class RequestLogServiceTests {
         public void Dispose() {
         }
 
-        public async Task ExecuteRequestLogInsertAsync(RequestLog args) {
+        public async Task ExecuteRequestLogInsertAsync(RequestLogEntity args) {
             var ts = DateTime.UtcNow - this.StartedAt;
             this.RequestLogs.Add((ts, args));
             await Task.Delay(this.RequestLogs.Count);
@@ -88,19 +88,19 @@ public class RequestLogServiceTests {
             throw new NotImplementedException();
         }
 
-        public Task<Operation> ExecuteOperationInsertAsync(Operation args) {
+        public Task<OperationEntity> ExecuteOperationInsertAsync(OperationEntity args) {
             throw new NotImplementedException();
         }
 
-        public Task<Operation?> ExecuteOperationSelectPKAsync(OperationPK args) {
+        public Task<OperationEntity?> ExecuteOperationSelectPKAsync(OperationPK args) {
             throw new NotImplementedException();
         }
 
-        public Task<List<ProjectPK>> ExecuteProjectDeletePKAsync(Project args) {
+        public Task<List<ProjectPK>> ExecuteProjectDeletePKAsync(ProjectEntity args) {
             throw new NotImplementedException();
         }
 
-        public Task<List<Project>> ExecuteProjectSelectAllAsync() {
+        public Task<List<ProjectEntity>> ExecuteProjectSelectAllAsync() {
             throw new NotImplementedException();
         }
 
@@ -108,43 +108,43 @@ public class RequestLogServiceTests {
             throw new NotImplementedException();
         }
 
-        public Task<ProjectManipulationResult> ExecuteProjectUpsertAsync(Project args) {
+        public Task<ProjectManipulationResult> ExecuteProjectUpsertAsync(ProjectEntity args) {
             throw new NotImplementedException();
         }
 
-        public Task<List<ToDoPK>> ExecuteToDoDeletePKAsync(ToDo args) {
+        public Task<List<ToDoPK>> ExecuteToDoDeletePKAsync(ToDoEntity args) {
             throw new NotImplementedException();
         }
 
-        public Task<List<ToDo>> ExecuteToDoSelectAllAsync() {
+        public Task<List<ToDoEntity>> ExecuteToDoSelectAllAsync() {
             throw new NotImplementedException();
         }
 
-        public Task<ToDo?> ExecuteToDoSelectPKAsync(ToDoPK args) {
+        public Task<ToDoEntity?> ExecuteToDoSelectPKAsync(ToDoPK args) {
             throw new NotImplementedException();
         }
 
-        public Task<List<ToDo>> ExecuteToDoSelectProjectAsync(ToDoPK args) {
+        public Task<List<ToDoEntity>> ExecuteToDoSelectProjectAsync(ToDoPK args) {
             throw new NotImplementedException();
         }
 
-        public Task<ToDoManipulationResult> ExecuteToDoUpsertAsync(ToDo args) {
+        public Task<ToDoManipulationResult> ExecuteToDoUpsertAsync(ToDoEntity args) {
             throw new NotImplementedException();
         }
 
-        public Task<List<UserPK>> ExecuteUserDeletePKAsync(User args) {
+        public Task<List<UserPK>> ExecuteUserDeletePKAsync(UserEntity args) {
             throw new NotImplementedException();
         }
 
-        public Task<User?> ExecuteUserSelectByUserNameAsync(UserSelectByUserNameArg args) {
+        public Task<UserEntity?> ExecuteUserSelectByUserNameAsync(UserSelectByUserNameArg args) {
             throw new NotImplementedException();
         }
 
-        public Task<User?> ExecuteUserSelectPKAsync(UserPK args) {
+        public Task<UserEntity?> ExecuteUserSelectPKAsync(UserPK args) {
             throw new NotImplementedException();
         }
 
-        public Task<UserManipulationResult> ExecuteUserUpsertAsync(User args) {
+        public Task<UserManipulationResult> ExecuteUserUpsertAsync(UserEntity args) {
             throw new NotImplementedException();
         }
 

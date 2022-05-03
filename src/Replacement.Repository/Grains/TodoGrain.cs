@@ -3,15 +3,15 @@
 namespace Replacement.Repository.Grains;
 
 public interface IToDoCollectionGrain : IGrainWithGuidKey {
-    Task<List<ToDo>> GetAllToDos(User user, Operation operation);
-    Task<List<ToDo>> GetUsersToDos(User user, Operation operation);
+    Task<List<ToDoEntity>> GetAllToDos(UserEntity user, OperationEntity operation);
+    Task<List<ToDoEntity>> GetUsersToDos(UserEntity user, OperationEntity operation);
     Task SetDirty();
 }
 
 public interface IToDoGrain : IGrainWithGuidCompoundKey {
-    Task<ToDo?> GetToDo(User user, Operation operation);
-    Task<bool> UpsertToDo(ToDo value, User user, Operation operation);
-    Task<bool> DeleteToDo(User user, Operation operation);
+    Task<ToDoEntity?> GetToDo(UserEntity user, OperationEntity operation);
+    Task<bool> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation);
+    Task<bool> DeleteToDo(UserEntity user, OperationEntity operation);
 }
 
 //
@@ -19,7 +19,7 @@ public interface IToDoGrain : IGrainWithGuidCompoundKey {
 public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
     private readonly IDBContext _DBContext;
     private bool _IsDirty;
-    private List<ToDo>? _GetAllToDos;
+    private List<ToDoEntity>? _GetAllToDos;
 
     public ToDoCollectionGrain(
         IDBContext dBContext
@@ -27,7 +27,7 @@ public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
         this._DBContext = dBContext;
     }
 
-    public async Task<List<ToDo>> GetAllToDos(User user, Operation operation) {
+    public async Task<List<ToDoEntity>> GetAllToDos(UserEntity user, OperationEntity operation) {
         var result = this._GetAllToDos;
         if (this._IsDirty || result is null) {
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
@@ -43,8 +43,8 @@ public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
         }
     }
 
-    public async Task<List<ToDo>> GetUsersToDos(User user, Operation operation) {
-        List<ToDo> result;
+    public async Task<List<ToDoEntity>> GetUsersToDos(UserEntity user, OperationEntity operation) {
+        List<ToDoEntity> result;
         using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
             result = await sqlAccess.ExecuteToDoSelectAllAsync();
         }
@@ -57,7 +57,7 @@ public class ToDoCollectionGrain : Grain, IToDoCollectionGrain {
     }
 }
 
-public class ToDoGrain : GrainBase<ToDo>, IToDoGrain {
+public class ToDoGrain : GrainBase<ToDoEntity>, IToDoGrain {
     public ToDoGrain(
         IDBContext dbContext
         ) :base(dbContext){
@@ -76,7 +76,7 @@ public class ToDoGrain : GrainBase<ToDo>, IToDoGrain {
     public override async Task OnActivateAsync() {
         var pk = this.GetGrainIdentityAsPK();
         if (pk is not null) {
-            ToDo? state;
+            ToDoEntity? state;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
                 state = await sqlAccess.ExecuteToDoSelectPKAsync(pk);
             }
@@ -89,19 +89,19 @@ public class ToDoGrain : GrainBase<ToDo>, IToDoGrain {
         this._State = null;
     }
 
-    public Task<ToDo?> GetToDo(User user, Operation operation) {
+    public Task<ToDoEntity?> GetToDo(UserEntity user, OperationEntity operation) {
         var state = this._State;
         if (state is null) {
             this.DeactivateOnIdle();
-            return Task.FromResult<ToDo?>(null);
+            return Task.FromResult<ToDoEntity?>(null);
         } else if (state.UserId == user.UserId) {
-            return Task.FromResult<ToDo?>(state);
+            return Task.FromResult<ToDoEntity?>(state);
         } else {
-            return Task.FromResult<ToDo?>(null);
+            return Task.FromResult<ToDoEntity?>(null);
         }
     }
 
-    public async Task<bool> UpsertToDo(ToDo value, User user, Operation operation) {
+    public async Task<bool> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation) {
         //var operation = new Operation(Guid.NewGuid(), "UpsertToDo", "ToDo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
         value = value with {
             OperationId = operation.OperationId,
@@ -119,7 +119,7 @@ public class ToDoGrain : GrainBase<ToDo>, IToDoGrain {
     }
 
 
-    public async Task<bool> DeleteToDo(User user, Operation operation) {
+    public async Task<bool> DeleteToDo(UserEntity user, OperationEntity operation) {
         var state = this._State;
         if (state is null) {
             return false;

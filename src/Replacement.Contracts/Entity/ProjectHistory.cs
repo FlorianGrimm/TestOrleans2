@@ -21,7 +21,7 @@
 */
 
 [Table("ProjectHistory", Schema = "history")]
-public record class ProjectHistory(
+public record class ProjectHistoryEntity(
     // [property:Key]
     Guid OperationId,
     // [property:Key]
@@ -38,3 +38,25 @@ public record class ProjectHistory(
     DateTimeOffset ValidTo,
     long SerialVersion
 ) : IDataHistory;
+
+partial class ConverterToAPI {
+    [return: NotNullIfNotNull("that")]
+    public static ProjectHistoryAPI? ToProjectHistoryAPI(this ProjectHistoryEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new ProjectHistoryAPI(
+                OperationId:that.OperationId,
+                ProjectId:that.ProjectId,
+                Title:that.Title,
+                CreatedAt:that.CreatedAt,
+                CreatedBy:that.CreatedBy,
+                ModifiedAt:that.ModifiedAt,
+                ModifiedBy:that.ModifiedBy,
+                ValidFrom:that.ValidFrom,
+                ValidTo:that.ValidTo,
+                SerialVersion: that.SerialVersion
+                );
+        }
+    }
+}
