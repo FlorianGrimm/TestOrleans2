@@ -27,7 +27,7 @@ public abstract class TrackingSet<TValue>
     internal override Type GetItemType() => typeof(TValue);
 
     public abstract TrackingObject<TValue>? Attach(TValue? item);
-    
+
     public abstract List<TrackingObject<TValue>> AttachRange(IEnumerable<TValue> items);
 
     public abstract TrackingObject<TValue> Add(TValue item);
@@ -36,7 +36,7 @@ public abstract class TrackingSet<TValue>
 
     public abstract TrackingObject<TValue> Upsert(TValue item);
 
-    public abstract void Detach(TrackingObject<TValue> item);
+    public abstract void Detach(TrackingObject<TValue>? item);
 
     public abstract void Delete(TrackingObject<TValue> trackingObject);
 
@@ -113,7 +113,7 @@ public class TrackingSet<TKey, TValue>
                 var replace = ((found.Status == TrackingStatus.Original) || this.AttachConflictReplace(item, found));
                 if (replace) {
                     found.Set(item, TrackingStatus.Original);
-                } else { 
+                } else {
                     // TODO remove changes ?
                 }
                 return found;
@@ -129,19 +129,21 @@ public class TrackingSet<TKey, TValue>
             }
         }
     }
-    
+
     public override List<TrackingObject<TValue>> AttachRange(IEnumerable<TValue> items) {
         var result = new List<TrackingObject<TValue>>();
         foreach (var item in items) {
-            var to=this.Attach(item);
+            var to = this.Attach(item);
             result.Add(to);
         }
         return result;
     }
 
-    public override void Detach(TrackingObject<TValue> value) {
-        var key = this._ExtractKey.ExtractKey(value.Value);
-        this._Items.Remove(key);
+    public override void Detach(TrackingObject<TValue>? value) {
+        if (value is not null) {
+            var key = this._ExtractKey.ExtractKey(value.Value);
+            this._Items.Remove(key);
+        }
     }
 
     public override TrackingObject<TValue> Add(TValue value) {

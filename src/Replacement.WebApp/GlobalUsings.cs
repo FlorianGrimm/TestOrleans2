@@ -1,6 +1,7 @@
 ﻿global using System;
 global using System.Collections.Generic;
 global using System.Diagnostics;
+global using System.Diagnostics.CodeAnalysis;
 global using System.Diagnostics.Tracing;
 global using System.Runtime.CompilerServices;
 global using System.Linq;
@@ -29,6 +30,9 @@ global using Microsoft.OData.ModelBuilder;
 
 global using Microsoft.OpenApi.Models;
 
+global using Polly;
+global using Polly.Retry;
+
 global using Orleans;
 global using Orleans.Hosting;
 
@@ -39,6 +43,9 @@ global using Replacement.Contracts.Entity;
 
 global using Replacement.Repository.Grains;
 global using Replacement.Repository.Service;
+global using Replacement.Repository.Extensions;
 
 global using Replacement.WebApp.Swagger;
 global using Replacement.WebApp.Services;
+global using Replacement.WebApp.Controllers;
+global using Replacement.WebApp.Extensions;

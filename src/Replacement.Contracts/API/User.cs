@@ -1,5 +1,5 @@
 ﻿namespace Replacement.Contracts.API;
-public record class UserAPI(
+public record class User(
     Guid UserId,
     string UserName,
     Guid OperationId,
@@ -8,17 +8,17 @@ public record class UserAPI(
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
     long SerialVersion
-) : IDataOperationRelated {
+) : IOperationRelatedAPI {
     public UserPK GetPrimaryKey() => new UserPK(this.UserId);
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
     public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
-    public static UserAPI Create(
-        OperationAPI operation,
+    public static User Create(
+        Operation operation,
         Guid userId,
         string userName
         ) {
-        return new UserAPI(
+        return new User(
             UserId: userId,
             UserName: userName,
             OperationId: operation.OperationId,
@@ -29,7 +29,7 @@ public record class UserAPI(
             SerialVersion: 0
             );
     }
-    public UserAPI SetOperation(OperationAPI value) {
+    public User SetOperation(Operation value) {
         return this with {
             OperationId = value.OperationId,
             CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,

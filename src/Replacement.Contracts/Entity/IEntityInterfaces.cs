@@ -1,10 +1,10 @@
 ﻿namespace Replacement.Contracts.Entity;
 
-public interface IDataCommon {
+public interface IDataEntity {
     long SerialVersion { get; init; }
 }
 
-public interface IDataOperationRelated : IDataCommon {
+public interface IOperationRelatedEntity : IDataEntity {
     Guid OperationId { get; init; }
     DateTimeOffset CreatedAt { get; init; }
     Guid? CreatedBy { get; init; }
@@ -13,7 +13,7 @@ public interface IDataOperationRelated : IDataCommon {
     // long SerialVersion { get; init; }
 }
 
-public interface IDataHistory : IDataCommon {
+public interface IHistoryEntity : IDataEntity {
     Guid OperationId { get; init; }
     DateTimeOffset CreatedAt { get; init; }
     Guid? CreatedBy { get; init; }

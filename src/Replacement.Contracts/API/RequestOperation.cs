@@ -1,7 +1,7 @@
 ﻿#warning WEICHEI
-// namespace Replacement.Contracts.Entity;
+// namespace Replacement.Contracts.API;
 
-// public record class RequestOperationEntity(
+// public record class RequestOperation(
 //     Guid RequestLogId,
 //     Guid OperationId,
 //     string ActivityId,

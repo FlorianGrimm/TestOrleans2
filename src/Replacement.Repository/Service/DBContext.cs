@@ -1,10 +1,11 @@
-﻿using Replacement.Contracts.Entity;
+﻿using System.Threading.Channels;
 
 namespace Replacement.Repository.Service;
 
 [Transient]
 public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
     private ISqlAccessFactory _SqlAccessFactory;
+    private readonly DBContextApplyChangesSequencializer _DbContextApplyChangesSequencializer;
     private DBContextOption _Options;
 
     public ITrackingSet<OperationPK, OperationEntity> Operation { get; }
@@ -15,9 +16,11 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
 
     public DBContext(
         ISqlAccessFactory sqlAccessFactory,
+        DBContextApplyChangesSequencializer dbContextApplyChangesSequencializer,
         IOptions<DBContextOption> options
         ) {
         this._SqlAccessFactory = sqlAccessFactory;
+        this._DbContextApplyChangesSequencializer = dbContextApplyChangesSequencializer;
         this._Options = options.Value;
 
         this.Operation = new TrackingSetOperation(this, TrackingSetApplyChangesOperation.Instance);
@@ -52,10 +55,12 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         ) {
         if (sqlAccess is null) {
             using (sqlAccess = await this.GetDataAccessAsync()) {
-                await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+                //await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+                await this._DbContextApplyChangesSequencializer.ApplyChangesAsync(this.TrackingChanges, sqlAccess, cancellationToken);
             }
         } else {
-            await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+            //await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+            await this._DbContextApplyChangesSequencializer.ApplyChangesAsync(this.TrackingChanges, sqlAccess, cancellationToken);
         }
     }
 
@@ -71,4 +76,27 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
 public class DBContextOption
     : TrackingSqlConnectionOption {
     // public string? ConnectionString { get; set; }
+}
+
+[Singleton]
+public class DBContextApplyChangesSequencializer {    
+    private Task _LastTask;
+
+    public DBContextApplyChangesSequencializer() {
+        this._LastTask = Task.CompletedTask;
+    }
+
+    public async Task ApplyChangesAsync(TrackingChanges trackingChanges, ISqlAccess sqlAccess, CancellationToken cancellationToken) {
+        Task currentTask;
+        lock (this) {
+            currentTask = this._LastTask.ContinueWith((task) => {
+                return trackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+            }, TaskContinuationOptions.RunContinuationsAsynchronously).Unwrap();
+            this._LastTask = currentTask;
+        }
+        await currentTask;
+        lock (this) {
+            System.Threading.Interlocked.CompareExchange(ref this._LastTask, Task.CompletedTask, currentTask);
+        }
+    }
 }

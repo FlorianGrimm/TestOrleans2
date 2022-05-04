@@ -39,7 +39,7 @@ public record class ToDoEntity(
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
     long SerialVersion
-) : IDataOperationRelated {
+) : IOperationRelatedEntity {
     public ToDoPK GetPrimaryKey() => new ToDoPK(this.ProjectId, this.ToDoId);
     public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
     public ProjectPK GetProjectPK() => new ProjectPK(this.ProjectId);

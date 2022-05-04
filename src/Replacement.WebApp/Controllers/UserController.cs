@@ -11,10 +11,10 @@ public class UserController : ReplacementControllerBase {
 
     // GET: api/User
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserAPI>>> Get() {
+    public async Task<ActionResult<IEnumerable<User>>> Get() {
         var requestOperation = this.CreateRequestOperation(
                     pk: "",
-                    argument: (UserAPI?)null
+                    argument: (User?)null
                     );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -27,16 +27,16 @@ public class UserController : ReplacementControllerBase {
         {
             var grain = this.Client.GetGrain<IUserCollectionGrain>(Guid.Empty)!;
             var result = await grain.GetAllUsers(operation);
-            return result.ToListUserAPI();
+            return result.ToListUser();
         }
     }
 
     // GET api/User/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{userId}")]
-    public async Task<ActionResult<UserAPI?>> Get(Guid userId) {
+    public async Task<ActionResult<User?>> Get(Guid userId) {
         var requestOperation = this.CreateRequestOperation(
                     pk: userId,
-                    argument: (UserAPI?)null
+                    argument: (User?)null
                     );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -49,13 +49,13 @@ public class UserController : ReplacementControllerBase {
         {
             var grain = this.Client.GetUserGrain(userId);
             var result = await grain.GetUser(operation);
-            return result.ToUserAPI();
+            return result.ToUser();
         }
     }
 
     // POST api/User
     [HttpPost]
-    public async Task<ActionResult<UserAPI>> Post([FromBody] UserAPI value) {
+    public async Task<ActionResult<User>> Post([FromBody] User value) {
         if (value.UserId == Guid.Empty) {
             value = value with {
                 UserId = Guid.NewGuid()
@@ -78,7 +78,7 @@ public class UserController : ReplacementControllerBase {
             var grain = this.Client.GetUserGrain(value.UserId);
             var result = await grain.UpsertUser(value.ToUserEntity(), user, operation);
             if (result is not null) {
-                return result.ToUserAPI();
+                return result.ToUser();
             } else {
                 return this.Conflict();
             }
@@ -87,7 +87,7 @@ public class UserController : ReplacementControllerBase {
 
     // PUT api/User/5
     [HttpPut("{userId}")]
-    public async Task<ActionResult<UserAPI>> Put(Guid userId, [FromBody] UserAPI value) {
+    public async Task<ActionResult<User>> Put(Guid userId, [FromBody] User value) {
         value = value with { UserId = userId };
 
         var requestOperation = this.CreateRequestOperation(
@@ -106,7 +106,7 @@ public class UserController : ReplacementControllerBase {
             var grain = this.Client.GetGrain<IUserGrain>(value.UserId);
             var result = await grain.UpsertUser(value.ToUserEntity(), user, operation);
             if (result is not null) {
-                return result.ToUserAPI();
+                return result.ToUser();
             } else {
                 return this.Conflict();
             }
@@ -122,7 +122,7 @@ public class UserController : ReplacementControllerBase {
 
         var requestOperation = this.CreateRequestOperation(
             pk: userId,
-            argument: (UserAPI?)null
+            argument: (User?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,

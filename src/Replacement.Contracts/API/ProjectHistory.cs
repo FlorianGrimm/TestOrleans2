@@ -1,5 +1,5 @@
 ﻿namespace Replacement.Contracts.API;
-public record class ProjectHistoryAPI(
+public record class ProjectHistory(
     Guid OperationId,
     Guid ProjectId,
     string Title,
@@ -10,4 +10,4 @@ public record class ProjectHistoryAPI(
     DateTimeOffset ValidFrom,
     DateTimeOffset ValidTo,
     long SerialVersion
-) : IDataHistory;
+) : IHistoryAPI;

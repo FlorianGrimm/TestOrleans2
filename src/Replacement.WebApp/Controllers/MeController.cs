@@ -14,10 +14,10 @@ public class MeController : ReplacementControllerBase {
 
     // GET api/Me
     [HttpGet()]
-    public async Task<ActionResult<UserAPI?>> Get() {
+    public async Task<ActionResult<User?>> Get() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (UserAPI?)null
+            argument: (User?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -34,10 +34,10 @@ public class MeController : ReplacementControllerBase {
 
     // GET api/Me
     [HttpGet("Project")]
-    public async Task<ActionResult<IEnumerable<ProjectAPI>>> GetMeProject() {
+    public async Task<ActionResult<IEnumerable<Project>>> GetMeProject() {
         var requestOperation = this.CreateRequestOperation(
             pk: string.Empty,
-            argument: (ProjectAPI?)null
+            argument: (Project?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -49,16 +49,16 @@ public class MeController : ReplacementControllerBase {
         }
         {
             var result = await this.Client.GetProjectCollectionGrain().GetUsersProjects(user, operation);
-            return result.ToListProjectAPI();
+            return result.ToListProject();
         }
     }
 
     // GET api/Me
     [HttpGet("ToDo")]
-    public async Task<ActionResult<IEnumerable<ToDoAPI>>> GetMeToDo() {
+    public async Task<ActionResult<IEnumerable<ToDo>>> GetMeToDo() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (ToDoAPI?)null
+            argument: (ToDo?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -69,8 +69,8 @@ public class MeController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            var result = await this.Client.GetToDoCollectionGrain().GetUsersToDos(user, operation);
-            return result.ToListToDoAPI();
+            var result = await this.Client.GetUserToDoGrain(user.UserId).GetUsersToDos(operation);
+            return result.ToListToDo();
         }
     }
 }

@@ -36,20 +36,20 @@ public class Startup {
         this.AddAppOptions(services);
     }
 
-    private IMvcBuilder AddAppControllers(IServiceCollection services) {
+    public IMvcBuilder AddAppControllers(IServiceCollection services) {
         return services.AddControllers((MvcOptions options) => {
             options.RespectBrowserAcceptHeader = true;
         });
     }
 
-    private void AddAppSwaggerGen(IServiceCollection services) {
+    public void AddAppSwaggerGen(IServiceCollection services) {
         var swaggerOptions = GetSwaggerOptions();
         services.AddSwaggerGen(c => {
             c.SwaggerDoc(swaggerOptions.DocumentName, swaggerOptions.OpenApiInfo);
         });
     }
 
-    private void AddAppServicesWithRegistrator(IServiceCollection services) {
+    public void AddAppServicesWithRegistrator(IServiceCollection services) {
         services.AddServicesWithRegistrator(
             actionAdd: (typeSourceSelector) => {
                 services.AddAttributtedServices(
@@ -60,7 +60,7 @@ public class Startup {
             });
     }
 
-    private void AddAppAuthentication(IServiceCollection services) {
+    public void AddAppAuthentication(IServiceCollection services) {
         //services.AddAuthorization()
         services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
             .AddNegotiate((NegotiateOptions negotiateOptions) => {
@@ -71,13 +71,13 @@ public class Startup {
         });
     }
 
-    private void AddAppOptions(IServiceCollection services) {
+    public void AddAppOptions(IServiceCollection services) {
         services.AddOptions<DBContextOption>().Configure(options => {
             options.ConnectionString = this.Configuration.GetValue<string>("Database");
         });
     }
 
-    private void AddAppRequestLog(IServiceCollection services) {
+    public void AddAppRequestLog(IServiceCollection services) {
         services.AddOptions<RequestLogServiceOptions>().Configure(options => {
             this.Configuration.Bind("RequestLog", options);
         });

@@ -1,6 +1,6 @@
 ﻿namespace Replacement.Contracts.API;
 
-public record class RequestLogAPI(
+public record class RequestLog(
     Guid RequestLogId,
     Guid OperationId,
     string ActivityId,
@@ -11,4 +11,4 @@ public record class RequestLogAPI(
     Guid? UserId,
     DateTimeOffset CreatedAt,
     long SerialVersion
-);
+) : IDataAPI;

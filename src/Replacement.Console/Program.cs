@@ -1,4 +1,4 @@
-﻿using Replacement.Contracts.Entity;
+﻿using Replacement.Contracts.API;
 
 using System.Net.Http;
 
@@ -120,7 +120,7 @@ public static class Program {
         try {
             IReplacementClient client = appServiceProvider.GetRequiredService<IReplacementClient>();
             List<Guid> lstProjectId = new List<Guid>();
-            var dctProject = new Dictionary<ProjectPK, ProjectEntity>();
+            var dctProject = new Dictionary<ProjectPK, Project>();
 
             for (int idxOuter = 0; idxOuter < cntOuter; idxOuter++) {
                 System.Console.Out.WriteLine($"idxOuter : {idxOuter} / {cntOuter} : {lstProjectId.Count}");
@@ -128,7 +128,7 @@ public static class Program {
                 for (int idxWrite = 0; idxWrite < cntInnerWrite; idxWrite++) {
                     var projectId = Guid.NewGuid();
                     lstProjectId.Add(projectId);
-                    var projectA = new ProjectEntity(
+                    var projectA = new Project(
                             ProjectId: projectId,
                             Title: projectId.ToString(),
                             OperationId: Guid.Empty,

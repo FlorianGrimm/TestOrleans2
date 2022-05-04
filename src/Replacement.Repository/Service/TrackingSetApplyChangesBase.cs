@@ -4,7 +4,7 @@ namespace Replacement.Repository.Service;
 
 public abstract class TrackingSetApplyChangesBase<TValue, TPrimaryKey>
     : ITrackingSetApplyChanges<TValue>
-    where TValue : class, IDataCommon
+    where TValue : class, IDataEntity
     where TPrimaryKey : IEquatable<TPrimaryKey> {
     private string _TypeName;
 

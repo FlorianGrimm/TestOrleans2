@@ -21,7 +21,7 @@ export class Client {
     /**
      * @return Success
      */
-    me(): Promise<UserAPI> {
+    me(): Promise<User> {
         let url_ = this.baseUrl + "/api/Me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -37,14 +37,14 @@ export class Client {
         });
     }
 
-    protected processMe(response: Response): Promise<UserAPI> {
+    protected processMe(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserAPI.fromJS(resultData200);
+            result200 = User.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -52,13 +52,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserAPI>(null as any);
+        return Promise.resolve<User>(null as any);
     }
 
     /**
      * @return Success
      */
-    project(): Promise<ProjectAPI[]> {
+    project(): Promise<Project[]> {
         let url_ = this.baseUrl + "/api/Me/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -74,7 +74,7 @@ export class Client {
         });
     }
 
-    protected processProject(response: Response): Promise<ProjectAPI[]> {
+    protected processProject(response: Response): Promise<Project[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -84,7 +84,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ProjectAPI.fromJS(item));
+                    result200!.push(Project.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -96,13 +96,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProjectAPI[]>(null as any);
+        return Promise.resolve<Project[]>(null as any);
     }
 
     /**
      * @return Success
      */
-    toDoAllAll(): Promise<ToDoAPI[]> {
+    toDoAllAll(): Promise<ToDo[]> {
         let url_ = this.baseUrl + "/api/Me/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -118,7 +118,7 @@ export class Client {
         });
     }
 
-    protected processToDoAllAll(response: Response): Promise<ToDoAPI[]> {
+    protected processToDoAllAll(response: Response): Promise<ToDo[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -128,7 +128,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ToDoAPI.fromJS(item));
+                    result200!.push(ToDo.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -140,13 +140,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ToDoAPI[]>(null as any);
+        return Promise.resolve<ToDo[]>(null as any);
     }
 
     /**
      * @return Success
      */
-    projectGetAll(): Promise<ProjectAPI[]> {
+    projectGetAll(): Promise<Project[]> {
         let url_ = this.baseUrl + "/api/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -162,7 +162,7 @@ export class Client {
         });
     }
 
-    protected processProjectGetAll(response: Response): Promise<ProjectAPI[]> {
+    protected processProjectGetAll(response: Response): Promise<Project[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -172,7 +172,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ProjectAPI.fromJS(item));
+                    result200!.push(Project.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -184,14 +184,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProjectAPI[]>(null as any);
+        return Promise.resolve<Project[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    projectPost(body: ProjectAPI | undefined): Promise<ProjectAPI> {
+    projectPost(body: Project | undefined): Promise<Project> {
         let url_ = this.baseUrl + "/api/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -211,14 +211,14 @@ export class Client {
         });
     }
 
-    protected processProjectPost(response: Response): Promise<ProjectAPI> {
+    protected processProjectPost(response: Response): Promise<Project> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProjectAPI.fromJS(resultData200);
+            result200 = Project.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -226,13 +226,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProjectAPI>(null as any);
+        return Promise.resolve<Project>(null as any);
     }
 
     /**
      * @return Success
      */
-    projectGetOne(projectId: string): Promise<ProjectAPI> {
+    projectGetOne(projectId: string): Promise<Project> {
         let url_ = this.baseUrl + "/api/Project/{projectId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -251,14 +251,14 @@ export class Client {
         });
     }
 
-    protected processProjectGetOne(response: Response): Promise<ProjectAPI> {
+    protected processProjectGetOne(response: Response): Promise<Project> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProjectAPI.fromJS(resultData200);
+            result200 = Project.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -266,14 +266,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProjectAPI>(null as any);
+        return Promise.resolve<Project>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    projectPut(projectId: string, body: ProjectAPI | undefined): Promise<ProjectAPI> {
+    projectPut(projectId: string, body: Project | undefined): Promise<Project> {
         let url_ = this.baseUrl + "/api/Project/{projectId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -296,14 +296,14 @@ export class Client {
         });
     }
 
-    protected processProjectPut(response: Response): Promise<ProjectAPI> {
+    protected processProjectPut(response: Response): Promise<Project> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ProjectAPI.fromJS(resultData200);
+            result200 = Project.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -311,7 +311,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ProjectAPI>(null as any);
+        return Promise.resolve<Project>(null as any);
     }
 
     /**
@@ -353,7 +353,7 @@ export class Client {
     /**
      * @return Success
      */
-    toDoAllAll22(): Promise<ToDoAPI[]> {
+    toDoAllAll2(): Promise<ToDo[]> {
         let url_ = this.baseUrl + "/api/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -365,11 +365,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoAllAll22(_response);
+            return this.processToDoAllAll2(_response);
         });
     }
 
-    protected processToDoAllAll22(response: Response): Promise<ToDoAPI[]> {
+    protected processToDoAllAll2(response: Response): Promise<ToDo[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -379,7 +379,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(ToDoAPI.fromJS(item));
+                    result200!.push(ToDo.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -391,14 +391,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ToDoAPI[]>(null as any);
+        return Promise.resolve<ToDo[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    toDoPOSTPOST(body: ToDoAPI | undefined): Promise<ToDoAPI> {
+    toDoPOSTPOST(body: ToDo | undefined): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -418,14 +418,14 @@ export class Client {
         });
     }
 
-    protected processToDoPOSTPOST(response: Response): Promise<ToDoAPI> {
+    protected processToDoPOSTPOST(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ToDoAPI.fromJS(resultData200);
+            result200 = ToDo.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -433,13 +433,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ToDoAPI>(null as any);
+        return Promise.resolve<ToDo>(null as any);
     }
 
     /**
      * @return Success
      */
-    toDoGETGET(projectId: string, toDoId: string): Promise<ToDoAPI> {
+    toDoGETGET(projectId: string, toDoId: string): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo/{projectId}/{todoId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -461,14 +461,14 @@ export class Client {
         });
     }
 
-    protected processToDoGETGET(response: Response): Promise<ToDoAPI> {
+    protected processToDoGETGET(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ToDoAPI.fromJS(resultData200);
+            result200 = ToDo.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -476,7 +476,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ToDoAPI>(null as any);
+        return Promise.resolve<ToDo>(null as any);
     }
 
     /**
@@ -522,7 +522,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    toDoPUTPUT(projectId: string, toDoId: string, body: ToDoAPI | undefined): Promise<ToDoAPI> {
+    toDoPUTPUT(projectId: string, toDoId: string, body: ToDo | undefined): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo/{projectId}/{toDoId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -548,14 +548,14 @@ export class Client {
         });
     }
 
-    protected processToDoPUTPUT(response: Response): Promise<ToDoAPI> {
+    protected processToDoPUTPUT(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = ToDoAPI.fromJS(resultData200);
+            result200 = ToDo.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -563,13 +563,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<ToDoAPI>(null as any);
+        return Promise.resolve<ToDo>(null as any);
     }
 
     /**
      * @return Success
      */
-    userAllAll(): Promise<UserAPI[]> {
+    userAllAll(): Promise<User[]> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -585,7 +585,7 @@ export class Client {
         });
     }
 
-    protected processUserAllAll(response: Response): Promise<UserAPI[]> {
+    protected processUserAllAll(response: Response): Promise<User[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -595,7 +595,7 @@ export class Client {
             if (Array.isArray(resultData200)) {
                 result200 = [] as any;
                 for (let item of resultData200)
-                    result200!.push(UserAPI.fromJS(item));
+                    result200!.push(User.fromJS(item));
             }
             else {
                 result200 = <any>null;
@@ -607,14 +607,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserAPI[]>(null as any);
+        return Promise.resolve<User[]>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    userPOSTPOST(body: UserAPI | undefined): Promise<UserAPI> {
+    userPOSTPOST(body: User | undefined): Promise<User> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -634,14 +634,14 @@ export class Client {
         });
     }
 
-    protected processUserPOSTPOST(response: Response): Promise<UserAPI> {
+    protected processUserPOSTPOST(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserAPI.fromJS(resultData200);
+            result200 = User.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -649,13 +649,13 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserAPI>(null as any);
+        return Promise.resolve<User>(null as any);
     }
 
     /**
      * @return Success
      */
-    userGETGET(userId: string): Promise<UserAPI> {
+    userGETGET(userId: string): Promise<User> {
         let url_ = this.baseUrl + "/api/User/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -674,14 +674,14 @@ export class Client {
         });
     }
 
-    protected processUserGETGET(response: Response): Promise<UserAPI> {
+    protected processUserGETGET(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserAPI.fromJS(resultData200);
+            result200 = User.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -689,14 +689,14 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserAPI>(null as any);
+        return Promise.resolve<User>(null as any);
     }
 
     /**
      * @param body (optional) 
      * @return Success
      */
-    userPUTPUT(userId: string, body: UserAPI | undefined): Promise<UserAPI> {
+    userPUTPUT(userId: string, body: User | undefined): Promise<User> {
         let url_ = this.baseUrl + "/api/User/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -719,14 +719,14 @@ export class Client {
         });
     }
 
-    protected processUserPUTPUT(response: Response): Promise<UserAPI> {
+    protected processUserPUTPUT(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
             return response.text().then((_responseText) => {
             let result200: any = null;
             let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = UserAPI.fromJS(resultData200);
+            result200 = User.fromJS(resultData200);
             return result200;
             });
         } else if (status !== 200 && status !== 204) {
@@ -734,7 +734,7 @@ export class Client {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             });
         }
-        return Promise.resolve<UserAPI>(null as any);
+        return Promise.resolve<User>(null as any);
     }
 
     /**
@@ -774,7 +774,7 @@ export class Client {
     }
 }
 
-export class ProjectAPI implements IProjectAPI {
+export class Project implements IProject {
     projectId?: string;
     title?: string | undefined;
     operationId?: string;
@@ -784,7 +784,7 @@ export class ProjectAPI implements IProjectAPI {
     modifiedBy?: string | undefined;
     serialVersion?: number;
 
-    constructor(data?: IProjectAPI) {
+    constructor(data?: IProject) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -806,9 +806,9 @@ export class ProjectAPI implements IProjectAPI {
         }
     }
 
-    static fromJS(data: any): ProjectAPI {
+    static fromJS(data: any): Project {
         data = typeof data === 'object' ? data : {};
-        let result = new ProjectAPI();
+        let result = new Project();
         result.init(data);
         return result;
     }
@@ -827,7 +827,7 @@ export class ProjectAPI implements IProjectAPI {
     }
 }
 
-export interface IProjectAPI {
+export interface IProject {
     projectId?: string;
     title?: string | undefined;
     operationId?: string;
@@ -838,7 +838,7 @@ export interface IProjectAPI {
     serialVersion?: number;
 }
 
-export class ToDoAPI implements IToDoAPI {
+export class ToDo implements IToDo {
     toDoId?: string;
     projectId?: string;
     userId?: string;
@@ -851,7 +851,7 @@ export class ToDoAPI implements IToDoAPI {
     modifiedBy?: string | undefined;
     serialVersion?: number;
 
-    constructor(data?: IToDoAPI) {
+    constructor(data?: IToDo) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -876,9 +876,9 @@ export class ToDoAPI implements IToDoAPI {
         }
     }
 
-    static fromJS(data: any): ToDoAPI {
+    static fromJS(data: any): ToDo {
         data = typeof data === 'object' ? data : {};
-        let result = new ToDoAPI();
+        let result = new ToDo();
         result.init(data);
         return result;
     }
@@ -900,7 +900,7 @@ export class ToDoAPI implements IToDoAPI {
     }
 }
 
-export interface IToDoAPI {
+export interface IToDo {
     toDoId?: string;
     projectId?: string;
     userId?: string;
@@ -914,7 +914,7 @@ export interface IToDoAPI {
     serialVersion?: number;
 }
 
-export class UserAPI implements IUserAPI {
+export class User implements IUser {
     userId?: string;
     userName?: string | undefined;
     operationId?: string;
@@ -924,7 +924,7 @@ export class UserAPI implements IUserAPI {
     modifiedBy?: string | undefined;
     serialVersion?: number;
 
-    constructor(data?: IUserAPI) {
+    constructor(data?: IUser) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -946,9 +946,9 @@ export class UserAPI implements IUserAPI {
         }
     }
 
-    static fromJS(data: any): UserAPI {
+    static fromJS(data: any): User {
         data = typeof data === 'object' ? data : {};
-        let result = new UserAPI();
+        let result = new User();
         result.init(data);
         return result;
     }
@@ -967,7 +967,7 @@ export class UserAPI implements IUserAPI {
     }
 }
 
-export interface IUserAPI {
+export interface IUser {
     userId?: string;
     userName?: string | undefined;
     operationId?: string;

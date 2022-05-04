@@ -8,44 +8,52 @@ using System.IO;
 namespace Replacement.TestExtensions;
 
 public class TestDefaultConfiguration {
-    private static readonly object LockObject = new object();
-    private static IConfiguration defaultConfiguration;
+    private static TestDefaultConfiguration? _Instance;
 
-    static TestDefaultConfiguration() {
-        defaultConfiguration = null!;
-        InitializeDefaults();
-    }
-
-    public static void InitializeDefaults() {
-        lock (LockObject) {
-            defaultConfiguration = BuildDefaultConfiguration();
+    public static TestDefaultConfiguration GetInstance() {
+        if (_Instance is not null) {
+            return _Instance;
+        } else {
+            lock (typeof(TestDefaultConfiguration)) {
+                return _Instance ??= Create();
+            }
         }
     }
 
-    public static bool UseAadAuthentication {
+    public static TestDefaultConfiguration Create() {
+        var result = new TestDefaultConfiguration();
+        return result;
+    }
+
+    private IConfiguration _DefaultConfiguration;
+
+    public TestDefaultConfiguration() {
+        this._DefaultConfiguration = this.BuildDefaultConfiguration();
+    }
+
+    public bool UseAadAuthentication {
         get {
-            bool.TryParse(defaultConfiguration[nameof(UseAadAuthentication)], out var value);
+            bool.TryParse(_DefaultConfiguration[nameof(UseAadAuthentication)], out var value);
             return value;
         }
     }
 
-    //public static Uri TableEndpoint => new Uri(defaultConfiguration[nameof(TableEndpoint)]);
-    //public static Uri DataBlobUri => new Uri(defaultConfiguration[nameof(DataBlobUri)]);
-    //public static Uri DataQueueUri => new Uri(defaultConfiguration[nameof(DataQueueUri)]);
-    //public static string DataConnectionString => defaultConfiguration[nameof(DataConnectionString)];
-    //public static string EventHubConnectionString => defaultConfiguration[nameof(EventHubConnectionString)];
-    //public static string EventHubFullyQualifiedNamespace => defaultConfiguration[nameof(EventHubFullyQualifiedNamespace)];
-    //public static string ZooKeeperConnectionString => defaultConfiguration[nameof(ZooKeeperConnectionString)];
-    //public static string RedisConnectionString => defaultConfiguration[nameof(RedisConnectionString)];
-    public static string DataConnectionString => defaultConfiguration[nameof(DataConnectionString)];
+    //public Uri TableEndpoint => new Uri(defaultConfiguration[nameof(TableEndpoint)]);
+    //public Uri DataBlobUri => new Uri(defaultConfiguration[nameof(DataBlobUri)]);
+    //public Uri DataQueueUri => new Uri(defaultConfiguration[nameof(DataQueueUri)]);
+    //public string DataConnectionString => defaultConfiguration[nameof(DataConnectionString)];
+    //public string EventHubConnectionString => defaultConfiguration[nameof(EventHubConnectionString)];
+    //public string EventHubFullyQualifiedNamespace => defaultConfiguration[nameof(EventHubFullyQualifiedNamespace)];
+    //public string ZooKeeperConnectionString => defaultConfiguration[nameof(ZooKeeperConnectionString)];
+    //public string RedisConnectionString => defaultConfiguration[nameof(RedisConnectionString)];
+    public string DataConnectionString => this._DefaultConfiguration[nameof(DataConnectionString)];
 
-    public static bool GetValue(string key, [MaybeNullWhen(false)] out string value) {
-        value = defaultConfiguration.GetValue(key, default(string));
-
+    public bool GetValue(string key, [MaybeNullWhen(false)] out string value) {
+        value = _DefaultConfiguration.GetValue(key, default(string));
         return value != null;
     }
 
-    private static IConfiguration BuildDefaultConfiguration() {
+    private IConfiguration BuildDefaultConfiguration() {
         var builder = new ConfigurationBuilder();
         ConfigureHostConfiguration(builder);
 
@@ -53,16 +61,6 @@ public class TestDefaultConfiguration {
         return config;
     }
 
-    public static void ConfigureHostConfiguration(IConfigurationBuilder builder) {
-        //builder.AddInMemoryCollection(new Dictionary<string, string>
-        //{
-        //        { nameof(ZooKeeperConnectionString), "127.0.0.1:2181" }
-        //    });
-
-        AddJsonFileInAncestorFolder(builder, "ReplacementTestSecrets.json");
-        builder.AddUserSecrets<TestDefaultConfiguration>();
-        builder.AddEnvironmentVariables("Orleans");
-    }
 
     /// <summary>
     /// Hack, allowing PhysicalFileProvider to be serialized using json
@@ -105,7 +103,15 @@ public class TestDefaultConfiguration {
         }
     }
 
+
+    public static void ConfigureHostConfiguration(IConfigurationBuilder builder) {
+        AddJsonFileInAncestorFolder(builder, "ReplacementTestSecrets.json");
+        builder.AddUserSecrets<TestDefaultConfiguration>();
+        builder.AddEnvironmentVariables("Orleans");
+    }
+
     public static void ConfigureTestCluster(TestClusterBuilder builder) {
+
         builder.ConfigureHostConfiguration(ConfigureHostConfiguration);
     }
 }

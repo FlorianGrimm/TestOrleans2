@@ -3,11 +3,11 @@
 namespace Replacement.Contracts.Entity;
 public static partial class ConverterToAPI {
     [return: NotNullIfNotNull("that")]
-    public static OperationAPI? ToOperationAPI(this OperationEntity? that) {
+    public static Operation? ToOperation(this OperationEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new OperationAPI(
+            return new Operation(
                 OperationId: that.OperationId,
                 OperationName: that.OperationName,
                 EntityType: that.EntityType,
@@ -19,20 +19,20 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<OperationAPI> ToListOperationAPI(this IEnumerable<OperationEntity> that) {
-        var result = new List<OperationAPI>();
+    public static List<Operation> ToListOperation(this IEnumerable<OperationEntity> that) {
+        var result = new List<Operation>();
         foreach (var item in that) { 
-            result.Add(item.ToOperationAPI());
+            result.Add(item.ToOperation());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static ProjectAPI? ToProjectAPI(this ProjectEntity? that) {
+    public static Project? ToProject(this ProjectEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new ProjectAPI(
+            return new Project(
                 ProjectId: that.ProjectId,
                 Title: that.Title,
                 OperationId: that.OperationId,
@@ -45,20 +45,20 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<ProjectAPI> ToListProjectAPI(this IEnumerable<ProjectEntity> that) {
-        var result = new List<ProjectAPI>();
+    public static List<Project> ToListProject(this IEnumerable<ProjectEntity> that) {
+        var result = new List<Project>();
         foreach (var item in that) { 
-            result.Add(item.ToProjectAPI());
+            result.Add(item.ToProject());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static ProjectHistoryAPI? ToProjectHistoryAPI(this ProjectHistoryEntity? that) {
+    public static ProjectHistory? ToProjectHistory(this ProjectHistoryEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new ProjectHistoryAPI(
+            return new ProjectHistory(
                 OperationId: that.OperationId,
                 ProjectId: that.ProjectId,
                 Title: that.Title,
@@ -73,77 +73,20 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<ProjectHistoryAPI> ToListProjectHistoryAPI(this IEnumerable<ProjectHistoryEntity> that) {
-        var result = new List<ProjectHistoryAPI>();
+    public static List<ProjectHistory> ToListProjectHistory(this IEnumerable<ProjectHistoryEntity> that) {
+        var result = new List<ProjectHistory>();
         foreach (var item in that) { 
-            result.Add(item.ToProjectHistoryAPI());
+            result.Add(item.ToProjectHistory());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static RequestLogAPI? ToRequestLogAPI(this RequestLogEntity? that) {
+    public static ToDo? ToToDo(this ToDoEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new RequestLogAPI(
-                RequestLogId: that.RequestLogId,
-                OperationId: that.OperationId,
-                ActivityId: that.ActivityId,
-                OperationName: that.OperationName,
-                EntityType: that.EntityType,
-                EntityId: that.EntityId,
-                Argument: that.Argument,
-                UserId: that.UserId,
-                CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-
-    public static List<RequestLogAPI> ToListRequestLogAPI(this IEnumerable<RequestLogEntity> that) {
-        var result = new List<RequestLogAPI>();
-        foreach (var item in that) { 
-            result.Add(item.ToRequestLogAPI());
-        }
-        return result;
-    }
-
-    [return: NotNullIfNotNull("that")]
-    public static RequestOperationAPI? ToRequestOperationAPI(this RequestOperationEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new RequestOperationAPI(
-                RequestLogId: that.RequestLogId,
-                OperationId: that.OperationId,
-                ActivityId: that.ActivityId,
-                OperationName: that.OperationName,
-                EntityType: that.EntityType,
-                EntityId: that.EntityId,
-                Argument: that.Argument,
-                UserName: that.UserName,
-                UserId: that.UserId,
-                CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
-                );
-        }
-    }
-
-    public static List<RequestOperationAPI> ToListRequestOperationAPI(this IEnumerable<RequestOperationEntity> that) {
-        var result = new List<RequestOperationAPI>();
-        foreach (var item in that) { 
-            result.Add(item.ToRequestOperationAPI());
-        }
-        return result;
-    }
-
-    [return: NotNullIfNotNull("that")]
-    public static ToDoAPI? ToToDoAPI(this ToDoEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new ToDoAPI(
+            return new ToDo(
                 ToDoId: that.ToDoId,
                 ProjectId: that.ProjectId,
                 UserId: that.UserId,
@@ -159,20 +102,20 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<ToDoAPI> ToListToDoAPI(this IEnumerable<ToDoEntity> that) {
-        var result = new List<ToDoAPI>();
+    public static List<ToDo> ToListToDo(this IEnumerable<ToDoEntity> that) {
+        var result = new List<ToDo>();
         foreach (var item in that) { 
-            result.Add(item.ToToDoAPI());
+            result.Add(item.ToToDo());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static ToDoHistoryAPI? ToToDoHistoryAPI(this ToDoHistoryEntity? that) {
+    public static ToDoHistory? ToToDoHistory(this ToDoHistoryEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new ToDoHistoryAPI(
+            return new ToDoHistory(
                 OperationId: that.OperationId,
                 ToDoId: that.ToDoId,
                 ProjectId: that.ProjectId,
@@ -190,20 +133,20 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<ToDoHistoryAPI> ToListToDoHistoryAPI(this IEnumerable<ToDoHistoryEntity> that) {
-        var result = new List<ToDoHistoryAPI>();
+    public static List<ToDoHistory> ToListToDoHistory(this IEnumerable<ToDoHistoryEntity> that) {
+        var result = new List<ToDoHistory>();
         foreach (var item in that) { 
-            result.Add(item.ToToDoHistoryAPI());
+            result.Add(item.ToToDoHistory());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static UserAPI? ToUserAPI(this UserEntity? that) {
+    public static User? ToUser(this UserEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new UserAPI(
+            return new User(
                 UserId: that.UserId,
                 UserName: that.UserName,
                 OperationId: that.OperationId,
@@ -216,20 +159,20 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<UserAPI> ToListUserAPI(this IEnumerable<UserEntity> that) {
-        var result = new List<UserAPI>();
+    public static List<User> ToListUser(this IEnumerable<UserEntity> that) {
+        var result = new List<User>();
         foreach (var item in that) { 
-            result.Add(item.ToUserAPI());
+            result.Add(item.ToUser());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static UserHistoryAPI? ToUserHistoryAPI(this UserHistoryEntity? that) {
+    public static UserHistory? ToUserHistory(this UserHistoryEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new UserHistoryAPI(
+            return new UserHistory(
                 OperationId: that.OperationId,
                 UserId: that.UserId,
                 UserName: that.UserName,
@@ -244,10 +187,10 @@ public static partial class ConverterToAPI {
         }
     }
 
-    public static List<UserHistoryAPI> ToListUserHistoryAPI(this IEnumerable<UserHistoryEntity> that) {
-        var result = new List<UserHistoryAPI>();
+    public static List<UserHistory> ToListUserHistory(this IEnumerable<UserHistoryEntity> that) {
+        var result = new List<UserHistory>();
         foreach (var item in that) { 
-            result.Add(item.ToUserHistoryAPI());
+            result.Add(item.ToUserHistory());
         }
         return result;
     }

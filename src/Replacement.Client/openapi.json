@@ -16,17 +16,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -47,7 +47,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectAPI"
+                    "$ref": "#/components/schemas/Project"
                   }
                 }
               },
@@ -55,7 +55,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectAPI"
+                    "$ref": "#/components/schemas/Project"
                   }
                 }
               },
@@ -63,7 +63,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectAPI"
+                    "$ref": "#/components/schemas/Project"
                   }
                 }
               }
@@ -85,7 +85,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ToDoAPI"
+                    "$ref": "#/components/schemas/ToDo"
                   }
                 }
               },
@@ -93,7 +93,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ToDoAPI"
+                    "$ref": "#/components/schemas/ToDo"
                   }
                 }
               },
@@ -101,7 +101,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ToDoAPI"
+                    "$ref": "#/components/schemas/ToDo"
                   }
                 }
               }
@@ -124,7 +124,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectAPI"
+                    "$ref": "#/components/schemas/Project"
                   }
                 }
               },
@@ -132,7 +132,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectAPI"
+                    "$ref": "#/components/schemas/Project"
                   }
                 }
               },
@@ -140,7 +140,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ProjectAPI"
+                    "$ref": "#/components/schemas/Project"
                   }
                 }
               }
@@ -157,17 +157,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectAPI"
+                "$ref": "#/components/schemas/Project"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectAPI"
+                "$ref": "#/components/schemas/Project"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectAPI"
+                "$ref": "#/components/schemas/Project"
               }
             }
           }
@@ -178,17 +178,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               }
             }
@@ -219,17 +219,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               }
             }
@@ -256,17 +256,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectAPI"
+                "$ref": "#/components/schemas/Project"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectAPI"
+                "$ref": "#/components/schemas/Project"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ProjectAPI"
+                "$ref": "#/components/schemas/Project"
               }
             }
           }
@@ -277,17 +277,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ProjectAPI"
+                  "$ref": "#/components/schemas/Project"
                 }
               }
             }
@@ -330,7 +330,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ToDoAPI"
+                    "$ref": "#/components/schemas/ToDo"
                   }
                 }
               },
@@ -338,7 +338,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ToDoAPI"
+                    "$ref": "#/components/schemas/ToDo"
                   }
                 }
               },
@@ -346,7 +346,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ToDoAPI"
+                    "$ref": "#/components/schemas/ToDo"
                   }
                 }
               }
@@ -362,17 +362,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ToDoAPI"
+                "$ref": "#/components/schemas/ToDo"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ToDoAPI"
+                "$ref": "#/components/schemas/ToDo"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ToDoAPI"
+                "$ref": "#/components/schemas/ToDo"
               }
             }
           }
@@ -383,17 +383,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               }
             }
@@ -432,17 +432,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               }
             }
@@ -509,17 +509,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ToDoAPI"
+                "$ref": "#/components/schemas/ToDo"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ToDoAPI"
+                "$ref": "#/components/schemas/ToDo"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ToDoAPI"
+                "$ref": "#/components/schemas/ToDo"
               }
             }
           }
@@ -530,17 +530,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ToDoAPI"
+                  "$ref": "#/components/schemas/ToDo"
                 }
               }
             }
@@ -561,7 +561,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserAPI"
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               },
@@ -569,7 +569,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserAPI"
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               },
@@ -577,7 +577,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/UserAPI"
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -593,17 +593,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAPI"
+                "$ref": "#/components/schemas/User"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAPI"
+                "$ref": "#/components/schemas/User"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAPI"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -614,17 +614,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -654,17 +654,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -690,17 +690,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAPI"
+                "$ref": "#/components/schemas/User"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAPI"
+                "$ref": "#/components/schemas/User"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/UserAPI"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -711,17 +711,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserAPI"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -753,7 +753,7 @@
   },
   "components": {
     "schemas": {
-      "ProjectAPI": {
+      "Project": {
         "type": "object",
         "properties": {
           "projectId": {
@@ -793,7 +793,7 @@
         },
         "additionalProperties": false
       },
-      "ToDoAPI": {
+      "ToDo": {
         "type": "object",
         "properties": {
           "toDoId": {
@@ -844,7 +844,7 @@
         },
         "additionalProperties": false
       },
-      "UserAPI": {
+      "User": {
         "type": "object",
         "properties": {
           "userId": {

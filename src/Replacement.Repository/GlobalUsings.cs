@@ -27,4 +27,5 @@ global using Brimborium.SqlAccess;
 
 global using Replacement.Contracts.API;
 global using Replacement.Contracts.Entity;
+global using Replacement.Repository.Grains;
 global using Replacement.Repository.Service;

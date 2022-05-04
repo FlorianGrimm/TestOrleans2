@@ -36,4 +36,4 @@ public record class UserHistoryEntity(
     // [property: Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-) : IDataHistory;
+) : IHistoryEntity;

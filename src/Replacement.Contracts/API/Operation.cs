@@ -1,5 +1,5 @@
 ﻿namespace Replacement.Contracts.API;
-public record class OperationAPI(
+public record class Operation(
     Guid OperationId,
     string OperationName,
     string EntityType,
@@ -7,4 +7,4 @@ public record class OperationAPI(
     Guid? UserId,
     DateTimeOffset CreatedAt,
     long SerialVersion
-);
+) : IDataAPI;

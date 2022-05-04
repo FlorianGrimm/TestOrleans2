@@ -33,3 +33,7 @@ dotnet run --project .\src\Replacement.DatabaseDevTool\Replacement.DatabaseDevTo
 ```cmd
 dotnet msbuild /t:SwaggerGenerate src\Replacement.WebApp\Replacement.WebApp.csproj
 ```
+
+```cmd
+dotnet watch --project src\Replacement.WebApp.Test\Replacement.WebApp.Test.csproj build
+```

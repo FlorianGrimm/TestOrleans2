@@ -32,7 +32,7 @@ public record class UserEntity(
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
     long SerialVersion
-) : IDataOperationRelated {
+) : IOperationRelatedEntity {
     public UserPK GetPrimaryKey() => new UserPK(this.UserId);
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
     public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
@@ -63,7 +63,7 @@ public record class UserEntity(
         };
     }
 
-    public UserAPI ToAPI() {
+    public User ToAPI() {
         throw new NotImplementedException();
     }
 }

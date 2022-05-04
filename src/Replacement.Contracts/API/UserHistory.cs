@@ -1,6 +1,6 @@
 ﻿namespace Replacement.Contracts.API;
 
-public record class UserHistoryAPI(
+public record class UserHistory(
     Guid OperationId,
     Guid UserId,
     string UserName,
@@ -11,4 +11,4 @@ public record class UserHistoryAPI(
     DateTimeOffset ValidFrom,
     DateTimeOffset ValidTo,
     long SerialVersion
-) : IDataHistory;
+) : IHistoryAPI;

@@ -3,19 +3,22 @@
 [Route("api/[controller]")]
 [ApiController]
 public class ProjectController : ReplacementControllerBase {
+    private readonly AppPolicies _AppPolicies;
+
     public ProjectController(
-         IClusterClient client,
-         ILogger<UserController> logger
-         )
-         : base(client, logger) {
+        IClusterClient client,
+        AppPolicies appPolicies,
+        ILogger<UserController> logger
+        )  : base(client, logger) {
+        this._AppPolicies = appPolicies;
     }
 
     // GET: api/Project
     [HttpGet(Name = "ProjectGetAll")]
-    public async Task<ActionResult<IEnumerable<ProjectAPI>>> Get() {
+    public async Task<ActionResult<IEnumerable<Project>>> Get() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (ProjectAPI?)null
+            argument: (Project?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -28,16 +31,16 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetGrain<IProjectCollectionGrain>(Guid.Empty)!;
             var result = await grain.GetAllProjects(user, operation);
-            return result.ToListProjectAPI();
+            return result.ToListProject();
         }
     }
 
     // GET api/Project/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{projectId}", Name = "ProjectGetOne")]
-    public async Task<ActionResult<ProjectAPI?>> Get(Guid projectId) {
+    public async Task<ActionResult<Project?>> Get(Guid projectId) {
         var requestOperation = this.CreateRequestOperation(
             pk: projectId,
-            argument: (ProjectAPI?)null
+            argument: (Project?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -50,13 +53,13 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(projectId);
             var result = await grain.GetProject(user, operation);
-            return result.ToProjectAPI();
+            return result.ToProject();
         }
     }
 
     // POST api/Project
     [HttpPost(Name = "ProjectPost")]
-    public async Task<ActionResult<ProjectAPI?>> Post([FromBody] ProjectAPI value) {
+    public async Task<ActionResult<Project?>> Post([FromBody] Project value) {
         if (value.ProjectId == Guid.Empty) {
             value = value with {
                 ProjectId = Guid.NewGuid(),
@@ -80,7 +83,7 @@ public class ProjectController : ReplacementControllerBase {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
             var result = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
             if (result is not null) {
-                return result.ToProjectAPI();
+                return result.ToProject();
                 //return this.Ok();
             } else {
                 return this.Conflict();
@@ -90,7 +93,7 @@ public class ProjectController : ReplacementControllerBase {
 
     // PUT api/Project/5
     [HttpPut("{projectId}", Name = "ProjectPut")]
-    public async Task<ActionResult<ProjectAPI?>> Put(Guid projectId, [FromBody] ProjectAPI value) {
+    public async Task<ActionResult<Project?>> Put(Guid projectId, [FromBody] Project value) {
         value = value with { ProjectId = projectId };
         var requestOperation = this.CreateRequestOperation(
             pk: projectId,
@@ -105,8 +108,6 @@ public class ProjectController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var project = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
 #if false
             Project? project = null;
             for (int iWatchDog = 2; iWatchDog >= 0; iWatchDog--) {
@@ -130,11 +131,27 @@ public class ProjectController : ReplacementControllerBase {
                 }
             }
 #endif
+#if true
+            var grain = this.Client.GetProjectGrain(value.ProjectId);
+            var project = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
             if (project is not null) {
-                return project.ToProjectAPI();
+                return project.ToProject();
             } else {
                 return this.Conflict();
             }
+#endif
+
+#if false
+            var grain = this.Client.GetProjectGrain(value.ProjectId);
+            var project = await this._AppPolicies.ControllerToGrainPolicy.ExecuteAsync(async () => await grain.UpsertProject(value.ToProjectEntity(), user, operation));
+
+            //var project = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
+            if (project is not null) {
+                return project.ToProject();
+            } else {
+                return this.Conflict();
+            }
+#endif
         }
     }
 
@@ -147,7 +164,7 @@ public class ProjectController : ReplacementControllerBase {
 
         var requestOperation = this.CreateRequestOperation(
             pk: projectId,
-            argument: (ProjectAPI?)null
+            argument: (Project?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,

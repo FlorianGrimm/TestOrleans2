@@ -39,8 +39,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
-	  <ProjectReference Include="..\..\..\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
 	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
 	</ItemGroup>
 

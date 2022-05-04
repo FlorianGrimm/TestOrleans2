@@ -1,5 +1,5 @@
 ﻿namespace Replacement.Contracts.API;
-public record class ToDoAPI(
+public record class ToDo(
     Guid ToDoId,
     Guid ProjectId,
     Guid UserId,
@@ -11,14 +11,14 @@ public record class ToDoAPI(
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
     long SerialVersion
-) : IDataOperationRelated {
+) : IOperationRelatedAPI {
     public ToDoPK GetPrimaryKey() => new ToDoPK(this.ProjectId, this.ToDoId);
     public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
     public ProjectPK GetProjectPK() => new ProjectPK(this.ProjectId);
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
     public UserPK? GetModifiedByUserPK() => this.ModifiedBy.HasValue ? new UserPK(this.ModifiedBy.Value) : null;
 
-    public ToDoAPI SetOperation(OperationEntity value) {
+    public ToDo SetOperation(OperationEntity value) {
         return this with {
             OperationId = value.OperationId,
             CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
@@ -28,7 +28,7 @@ public record class ToDoAPI(
         };
     }
 
-    public ToDoAPI SetProject(ProjectPK value) {
+    public ToDo SetProject(ProjectPK value) {
         return this with {
             ProjectId = value.ProjectId
         };

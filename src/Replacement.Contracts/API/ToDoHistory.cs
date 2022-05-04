@@ -1,5 +1,5 @@
 ﻿namespace Replacement.Contracts.API;
-public record class ToDoHistoryAPI(
+public record class ToDoHistory(
     Guid OperationId,
     Guid ToDoId,
     Guid? ProjectId,
@@ -13,4 +13,4 @@ public record class ToDoHistoryAPI(
     DateTimeOffset ValidFrom,
     DateTimeOffset ValidTo,
     long SerialVersion
-) : IDataHistory;
+) : IHistoryAPI;

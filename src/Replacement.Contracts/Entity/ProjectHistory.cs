@@ -37,4 +37,4 @@ public record class ProjectHistoryEntity(
     // [property:Key]
     DateTimeOffset ValidTo,
     long SerialVersion
-) : IDataHistory;
+) : IHistoryEntity;

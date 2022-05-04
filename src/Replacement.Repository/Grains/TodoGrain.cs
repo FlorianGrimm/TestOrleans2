@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.Repository.Grains;
+﻿namespace Replacement.Repository.Grains;
 
 public interface IToDoCollectionGrain : IGrainWithGuidKey {
     Task<List<ToDoEntity>> GetAllToDos(UserEntity user, OperationEntity operation);

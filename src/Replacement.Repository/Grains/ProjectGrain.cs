@@ -22,14 +22,14 @@ public interface IProjectGrain : IGrainWithGuidKey {
 }
 
 public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGrain {
-    private LazyValue<List<ProjectEntity>> _AllProjects;
+    private CachedValue<List<ProjectEntity>> _AllProjects;
 
     private List<ProjectEntity>? _GetAllProjects;
 
     public ProjectCollectionGrain(
         IDBContext dbContext
         ) : base(dbContext) {
-        this._AllProjects = new LazyValue<List<ProjectEntity>>();
+        this._AllProjects = new CachedValue<List<ProjectEntity>>();
     }
 
     public async Task<List<ProjectEntity>> GetAllProjects(UserEntity user, OperationEntity operation) {

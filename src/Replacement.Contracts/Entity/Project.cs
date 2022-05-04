@@ -34,7 +34,7 @@ public record class ProjectEntity(
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
     long SerialVersion
-) : IDataOperationRelated {
+) : IOperationRelatedEntity {
     public ProjectPK GetPrimaryKey() => new ProjectPK(this.ProjectId);
     public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
