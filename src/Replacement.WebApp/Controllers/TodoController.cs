@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.WebApp.Controllers;
+﻿namespace Replacement.WebApp.Controllers;
 //https://localhost:5001/api/ToDo
 //https://localhost:5001/api/ToDo/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
 [Route("api/[controller]")]
@@ -12,10 +10,10 @@ public class ToDoController : ReplacementControllerBase {
 
     // GET: api/ToDo
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ToDoEntity>>> Get() {
+    public async Task<ActionResult<IEnumerable<ToDoAPI>>> Get() {
         var requestOperation = this.CreateRequestOperation(
            pk: string.Empty,
-           argument: (ToDoEntity?)null
+           argument: (ToDoAPI?)null
            );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -25,13 +23,14 @@ public class ToDoController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            return await this.Client.GetToDoCollectionGrain().GetAllToDos(user, operation);
+            var result = await this.Client.GetToDoCollectionGrain().GetAllToDos(user, operation);
+            return result.ToListToDoAPI();
         }
     }
 
     // GET api/ToDo/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{projectId}/{todoId}")]
-    public async Task<ActionResult<ToDoEntity?>> Get(Guid projectId, Guid toDoId) {
+    public async Task<ActionResult<ToDoAPI?>> Get(Guid projectId, Guid toDoId) {
         var toDoPK = new ToDoPK(projectId, toDoId);
         var requestOperation = this.CreateRequestOperation(
            pk: toDoPK,
@@ -48,13 +47,13 @@ public class ToDoController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(toDoPK.ProjectId);
             var result = await grain.GetToDo(toDoPK, user, operation);
-            return result;
+            return result.ToToDoAPI();
         }
     }
 
     // POST api/ToDo
     [HttpPost]
-    public async Task<ActionResult> Post([FromBody] ToDoEntity value) {
+    public async Task<ActionResult<ToDoAPI>> Post([FromBody] ToDoAPI value) {
         if (value.ToDoId == Guid.Empty) {
             value = value with {
                 ToDoId = Guid.NewGuid()
@@ -75,9 +74,9 @@ public class ToDoController : ReplacementControllerBase {
         }
         {
             var grain = this.Client.GetToDoGrain(toDoPK);
-            var result = await grain.UpsertToDo(value, user, operation);
-            if (result) {
-                return this.Ok();
+            var result = await grain.UpsertToDo(value.ToToDoEntity(), user, operation);
+            if (result is not null) {
+                return result.ToToDoAPI();
             } else {
                 return this.Conflict();
             }
@@ -86,7 +85,7 @@ public class ToDoController : ReplacementControllerBase {
 
     // PUT api/ToDo/5
     [HttpPut("{projectId}/{toDoId}")]
-    public async Task<ActionResult> Put(Guid projectId, Guid toDoId, [FromBody] ToDoEntity value) {
+    public async Task<ActionResult<ToDoAPI>> Put(Guid projectId, Guid toDoId, [FromBody] ToDoAPI value) {
         value = value with {
             ProjectId = projectId,
             ToDoId = toDoId
@@ -107,9 +106,9 @@ public class ToDoController : ReplacementControllerBase {
         }
         {
             var grain = this.Client.GetProjectGrain(toDoPK.ProjectId);
-            var toDo = await grain.UpsertToDo(value, user, operation);
-            if (toDo is not null) {
-                return this.Ok();
+            var result = await grain.UpsertToDo(value.ToToDoEntity(), user, operation);
+            if (result is not null) {
+                return result.ToToDoAPI();
             } else {
                 return this.Conflict();
             }

@@ -13,11 +13,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Grains\TodoGrain.cs" />
 	  <Compile Remove="Storage\MyGrainState.cs" />
 	  <Compile Remove="Storage\MyGrainStorageConfiguration.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Include="Grains\TodoGrain.cs" />
 	  <None Include="Storage\MyGrainState.cs" />
 	  <None Include="Storage\MyGrainStorageConfiguration.cs" />
 	</ItemGroup>

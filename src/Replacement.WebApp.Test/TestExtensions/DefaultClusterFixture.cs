@@ -1,5 +1,6 @@
 ﻿namespace Replacement.TestExtensions;
 
+[CollectionDefinition("DefaultClusterFixture")]
 public class DefaultClusterFixture : Xunit.IAsyncLifetime {
     static DefaultClusterFixture() {
         TestDefaultConfiguration.InitializeDefaults();

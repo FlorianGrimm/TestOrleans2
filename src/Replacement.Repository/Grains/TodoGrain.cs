@@ -10,7 +10,7 @@ public interface IToDoCollectionGrain : IGrainWithGuidKey {
 
 public interface IToDoGrain : IGrainWithGuidCompoundKey {
     Task<ToDoEntity?> GetToDo(UserEntity user, OperationEntity operation);
-    Task<bool> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation);
+    Task<ToDoEntity?> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation);
     Task<bool> DeleteToDo(UserEntity user, OperationEntity operation);
 }
 
@@ -101,7 +101,7 @@ public class ToDoGrain : GrainBase<ToDoEntity>, IToDoGrain {
         }
     }
 
-    public async Task<bool> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation) {
+    public async Task<ToDoEntity?> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation) {
         //var operation = new Operation(Guid.NewGuid(), "UpsertToDo", "ToDo", value.Id.ToString(), null, DateTimeOffset.UtcNow, 0);
         value = value with {
             OperationId = operation.OperationId,
@@ -115,7 +115,7 @@ public class ToDoGrain : GrainBase<ToDoEntity>, IToDoGrain {
         this._State = to.Value;
         await this.PopulateDirty();
 
-        return true;
+        return this._State;
     }
 
 

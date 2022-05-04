@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.WebApp.Controllers;
+﻿namespace Replacement.WebApp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -14,10 +12,10 @@ public class ProjectController : ReplacementControllerBase {
 
     // GET: api/Project
     [HttpGet(Name = "ProjectGetAll")]
-    public async Task<ActionResult<IEnumerable<ProjectEntity>>> Get() {
+    public async Task<ActionResult<IEnumerable<ProjectAPI>>> Get() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (ProjectEntity?)null
+            argument: (ProjectAPI?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -29,16 +27,17 @@ public class ProjectController : ReplacementControllerBase {
         }
         {
             var grain = this.Client.GetGrain<IProjectCollectionGrain>(Guid.Empty)!;
-            return await grain.GetAllProjects(user, operation);
+            var result = await grain.GetAllProjects(user, operation);
+            return result.ToListProjectAPI();
         }
     }
 
     // GET api/Project/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
     [HttpGet("{projectId}", Name = "ProjectGetOne")]
-    public async Task<ActionResult<ProjectEntity?>> Get(Guid projectId) {
+    public async Task<ActionResult<ProjectAPI?>> Get(Guid projectId) {
         var requestOperation = this.CreateRequestOperation(
             pk: projectId,
-            argument: (ProjectEntity?)null
+            argument: (ProjectAPI?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
@@ -51,13 +50,13 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(projectId);
             var result = await grain.GetProject(user, operation);
-            return result;
+            return result.ToProjectAPI();
         }
     }
 
     // POST api/Project
     [HttpPost(Name = "ProjectPost")]
-    public async Task<ActionResult<ProjectEntity?>> Post([FromBody] ProjectEntity value) {
+    public async Task<ActionResult<ProjectAPI?>> Post([FromBody] ProjectAPI value) {
         if (value.ProjectId == Guid.Empty) {
             value = value with {
                 ProjectId = Guid.NewGuid(),
@@ -79,9 +78,9 @@ public class ProjectController : ReplacementControllerBase {
         }
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var result = await grain.UpsertProject(value, user, operation);
+            var result = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
             if (result is not null) {
-                return result;
+                return result.ToProjectAPI();
                 //return this.Ok();
             } else {
                 return this.Conflict();
@@ -91,7 +90,7 @@ public class ProjectController : ReplacementControllerBase {
 
     // PUT api/Project/5
     [HttpPut("{projectId}", Name = "ProjectPut")]
-    public async Task<ActionResult<ProjectEntity?>> Put(Guid projectId, [FromBody] ProjectEntity value) {
+    public async Task<ActionResult<ProjectAPI?>> Put(Guid projectId, [FromBody] ProjectAPI value) {
         value = value with { ProjectId = projectId };
         var requestOperation = this.CreateRequestOperation(
             pk: projectId,
@@ -107,7 +106,7 @@ public class ProjectController : ReplacementControllerBase {
         }
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var project = await grain.UpsertProject(value, user, operation);
+            var project = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
 #if false
             Project? project = null;
             for (int iWatchDog = 2; iWatchDog >= 0; iWatchDog--) {
@@ -132,7 +131,7 @@ public class ProjectController : ReplacementControllerBase {
             }
 #endif
             if (project is not null) {
-                return this.Ok();
+                return project.ToProjectAPI();
             } else {
                 return this.Conflict();
             }
@@ -148,7 +147,7 @@ public class ProjectController : ReplacementControllerBase {
 
         var requestOperation = this.CreateRequestOperation(
             pk: projectId,
-            argument: (ProjectEntity?)null
+            argument: (ProjectAPI?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,

@@ -58,7 +58,7 @@ public class MeController : ReplacementControllerBase {
     public async Task<ActionResult<IEnumerable<ToDoAPI>>> GetMeToDo() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
-            argument: (ToDoEntity?)null
+            argument: (ToDoAPI?)null
             );
         var (operation, user) = await this.InitializeOperation(
             requestOperation: requestOperation,
