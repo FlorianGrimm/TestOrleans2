@@ -34,7 +34,7 @@ public interface IProjectGrain : IGrainWithGuidKey {
     Task<bool> DeleteToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation);
 }
 
-public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGrain {
+public partial class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGrain {
     private readonly ObserverManager<IProjectGrainObserver> _ProjectGrainObservers;
     private readonly ILogger _Logger;
     private CachedValue<List<ProjectEntity>> _AllProjects;
@@ -48,14 +48,31 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
         this._ProjectGrainObservers = new ObserverManager<IProjectGrainObserver>(TimeSpan.Zero, logger, "ProjectGrainObserver");
     }
 
+
+    [LoggerMessage(
+        EventId = (int)LogEventId.ProjectCollectionGrain_LogSubscripe,
+        Level = LogLevel.Trace,
+        Message = "Subscripe ProjectGrainObserver:{grainId};")]
+    private partial void LogSubscripe(string grainId);
+
     [AlwaysInterleave]
     public Task Subscripe(IProjectGrainObserver projectGrainObserver) {
+        LogSubscripe(projectGrainObserver.GetGrainId()?.ToString() ?? "-");
+
         this._ProjectGrainObservers.Subscribe(projectGrainObserver, projectGrainObserver);
         return Task.CompletedTask;
     }
 
+    [LoggerMessage(
+       EventId = (int)LogEventId.ProjectCollectionGrain_LogUnsubscripe,
+       Level = LogLevel.Trace,
+       Message = "Subscripe ProjectGrainObserver:{grainId};")]
+    private partial void LogUnsubscripe(string grainId);
+
     [AlwaysInterleave]
     public Task Unsubscripe(IProjectGrainObserver projectGrainObserver) {
+        LogUnsubscripe(projectGrainObserver.GetGrainId()?.ToString() ?? "-");
+
         this._ProjectGrainObservers.Unsubscribe(projectGrainObserver);
         return Task.CompletedTask;
     }
@@ -66,12 +83,26 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
         return Task.CompletedTask;
     }
 
+    [LoggerMessage(
+    EventId = (int)LogEventId.ProjectCollectionGrain_LogSetDirtyProject,
+    Level = LogLevel.Trace,
+    Message = "SetDirtyProject projectPK:{projectPK};")]
+    private partial void LogSetDirtyProject(string projectPK);
+
+
     [AlwaysInterleave]
     public Task SetDirtyProject(ProjectPK projectPK) {
+        this.LogSetDirtyProject(projectPK.ToString());
         this._ProjectGrainObservers.Notify((o) => { o.ReceiveDirtyProject(projectPK); });
         this._AllProjects = new CachedValue<List<ProjectEntity>>();
         return Task.CompletedTask;
     }
+
+    [LoggerMessage(
+    EventId = (int)LogEventId.ProjectCollectionGrain_LogSetDirtyToDo,
+    Level = LogLevel.Trace,
+    Message = "SetDirtyToDo toDoPK:{toDoPK};")]
+    private partial void LogSetDirtyToDo(string toDoPK);
 
     [AlwaysInterleave]
     public Task SetDirtyToDo(ToDoPK toDoPK) {
@@ -80,17 +111,31 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
         return Task.CompletedTask;
     }
 
+    [LoggerMessage(
+    EventId = (int)LogEventId.ProjectCollectionGrain_GetAllProjects,
+    Level = LogLevel.Trace,
+    Message = "SetDirtyToDo userId:{userId}; resultCount:{resultCount}; cached:{cached}")]
+    private partial void LogGetAllProjects(Guid userId, int resultCount, bool cached);
+
     public async Task<List<ProjectEntity>> GetAllProjects(UserEntity user, OperationEntity operation) {
         if (this._AllProjects.TryGetValue(out var result)) {
+            this.LogGetAllProjects(user.UserId, result.Count, true);
             return result;
         } else {
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
                 result = await sqlAccess.ExecuteProjectSelectAllAsync();
             }
             this._AllProjects = this._AllProjects.SetStatus(result);
+            this.LogGetAllProjects(user.UserId, result.Count, false);
             return result;
         }
     }
+
+    [LoggerMessage(
+    EventId = (int)LogEventId.ProjectCollectionGrain_GetUsersProjects,
+    Level = LogLevel.Trace,
+    Message = "GetUsersProjects userId:{userId}; resultCount:{resultCount}; cached:{cached}")]
+    private partial void LogGetUsersProjects(Guid userId, int resultCount, bool cached);
 
     public async Task<List<ProjectEntity>> GetUsersProjects(UserEntity user, OperationEntity operation) {
         List<ProjectEntity> result;
@@ -98,6 +143,7 @@ public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGra
 #warning TODO
             result = await sqlAccess.ExecuteProjectSelectAllAsync();
         }
+        this.LogGetUsersProjects(user.UserId, result.Count, false);
         return result;
     }
 
@@ -128,6 +174,12 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     //}
 
 
+    [LoggerMessage(
+        EventId = (int)LogEventId.ProjectGrain_Load,
+        Level = LogLevel.Trace,
+        Message = "Load projectPK:{projectPK}; found:{found}; toDosCount:{toDosCount};")]
+    private partial void LogLoad(ProjectPK projectPK, bool found, int toDosCount);
+
     protected override async Task<ProjectEntity?> Load() {
         var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
         List<ProjectEntity> projects;
@@ -137,20 +189,31 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
         }
         var project = projects.SingleOrDefault();
         if (project is null) {
+            this.LogLoad(projectPK, false, 0);
+
             return null;
         } else {
             this._DBContext.Project.Attach(project);
             this._DBContext.ToDo.AttachRange(lstToDos);
+            this.LogLoad(projectPK, true, lstToDos.Count);
             return project;
         }
     }
+
+    [LoggerMessage(
+    EventId = (int)LogEventId.ProjectGrain_GetProject,
+    Level = LogLevel.Trace,
+    Message = "GetProject projectPK:{projectPK}; found:{found}; toDosCount:{toDosCount};")]
+    private partial void LogGetProject(ProjectPK projectPK, bool found);
 
     public async Task<ProjectEntity?> GetProject(UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is null) {
             this.DeactivateOnIdle();
+            return state;
+        } else { 
+            return state;
         }
-        return state;
     }
 
     public async Task<ProjectEntity?> UpsertProject(ProjectEntity value, UserEntity user, OperationEntity operation) {

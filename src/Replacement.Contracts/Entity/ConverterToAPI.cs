@@ -82,6 +82,34 @@ public static partial class ConverterToAPI {
     }
 
     [return: NotNullIfNotNull("that")]
+    public static RequestLog? ToRequestLog(this RequestLogEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new RequestLog(
+                RequestLogId: that.RequestLogId,
+                OperationId: that.OperationId,
+                ActivityId: that.ActivityId,
+                OperationName: that.OperationName,
+                EntityType: that.EntityType,
+                EntityId: that.EntityId,
+                Argument: that.Argument,
+                UserId: that.UserId,
+                CreatedAt: that.CreatedAt,
+                SerialVersion: that.SerialVersion
+                );
+        }
+    }
+
+    public static List<RequestLog> ToListRequestLog(this IEnumerable<RequestLogEntity> that) {
+        var result = new List<RequestLog>();
+        foreach (var item in that) { 
+            result.Add(item.ToRequestLog());
+        }
+        return result;
+    }
+
+    [return: NotNullIfNotNull("that")]
     public static ToDo? ToToDo(this ToDoEntity? that) {
         if (that is null) {
             return default;

@@ -32,3 +32,4 @@ global using Replacement.Contracts.API;
 global using Replacement.Contracts.Entity;
 global using Replacement.Repository.Grains;
 global using Replacement.Repository.Service;
+global using Replacement.Repository.Extensions;

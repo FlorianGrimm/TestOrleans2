@@ -12,8 +12,8 @@ public static partial class Program {
             System.Console.Out.WriteLine("--OutputFolder     - for the sql files.");
             System.Console.Out.WriteLine("--force true       - force update database.");
             System.Console.Out.WriteLine("--verbose true");
-            System.Console.Out.WriteLine("--steps 1,2,3,4,5");
-            printSteps(0);
+            System.Console.Out.WriteLine("--steps 1,2,3,4,5,6");
+            printSteps(0, new HashSet<int>());
 
             System.Console.Out.WriteLine("");
             System.Console.Out.WriteLine("User secrets");
@@ -30,9 +30,16 @@ public static partial class Program {
             bool verbose = configuration.GetValue<bool>("verbose");
             string steps = configuration.GetValue<string>("steps");
             if (string.IsNullOrEmpty(steps)) {
-                steps = "1,2,3,4,5";
+                steps = configuration.GetValue<string>("step");
             }
-            var hsSteps = new HashSet<string>(steps.Split(','));
+            if (string.IsNullOrEmpty(steps)) {
+                steps = "1,2,3,4,5,6";
+            }
+            var hsSteps = new HashSet<int>(
+                steps
+                .Split(',')
+                .Select(s => { if (int.TryParse(s, out var i)) { return i; } else { return 0; } })
+                .Where(i => i > 0));
 
             var connectionString = configuration.GetValue<string>("ConnectionString");
             var outputFolder = configuration.GetValue<string>("OutputFolder")
@@ -68,6 +75,8 @@ public static partial class Program {
 
 
             if (verbose) {
+
+                System.Console.Out.WriteLine($"upperDirectoryPath:{upperDirectoryPath}");
                 System.Console.Out.WriteLine($"outputFolder:{outputFolder}");
                 System.Console.Out.WriteLine($"connectionString:{connectionString}");
                 System.Console.Out.WriteLine($"sqlProjectName:{sqlProjectName}");
@@ -82,8 +91,7 @@ public static partial class Program {
                 System.Console.Error.WriteLine("dotnet not found");
                 return 1;
             }
-            if (hsSteps.Contains("1")) {
-                printSteps(1);
+            if (conditionRunStep(1, hsSteps)) {
                 var sqlProjectTables_csproj = System.IO.Path.Combine(
                     upperDirectoryPath,
                     sqlProjectTablesName,
@@ -93,13 +101,12 @@ public static partial class Program {
                     upperDirectoryPath,
                     sqlProjectTablesName
                     );
-                
+
                 var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectTables_csproj, sqlProjectTablesDirectory, isForce);
                 if (subresult != 0) { return subresult; }
             }
 #if true
-            if (hsSteps.Contains("2")) {
-                printSteps(2);
+            if (conditionRunStep(2, hsSteps)) {
 
                 if (!System.IO.Path.IsPathFullyQualified(outputFolder)) {
                     outputFolder = System.IO.Path.Combine(upperDirectoryPath, outputFolder);
@@ -114,8 +121,7 @@ public static partial class Program {
 #endif
 
 #if true
-            if (hsSteps.Contains("3")) {
-                printSteps(3);
+            if (conditionRunStep(3, hsSteps)) {
                 var sqlProjectComplete_csproj = System.IO.Path.Combine(
                     upperDirectoryPath,
                     sqlProjectName,
@@ -140,9 +146,7 @@ public static partial class Program {
             // GenerateSqlAccess
 #if true
             AddNativeTypeConverter();
-            if (hsSteps.Contains("4")) {
-                printSteps(4);
-
+            if (conditionRunStep(4, hsSteps)) {
                 {
                     var (outputPath, outputNamespace) = Replacement.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
                     var subResult = MainGeneratePrimaryKey(connectionString, outputPath, outputNamespace);
@@ -150,7 +154,7 @@ public static partial class Program {
 
                         System.Console.Out.WriteLine("PrimaryKey modified.");
                         //
-                        if (hsSteps.Contains("5")) {
+                        if (hsSteps.Any()) {
                             System.Console.Out.WriteLine("Trying to rerun.");
                             System.Console.Out.WriteLine("stay tunned");
                             var sqlProject_csproj = System.IO.Path.Combine(
@@ -167,21 +171,49 @@ public static partial class Program {
                             psi.WorkingDirectory = sqlProjectDirectory;
                             System.Diagnostics.Process.Start(psi);
                             // do not check exit because this prg is already running.
-                        } else { 
+                        } else {
                             System.Console.Out.WriteLine("terminate");
                         }
                         return 0;
                     }
                 }
             }
-            if (hsSteps.Contains("5")) { // 5 MainGenerateSqlAccess
-                printSteps(5);
-
+            if (conditionRunStep(5, hsSteps)) {
                 var defintions = GetDefintion();
 
                 var (outputPath, outputNamespace, outputClassName) = Replacement.Repository.Service.SqlAccessLocation.GetPrimaryKeyOutputInfo();
 
                 MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
+            }
+            if (conditionRunStep(6, hsSteps)) {
+                // pwsh --file src\Replacement.Contracts\GeneratorConverter.ps1
+                {
+                    var start = System.DateTime.Now;
+
+                    string fulllNameGeneratorConverter_ps1 = "GeneratorConverter.ps1";
+                    string workingDirectory = System.IO.Path.Combine(
+                        upperDirectoryPath,
+                        @"Replacement.Contracts");
+
+                    System.Console.Out.WriteLine($"fulllNameGeneratorConverter_ps1: {fulllNameGeneratorConverter_ps1}");
+
+                    var psi = new System.Diagnostics.ProcessStartInfo(
+                        "pwsh",
+                        $"-file \"{fulllNameGeneratorConverter_ps1}\"");
+                    psi.WorkingDirectory = workingDirectory;
+                    var process = System.Diagnostics.Process.Start(psi);
+                    if (process is not null) {
+                        process.WaitForExit(30_000);
+                        var stop = System.DateTime.Now;
+                        System.Console.Out.WriteLine($"{(stop - start).TotalSeconds} sec");
+                        if (process.ExitCode == 0) {
+                            System.Console.Out.WriteLine($"pwsh -file \"{fulllNameGeneratorConverter_ps1}\" in \"{workingDirectory}\" OK");
+                        } else {
+                            System.Console.Out.WriteLine($"pwsh -file \"{fulllNameGeneratorConverter_ps1}\" in \"{workingDirectory}\" Failed");
+                            return 1;
+                        }
+                    }
+                }
             }
 #endif
 
@@ -193,7 +225,15 @@ public static partial class Program {
             return 1;
         }
     }
-    private static void printSteps(int currentStep) {
+    private static bool conditionRunStep(int currentStep, HashSet<int> hsSteps) {
+        if (hsSteps.Remove(currentStep)) {
+            printSteps(currentStep, hsSteps);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    private static void printSteps(int currentStep, HashSet<int> hsSteps) {
         var steps = new string[] {
             "",
             " 1) Update tables in database.",
@@ -201,12 +241,15 @@ public static partial class Program {
             " 3) Update tables & store procedures in database.",
             " 4) Generate PrimaryKey.",
             " 5) Generate SqlAccess C#.",
+            " 6) Generate ConvertTo***.",
         };
         System.Console.Out.WriteLine("");
-        for (int step= 1; step <= 5; step++){
+        for (int step = 1; step < steps.Length; step++) {
             if (currentStep == step) {
                 System.Console.Out.WriteLine("*" + steps[step]);
-            } else { 
+            } else if (hsSteps.Contains(step)) {
+                System.Console.Out.WriteLine("+" + steps[step]);
+            } else {
                 System.Console.Out.WriteLine("-" + steps[step]);
             }
         }
@@ -282,7 +325,7 @@ public static partial class Program {
             if (process is not null) {
                 process.WaitForExit(30_000);
                 var stop = System.DateTime.Now;
-                System.Console.Out.WriteLine($"{(stop-start).TotalSeconds} sec");
+                System.Console.Out.WriteLine($"{(stop - start).TotalSeconds} sec");
                 if (process.ExitCode == 0) {
                     System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} OK");
                 } else {
@@ -291,9 +334,9 @@ public static partial class Program {
                 }
             }
             return 0;
-        } else {
-            return 0;
         }
+
+        return 0;
     }
 
     public static IConfigurationRoot GetConfiguration(string[] args) {

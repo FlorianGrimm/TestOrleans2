@@ -82,6 +82,34 @@ public static partial class ConverterToEntity {
     }
 
     [return: NotNullIfNotNull("that")]
+    public static RequestLogEntity? ToRequestLogEntity(this RequestLog? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new RequestLogEntity(
+                RequestLogId: that.RequestLogId,
+                OperationId: that.OperationId,
+                ActivityId: that.ActivityId,
+                OperationName: that.OperationName,
+                EntityType: that.EntityType,
+                EntityId: that.EntityId,
+                Argument: that.Argument,
+                UserId: that.UserId,
+                CreatedAt: that.CreatedAt,
+                SerialVersion: that.SerialVersion
+                );
+        }
+    }
+
+    public static List<RequestLogEntity> ToListRequestLogEntity(this IEnumerable<RequestLog> that) {
+        var result = new List<RequestLogEntity>();
+        foreach (var item in that) { 
+            result.Add(item.ToRequestLogEntity());
+        }
+        return result;
+    }
+
+    [return: NotNullIfNotNull("that")]
     public static ToDoEntity? ToToDoEntity(this ToDo? that) {
         if (that is null) {
             return default;

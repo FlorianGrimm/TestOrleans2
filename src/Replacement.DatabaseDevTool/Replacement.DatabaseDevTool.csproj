@@ -6,6 +6,7 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<UserSecretsId>1ae00c78-4cfe-4b4e-b830-466314f1c9f5</UserSecretsId>
+		<ExtraDefineConstants>NOConverterToAPI</ExtraDefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
