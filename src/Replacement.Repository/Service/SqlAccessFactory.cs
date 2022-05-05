@@ -31,12 +31,6 @@ public partial class SqlAccessFactory
     public async Task<ITrackingTransConnection> BeginTrackingTransConnection(
         CancellationToken cancellationToken = default(CancellationToken)
         ) {
-        //var connectionString = this._Options.ConnectionString;
-        //if (string.IsNullOrEmpty(connectionString)) { throw new InvalidOperationException("ConnectionString is empty"); }
-        //var (connection, transaction) = await TrackingSqlTransConnection.OpenAsync(connectionString, cancellationToken);
-
-        //var result = new SqlAccess(connection, transaction);
-        //return result;
         return await this.CreateDataAccessAsync(cancellationToken);
     }
 

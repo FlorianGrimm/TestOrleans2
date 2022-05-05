@@ -1,4 +1,6 @@
-﻿using Replacement.Contracts.Entity;
+﻿using Orleans.Concurrency;
+
+using Replacement.Contracts.Entity;
 
 namespace Replacement.Repository.Grains;
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
@@ -7,7 +9,18 @@ public interface IProjectCollectionGrain : IGrainWithGuidKey {
 
     Task<Guid?> GetProjectIdFromToDoId(Guid toDoId);
 
+    Task Subscripe(IProjectGrainObserver projectGrainObserver);
+    Task Unsubscripe(IProjectGrainObserver projectGrainObserver);
     Task SetDirty();
+    Task SetDirtyProject(ProjectPK projectPK);
+    Task SetDirtyToDo(ToDoPK toDoPK);
+}
+
+public interface IProjectGrainObserver : IGrainObserver {
+    void ReceiveDirtyProject(ProjectPK projectPK);
+    void ReceiveDirtyTodo(ToDoPK toDoPK);
+    //    void ReceiveActivate(Guid projectId);
+    //    void ReceiveDeactivate(Guid guid);
 }
 
 public interface IProjectGrain : IGrainWithGuidKey {
@@ -22,52 +35,75 @@ public interface IProjectGrain : IGrainWithGuidKey {
 }
 
 public class ProjectCollectionGrain : GrainCollectionBase, IProjectCollectionGrain {
+    private readonly ObserverManager<IProjectGrainObserver> _ProjectGrainObservers;
+    private readonly ILogger _Logger;
     private CachedValue<List<ProjectEntity>> _AllProjects;
 
-    private List<ProjectEntity>? _GetAllProjects;
-
     public ProjectCollectionGrain(
-        IDBContext dbContext
+        IDBContext dbContext,
+        ILogger<ProjectCollectionGrain> logger
         ) : base(dbContext) {
         this._AllProjects = new CachedValue<List<ProjectEntity>>();
+        this._Logger = logger;
+        this._ProjectGrainObservers = new ObserverManager<IProjectGrainObserver>(TimeSpan.Zero, logger, "ProjectGrainObserver");
+    }
+
+    [AlwaysInterleave]
+    public Task Subscripe(IProjectGrainObserver projectGrainObserver) {
+        this._ProjectGrainObservers.Subscribe(projectGrainObserver, projectGrainObserver);
+        return Task.CompletedTask;
+    }
+
+    [AlwaysInterleave]
+    public Task Unsubscripe(IProjectGrainObserver projectGrainObserver) {
+        this._ProjectGrainObservers.Unsubscribe(projectGrainObserver);
+        return Task.CompletedTask;
+    }
+
+    [AlwaysInterleave]
+    public Task SetDirty() {
+        this._AllProjects = new CachedValue<List<ProjectEntity>>();
+        return Task.CompletedTask;
+    }
+
+    [AlwaysInterleave]
+    public Task SetDirtyProject(ProjectPK projectPK) {
+        this._ProjectGrainObservers.Notify((o) => { o.ReceiveDirtyProject(projectPK); });
+        this._AllProjects = new CachedValue<List<ProjectEntity>>();
+        return Task.CompletedTask;
+    }
+
+    [AlwaysInterleave]
+    public Task SetDirtyToDo(ToDoPK toDoPK) {
+        this._ProjectGrainObservers.Notify((o) => { o.ReceiveDirtyTodo(toDoPK); });
+        //this._AllProjects = new CachedValue<List<ProjectEntity>>();
+        return Task.CompletedTask;
     }
 
     public async Task<List<ProjectEntity>> GetAllProjects(UserEntity user, OperationEntity operation) {
         if (this._AllProjects.TryGetValue(out var result)) {
             return result;
         } else {
-            List<ProjectEntity> projects;
             using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
-                projects = await sqlAccess.ExecuteProjectSelectAllAsync();
+                result = await sqlAccess.ExecuteProjectSelectAllAsync();
             }
-            this._AllProjects = this._AllProjects.SetStatus(projects ?? new List<ProjectEntity>());
-            return this._AllProjects.Value;
+            this._AllProjects = this._AllProjects.SetStatus(result);
+            return result;
         }
     }
 
     public async Task<List<ProjectEntity>> GetUsersProjects(UserEntity user, OperationEntity operation) {
-        if (this._IsDirty || this._GetAllProjects is null) {
-            List<ProjectEntity> projects;
-            using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+        List<ProjectEntity> result;
+        using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
 #warning TODO
-                projects = await sqlAccess.ExecuteProjectSelectAllAsync();
-            }
-            this._GetAllProjects = projects;
-            this._IsDirty = false;
-            return projects;
-        } else {
-            return this._GetAllProjects;
+            result = await sqlAccess.ExecuteProjectSelectAllAsync();
         }
+        return result;
     }
 
     public Task<Guid?> GetProjectIdFromToDoId(Guid toDoId) {
 #warning TODO
         throw new NotImplementedException();
-    }
-
-    public Task SetDirty() {
-        this._IsDirty = true;
-        return Task.CompletedTask;
     }
 }
 
@@ -77,10 +113,21 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     public ProjectGrain(
         IDBContext dbContext,
         ILogger<ProjectGrain> logger
-
         ) : base(dbContext) {
         this._Logger = logger;
     }
+
+    //public override Task OnActivateAsync() {
+    //    this.GrainFactory.GetProjectCollectionGrain().AsReference<IProjectGrainObserver>().ReceiveActivate(this.GetPrimaryKey());
+    //    return base.OnActivateAsync();
+    //}
+
+    //public override Task OnDeactivateAsync() {
+    //    this.GrainFactory.GetProjectCollectionGrain().AsReference<IProjectGrainObserver>().ReceiveDeactivate(this.GetPrimaryKey());
+    //    return base.OnDeactivateAsync();
+    //}
+
+
     protected override async Task<ProjectEntity?> Load() {
         var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
         List<ProjectEntity> projects;
@@ -107,67 +154,39 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     }
 
     public async Task<ProjectEntity?> UpsertProject(ProjectEntity value, UserEntity user, OperationEntity operation) {
-        var state = await this.GetState();
-
-        if (state is null) {
-            // new
-        } else {
-            if (!state.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
-                return null;
-            }
-        }
-
-        var nextValue = value.SetOperation(operation);
-        var operationTO = this._DBContext.Operation.Add(operation);
-        var projectTO = this._DBContext.Project.Upsert(nextValue);
-
-        await this.ApplyChangesAsync();
-#if false
-        sqlException.ErrorCode
-        -2146232060
-        sqlException.Number
-        1205
-
         try {
-            // when ((uint)sqlException.ErrorCode == 0x80131904)
-            //} catch (Microsoft.Data.SqlClient.SqlException sqlException)  {
-        } catch (Microsoft.Data.SqlClient.SqlException sqlException) {
-            this._Logger.LogError(sqlException, "x");
-            if (!System.Diagnostics.Debugger.IsAttached) {
-                System.Diagnostics.Debugger.Launch();
-            }
-            System.Diagnostics.Debugger.Break();
-            if (sqlException is not null) {
-                throw;
-            }
-        } catch (System.Exception exception) {
-            this._Logger.LogError(exception, "x");
-            if (!System.Diagnostics.Debugger.IsAttached) {
-                System.Diagnostics.Debugger.Launch();
-            }
-            System.Diagnostics.Debugger.Break();
-            if (exception is not null) {
-                throw;
-            }
-            //System.Console.Out.WriteLine($"ErrorCode:{sqlException.ErrorCode}; Number:{sqlException.Number};");
 
-            await Task.Delay(50);
-            //} catch (Microsoft.Data.SqlClient.SqlException sqlException) {
-            //    await Task.Delay(50);
+            var state = await this.GetState();
+
+            if (state is null) {
+                // new
+            } else {
+                if (!state.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
+                    return null;
+                }
+            }
+
+            var nextValue = value.SetOperation(operation);
+            var operationTO = this._DBContext.Operation.Add(operation);
+            var projectTO = this._DBContext.Project.Upsert(nextValue);
+
+            await this.ApplyChangesAsync();
+
+            this._State = projectTO.Value;
+            this._DBContext.Operation.Detach(operationTO);
+            await this.PopulateDirtyProject();
+
+            return projectTO.Value;
+        } catch {
+            this.SetStateDirty();
+            throw;
         }
-#endif
-        this._State = projectTO.Value;
-        this._DBContext.Operation.Detach(operationTO);
-        await this.PopulateDirty();
-
-        return projectTO.Value;
     }
 
     public async Task<bool> DeleteProject(UserEntity user, OperationEntity operation) {
-        var state = await this.GetState();
-        if (state is null) {
-            return false;
-        } else {
+        try {
+            var state = await this.GetState();
+            if (state is null) { return false; }
             //        
             var lstToDo = this._DBContext.GetToDoOfProject(state.GetPrimaryKey()).ToList();
             var operationTO = this._DBContext.Operation.Add(operation);
@@ -177,56 +196,36 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
             this._DBContext.Project.Delete(state.SetOperation(operation));
             this._State = null;
             await this.ApplyChangesAsync();
-#if false
-            try {
-                await this._DBContext.ApplyChangesAsync();
-                // when ((uint)sqlException.ErrorCode == 0x80131904)
-                //} catch (Microsoft.Data.SqlClient.SqlException sqlException)  {
-            } catch (Microsoft.Data.SqlClient.SqlException sqlException) {
-                this._Logger.LogError(sqlException, "x");
-                if (!System.Diagnostics.Debugger.IsAttached) {
-                    System.Diagnostics.Debugger.Launch();
-                }
-                System.Diagnostics.Debugger.Break();
-                if (sqlException is not null) {
-                    throw;
-                }
-            } catch (System.Exception exception) {
-                this._Logger.LogError(exception, "x");
-                if (!System.Diagnostics.Debugger.IsAttached) {
-                    System.Diagnostics.Debugger.Launch();
-                }
-                System.Diagnostics.Debugger.Break();
-                if (exception is not null) {
-                    throw;
-                }
-                //System.Console.Out.WriteLine($"ErrorCode:{sqlException.ErrorCode}; Number:{sqlException.Number};");
-
-                await Task.Delay(50);
-                //} catch (Microsoft.Data.SqlClient.SqlException sqlException) {
-                //    await Task.Delay(50);
-            }
-#endif
             this._DBContext.Operation.Detach(operationTO);
-            await this.PopulateDirty();
+            await this.PopulateDirtyProject();
             this.DeactivateOnIdle();
             return true;
+        } catch {
+            this.SetStateDirty();
+            throw;
         }
     }
 
     public async Task<ToDoEntity?> GetToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation) {
-        var state = await this.GetState();
-        if (state is not null) {
-            if (this._DBContext.ToDo.TryGetValue(toDoPK, out var result)) {
-                return result;
+        try {
+            var state = await this.GetState();
+            if (state is not null) {
+                if (this._DBContext.ToDo.TryGetValue(toDoPK, out var result)) {
+                    return result;
+                }
             }
+            return null;
+        } catch {
+            this.SetStateDirty();
+            throw;
         }
-        return null;
     }
 
     public async Task<ToDoEntity?> UpsertToDo(ToDoEntity value, UserEntity user, OperationEntity operation) {
-        var state = await this.GetState();
-        if (state is not null) {
+        try {
+            var state = await this.GetState();
+            if (state is null) { return null; }
+
             TrackingObject<OperationEntity> operationTO;
             TrackingObject<ToDoEntity> result;
             if (this._DBContext.ToDo.TryGetValue(value.GetPrimaryKey(), out var currentToDo)) {
@@ -243,15 +242,19 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
             }
             await this.ApplyChangesAsync();
             this._DBContext.Operation.Detach(operationTO);
+            await this.PopulateDirtyTodo(value.GetPrimaryKey());
             return result.Value;
-        } else {
-            return null;
+        } catch {
+            this.SetStateDirty();
+            throw;
         }
     }
 
     public async Task<bool> DeleteToDo(ToDoPK toDoPK, UserEntity user, OperationEntity operation) {
-        var state = await this.GetState();
-        if (state is not null) {
+        try {
+            var state = await this.GetState();
+            if (state is null) { return false; }
+
             if (this._DBContext.ToDo.TryGetValue(toDoPK, out var value)) {
                 var operationTO = this._DBContext.Operation.Add(operation);
                 this._DBContext.ToDo.Delete(value);
@@ -261,14 +264,22 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
             } else {
                 return false;
             }
-        } else {
-            return false;
+        } catch {
+            this.SetStateDirty();
+            throw;
         }
     }
 
-    private async Task PopulateDirty() {
+    private async Task PopulateDirtyProject() {
         var ProjectCollectionGrain = this.GrainFactory.GetGrain<IProjectCollectionGrain>(Guid.Empty);
-        await ProjectCollectionGrain.SetDirty();
+        var projectId = this.GetPrimaryKey();
+        await ProjectCollectionGrain.SetDirtyProject(new ProjectPK(projectId));
+    }
+
+    private async Task PopulateDirtyTodo(ToDoPK toDoPK) {
+        var ProjectCollectionGrain = this.GrainFactory.GetGrain<IProjectCollectionGrain>(Guid.Empty);
+        var projectId = this.GetPrimaryKey();
+        await ProjectCollectionGrain.SetDirtyToDo(toDoPK);
     }
 
     public async Task<ProjectContext?> GetProjectContext(UserEntity user, OperationEntity operation) {
@@ -278,7 +289,7 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
         } else {
             var projectPK = state.GetPrimaryKey();
             return new ProjectContext(
-                Project: new List<ProjectEntity>() { state }, 
+                Project: new List<ProjectEntity>() { state },
                 ToDo: new List<ToDoEntity>(
                     this._DBContext.ToDo.Values.Where(todo => todo.GetProjectPK() == projectPK)
                 ));

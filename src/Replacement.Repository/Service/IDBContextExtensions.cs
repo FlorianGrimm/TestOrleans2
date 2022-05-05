@@ -28,14 +28,4 @@ public static class IDBContextExtensions {
                 toDo => toDo.GetProjectPK().Equals(projectPK)
             );
     }
-
-#warning weichei
-    //public static TrackingObject<OperationEntity>? A(this IDBContext that, OperationEntity operationEntity) {
-    //    if (that.Operation.TryTrackingObject(new OperationPK(operationEntity.CreatedAt, operationEntity.OperationId), out var result)) {
-    //        return result;
-    //    } else {
-    //        operationEntity.
-    //        return that.Operation.Attach(operationEntity);
-    //    }
-    //}
 }

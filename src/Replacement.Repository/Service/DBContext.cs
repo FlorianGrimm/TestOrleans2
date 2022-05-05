@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace Replacement.Repository.Service;
+﻿namespace Replacement.Repository.Service;
 
 [Transient]
 public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
@@ -13,7 +11,6 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
     public ITrackingSet<ProjectPK, ProjectEntity> Project { get; }
     public ITrackingSet<ToDoPK, ToDoEntity> ToDo { get; }
 
-
     public DBContext(
         ISqlAccessFactory sqlAccessFactory,
         DBContextApplyChangesSequencializer dbContextApplyChangesSequencializer,
@@ -22,6 +19,7 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         this._SqlAccessFactory = sqlAccessFactory;
         this._DbContextApplyChangesSequencializer = dbContextApplyChangesSequencializer;
         this._Options = options.Value;
+        this.UseSequencializer = true;
 
         this.Operation = new TrackingSetOperation(this, TrackingSetApplyChangesOperation.Instance);
         this.User = new TrackingSetUser(this, TrackingSetApplyChangesUser.Instance);
@@ -43,6 +41,8 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
         set => this._SqlAccessFactory = value;
     }
 
+    public bool UseSequencializer { get; set; }
+
     public Task<ISqlAccess> GetDataAccessAsync(
             CancellationToken cancellationToken = default(CancellationToken)
         ) {
@@ -53,14 +53,22 @@ public class DBContext : Brimborium.Tracking.TrackingContext, IDBContext {
             ISqlAccess? sqlAccess = default,
             CancellationToken cancellationToken = default(CancellationToken)
         ) {
-        if (sqlAccess is null) {
-            using (sqlAccess = await this.GetDataAccessAsync()) {
-                //await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+        if (this.UseSequencializer) {
+            if (sqlAccess is null) {
+                using (sqlAccess = await this.GetDataAccessAsync()) {
+                    await this._DbContextApplyChangesSequencializer.ApplyChangesAsync(this.TrackingChanges, sqlAccess, cancellationToken);
+                }
+            } else {
                 await this._DbContextApplyChangesSequencializer.ApplyChangesAsync(this.TrackingChanges, sqlAccess, cancellationToken);
             }
         } else {
-            //await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
-            await this._DbContextApplyChangesSequencializer.ApplyChangesAsync(this.TrackingChanges, sqlAccess, cancellationToken);
+            if (sqlAccess is null) {
+                using (sqlAccess = await this.GetDataAccessAsync()) {
+                    await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+                }
+            } else {
+                await this.TrackingChanges.ApplyChangesAsync(sqlAccess, cancellationToken);
+            }
         }
     }
 

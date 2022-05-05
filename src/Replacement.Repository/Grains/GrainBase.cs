@@ -26,8 +26,10 @@ public class GrainBase<TValue> : Grain
             var state = await this.Load();
             this._State = state;
             this._IsDirty = false;
+            return state;
+        } else { 
+            return this._State;
         }
-        return this._State;
     }
 
     protected virtual Task<TValue?> Load() {
@@ -39,10 +41,14 @@ public class GrainBase<TValue> : Grain
         try {
             await this._DBContext.ApplyChangesAsync(sqlAccess, cancellationToken);
         } catch {
-            this._IsDirty = true;
-            this._DBContext.Clear();
+            this.SetStateDirty();
             throw;
         }
+    }
+
+    protected virtual void SetStateDirty() {
+        this._IsDirty = true;
+        this._DBContext.Clear();
     }
 }
 

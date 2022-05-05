@@ -16,11 +16,26 @@ public class UserToDoCollectionGrain : Grain, IUserToDoCollectionGrain {
 }
 #endif
 
-public class UserToDoGrain : GrainBase<UserEntity>, IUserToDoGrain {
+public class UserToDoGrain : GrainBase<UserEntity>, IUserToDoGrain, IProjectGrainObserver {
     private CachedValue<List<ToDoEntity>> _GetAllToDos;
+    private readonly ILogger _Logger;
 
-    public UserToDoGrain(IDBContext dBContext) : base(dBContext) {
+    public UserToDoGrain(
+        IDBContext dBContext,
+        ILogger<UserGrain> logger
+        ) : base(dBContext) {
         this._GetAllToDos = new CachedValue<List<ToDoEntity>>();
+        this._Logger = logger;
+    }
+
+    public override async Task OnActivateAsync() {
+        //this.GrainFactory.GetProjectCollectionGrain().AsReference<IProjectGrainObserver>
+        await this.GrainFactory.GetProjectCollectionGrain().Subscripe(this.AsReference<IProjectGrainObserver>());
+        await base.OnActivateAsync();
+    }
+    public override async Task OnDeactivateAsync() {
+        await this.GrainFactory.GetProjectCollectionGrain().Unsubscripe(this.AsReference<IProjectGrainObserver>());
+        await base.OnDeactivateAsync();
     }
 
     public async Task<List<ToDoEntity>> GetAllToDos(OperationEntity operation) {
@@ -31,6 +46,12 @@ public class UserToDoGrain : GrainBase<UserEntity>, IUserToDoGrain {
             }
             if (result.Count < 1000) {
                 this._GetAllToDos = this._GetAllToDos.SetStatus(result);
+                //if (result.Any()) {
+                //    var projects = result.Select(i => i.ProjectId).Distinct().ToList();
+                //    this.GrainFactory.GetProjectCollectionGrain().
+                //}
+            } else {
+                this._GetAllToDos = new CachedValue<List<ToDoEntity>>();
             }
             return result;
         }
@@ -43,6 +64,16 @@ public class UserToDoGrain : GrainBase<UserEntity>, IUserToDoGrain {
             var result = await sqlAccess.ExecuteToDoSelectAllAsync();
             return result;
         }
+    }
+
+    public void ReceiveDirtyProject(ProjectPK projectPK) {
+        this._GetAllToDos = new CachedValue<List<ToDoEntity>>();
+        this._Logger.LogInformation("UserToDoGrain.ReceiveDirty {0}", projectPK);
+    }
+
+    public void ReceiveDirtyTodo(ToDoPK toDoPK) {
+        this._GetAllToDos = new CachedValue<List<ToDoEntity>>();
+        this._Logger.LogInformation("UserToDoGrain.ReceiveDirty {0}", toDoPK);
     }
 }
 
