@@ -12,5 +12,5 @@ public record class ToDoHistory(
     Guid? ModifiedBy,
     DateTimeOffset ValidFrom,
     DateTimeOffset ValidTo,
-    long SerialVersion
+    long DataVersion
 ) : IHistoryAPI;

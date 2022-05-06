@@ -1,14 +1,14 @@
 ﻿namespace Brimborium.RowVersion.Entity;
 
-public struct AggregationRowVersion {
-    public long RowVersion { get; set; }
+public struct AggregationEntityVersion {
+    public long EntityVersion { get; set; }
     public int CountVersion { get; set; }
     public string Arguments { get; set; }
 }
 
 public sealed class AggregationRowVersionHolder {
     public AggregationRowVersionHolder() {
-        this.Value = new AggregationRowVersion();
+        this.Value = new AggregationEntityVersion();
     }
-    public AggregationRowVersion Value;
+    public AggregationEntityVersion Value;
 }

@@ -1,12 +1,12 @@
 ﻿namespace Brimborium.RowVersion.Entity;
 
-public interface IEntityWithEntryVersion
+public interface IEntityWithDataEntityVersion
     : IEntityWithVersion {
 
     // from IEntityWithVersion 
-    // long SerialVersion { get; set; }
+    // long EntityVersion { get; set; }
 
-    string RowVersion { get; set; }
+    string DataVersion { get; set; }
 
-    EntryVersion EntryVersion { get; set; }
+    DataEntitiyVersion DataEntityVersion { get; set; }
 }

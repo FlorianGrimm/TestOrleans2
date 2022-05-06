@@ -1,17 +1,17 @@
 ﻿namespace Brimborium.RowVersion.API;
 
 public interface IDataAPIWithVersion {
-    string RowVersion { get; }
+    string DataVersion { get; }
 }
 
 public record class DataAPIWithVersionRecord(
-    string RowVersion
-    );
+    string DataVersion
+    ): IDataAPIWithVersion;
 
-public class DataAPIWithVersionClass {
+public class DataAPIWithVersionClass : IDataAPIWithVersion {
     public DataAPIWithVersionClass() {
-        this.RowVersion = string.Empty;
+        this.DataVersion = string.Empty;
     }
 
-    public string RowVersion { get; set; }
+    public string DataVersion { get; set; }
 }

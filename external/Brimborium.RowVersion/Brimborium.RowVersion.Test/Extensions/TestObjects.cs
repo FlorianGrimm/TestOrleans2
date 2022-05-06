@@ -4,10 +4,10 @@ class TestEntityWithVersion : IEntityWithVersion {
     public TestEntityWithVersion() {
     }
     public TestEntityWithVersion(long serialVersion) {
-        this.SerialVersion = serialVersion;
+        this.EntityVersion = serialVersion;
     }
 
-    public long SerialVersion { get; set; }
+    public long EntityVersion { get; set; }
 }
 class DTTestValidRange : IDTValidRange {
     public DTTestValidRange() {

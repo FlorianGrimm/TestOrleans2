@@ -14,7 +14,7 @@ public static partial class ConverterToEntity {
                 EntityId: that.EntityId,
                 UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -40,7 +40,7 @@ public static partial class ConverterToEntity {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -68,7 +68,7 @@ public static partial class ConverterToEntity {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -96,7 +96,7 @@ public static partial class ConverterToEntity {
                 Argument: that.Argument,
                 UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -125,7 +125,7 @@ public static partial class ConverterToEntity {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -156,7 +156,7 @@ public static partial class ConverterToEntity {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -182,7 +182,7 @@ public static partial class ConverterToEntity {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }
@@ -210,7 +210,7 @@ public static partial class ConverterToEntity {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
+                EntityVersion: that.DataVersion
                 );
         }
     }

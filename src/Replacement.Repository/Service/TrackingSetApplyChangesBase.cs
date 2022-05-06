@@ -35,7 +35,7 @@ public abstract class TrackingSetApplyChangesBase<TValue, TPrimaryKey>
             return result.DataResult;
         }
         if (result.OperationResult.ResultValue == ResultValue.RowVersionMismatch) {
-            throw new InvalidOperationException($"RowVersionMismatch {value.SerialVersion}!={result.DataResult.SerialVersion}");
+            throw new InvalidOperationException($"RowVersionMismatch {value.EntityVersion}!={result.DataResult.EntityVersion}");
         }
         throw new InvalidOperationException($"Unknown error {result.OperationResult.ResultValue} {this._TypeName} {this.ExtractKey(value)}");
     }

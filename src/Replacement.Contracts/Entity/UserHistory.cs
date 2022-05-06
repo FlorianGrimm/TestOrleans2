@@ -12,7 +12,7 @@
         public DateTimeOffset ValidFrom { get; set; }
         [Key]
         public DateTimeOffset ValidTo { get; set; }
-        public long SerialVersion { get; set; }
+        public long DataVersion { get; set; }
 
         [ForeignKey("ValidFrom,OperationId")]
         [InverseProperty("UserHistory")]
@@ -35,5 +35,5 @@ public record class UserHistoryEntity(
     DateTimeOffset ValidFrom,
     // [property: Key]
     DateTimeOffset ValidTo,
-    long SerialVersion
+    long EntityVersion
 ) : IHistoryEntity;

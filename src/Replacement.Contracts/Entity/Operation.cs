@@ -6,7 +6,7 @@ public record class OperationEntity(
     string EntityId,
     Guid? UserId,
     DateTimeOffset CreatedAt,
-    long SerialVersion
+    long EntityVersion
 ) : IDataEntity {
     public static OperationEntity Create(
         Guid OperationId,
@@ -22,14 +22,14 @@ public record class OperationEntity(
             EntityId: EntityId,
             UserId: UserId,
             CreatedAt: DateTimeOffset.UtcNow,
-            SerialVersion: 0
+            EntityVersion: 0
         );
     }
     public OperationEntity Renew() {
         return this with {
             OperationId = Guid.NewGuid(),
             CreatedAt = DateTimeOffset.UtcNow,
-            SerialVersion = 0
+            EntityVersion = 0
         };
     }
 }

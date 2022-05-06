@@ -27,7 +27,7 @@ public class ProjectGrainTest
             CreatedBy: null,
             ModifiedAt: DateTimeOffset.MinValue,
             ModifiedBy: null,
-            SerialVersion: 0
+            DataVersion: 0
         );
         ProjectEntity? projectEntityAct1;
         Project project2;
@@ -62,6 +62,6 @@ public class ProjectGrainTest
         Assert.Equal(projectEntityAct1.CreatedAt, projectEntityAct2.CreatedAt);
         Assert.Equal(projectEntityAct1.CreatedBy, projectEntityAct2.CreatedBy);
         Assert.True(projectEntityAct1.ModifiedAt < projectEntityAct2.ModifiedAt);
-        Assert.True(projectEntityAct1.SerialVersion < projectEntityAct2.SerialVersion);
+        Assert.True(projectEntityAct1.EntityVersion < projectEntityAct2.EntityVersion);
     }
 }

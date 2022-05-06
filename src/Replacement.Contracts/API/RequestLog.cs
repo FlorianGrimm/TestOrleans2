@@ -10,5 +10,5 @@ public record class RequestLog(
     string? Argument,
     Guid? UserId,
     DateTimeOffset CreatedAt,
-    long SerialVersion
+    long DataVersion
 ) : IDataAPI;

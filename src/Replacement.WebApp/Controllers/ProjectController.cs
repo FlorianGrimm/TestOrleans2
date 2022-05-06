@@ -63,7 +63,7 @@ public class ProjectController : ReplacementControllerBase {
         if (value.ProjectId == Guid.Empty) {
             value = value with {
                 ProjectId = Guid.NewGuid(),
-                SerialVersion = 0
+                DataVersion = 0
             };
         }
 

@@ -14,7 +14,7 @@ public static partial class ConverterToAPI {
                 EntityId: that.EntityId,
                 UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -40,7 +40,7 @@ public static partial class ConverterToAPI {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -68,7 +68,7 @@ public static partial class ConverterToAPI {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -96,7 +96,7 @@ public static partial class ConverterToAPI {
                 Argument: that.Argument,
                 UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -125,7 +125,7 @@ public static partial class ConverterToAPI {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -156,7 +156,7 @@ public static partial class ConverterToAPI {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -182,7 +182,7 @@ public static partial class ConverterToAPI {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }
@@ -210,7 +210,7 @@ public static partial class ConverterToAPI {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                SerialVersion: that.SerialVersion
+                DataVersion: that.EntityVersion
                 );
         }
     }

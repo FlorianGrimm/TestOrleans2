@@ -7,7 +7,7 @@ public record class User(
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
-    long SerialVersion
+    long DataVersion
 ) : IOperationRelatedAPI {
     public UserPK GetPrimaryKey() => new UserPK(this.UserId);
     public UserPK? GetCreatedByUserPK() => this.CreatedBy.HasValue ? new UserPK(this.CreatedBy.Value) : null;
@@ -26,14 +26,14 @@ public record class User(
             CreatedBy: operation.UserId,
             ModifiedAt: operation.CreatedAt,
             ModifiedBy: operation.UserId,
-            SerialVersion: 0
+            DataVersion: 0
             );
     }
     public User SetOperation(Operation value) {
         return this with {
             OperationId = value.OperationId,
-            CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
-            CreatedBy = this.SerialVersion == 0 ? value.UserId : this.CreatedBy,
+            CreatedAt = this.DataVersion == 0 ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = this.DataVersion == 0 ? value.UserId : this.CreatedBy,
             ModifiedAt = value.CreatedAt,
             ModifiedBy = value.UserId
         };

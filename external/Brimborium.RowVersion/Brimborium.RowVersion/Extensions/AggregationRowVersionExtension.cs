@@ -1,10 +1,10 @@
 ﻿namespace Brimborium.RowVersion.Extensions;
 
-public static class AggregationRowVersionExtension {
-    public static AggregationRowVersion ToAggregationRowVersion<T>(this IEnumerable<T> that) where T : IEntityWithVersion {
-        var result = new AggregationRowVersion();
+public static class AggregationEntityVersionExtension {
+    public static AggregationEntityVersion ToAggregationEntityVersion<T>(this IEnumerable<T> that) where T : IEntityWithVersion {
+        var result = new AggregationEntityVersion();
         foreach (var item in that) {
-            item.SerialVersion.MaxRowVersion(ref result);
+            item.EntityVersion.MaxEntityVersion(ref result);
         }
         return result;
     }
@@ -14,22 +14,22 @@ public static class AggregationRowVersionExtension {
         return MD5Extension.GetMD5HashFromByteArray(b);
     }
 
-    public static string ToCacheKey(this AggregationRowVersion that) {
-        return $"{that.RowVersion.ToString("x16")}:{that.CountVersion.ToString("x8")}:{that.Arguments}";
+    public static string ToCacheKey(this AggregationEntityVersion that) {
+        return $"{that.EntityVersion.ToString("x16")}:{that.CountVersion.ToString("x8")}:{that.Arguments}";
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static void MaxRowVersion(this long rowVersionNext, ref long rowVersion) {
-        if (rowVersion < rowVersionNext) {
-            rowVersion = rowVersionNext;
+    public static void MaxEntityVersion(this long entityVersionNext, ref long entityVersion) {
+        if (entityVersion < entityVersionNext) {
+            entityVersion = entityVersionNext;
         }
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static void MaxRowVersion(this long rowVersionNext, ref AggregationRowVersion aggregationRowVersion) {
-        if (aggregationRowVersion.RowVersion < rowVersionNext) {
-            aggregationRowVersion.RowVersion = rowVersionNext;
+    public static void MaxEntityVersion(this long entityVersionNext, ref AggregationEntityVersion aggregationEntityVersion) {
+        if (aggregationEntityVersion.EntityVersion < entityVersionNext) {
+            aggregationEntityVersion.EntityVersion = entityVersionNext;
         }
-        aggregationRowVersion.CountVersion++;
+        aggregationEntityVersion.CountVersion++;
     }
 }

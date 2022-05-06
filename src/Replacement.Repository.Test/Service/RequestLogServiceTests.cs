@@ -46,7 +46,7 @@ public class RequestLogServiceTests {
         Assert.Equal(10, sqlAccessFactory.RequestLogs.Count);
         for (int idx = 0; idx < sqlAccessFactory.RequestLogs.Count; idx++) {
             var a = sqlAccessFactory.RequestLogs[idx];
-            Assert.Equal(idx+1, a.rl.SerialVersion);
+            Assert.Equal(idx+1, a.rl.EntityVersion);
         }
         for (int idx = 1; idx < sqlAccessFactory.RequestLogs.Count; idx++) {
             var a = sqlAccessFactory.RequestLogs[idx - 1];

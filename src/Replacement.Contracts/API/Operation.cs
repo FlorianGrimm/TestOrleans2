@@ -6,5 +6,5 @@ public record class Operation(
     string EntityId,
     Guid? UserId,
     DateTimeOffset CreatedAt,
-    long SerialVersion
+    long DataVersion
 ) : IDataAPI;

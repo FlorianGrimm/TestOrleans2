@@ -54,7 +54,7 @@ public static class AggregateRecordList {
 
 public class AggregateRecordList<T> where T : IEntityWithVersion {
     private readonly List<T> _List;
-    private AggregationRowVersion _RowVersion;
+    private AggregationEntityVersion _AggregatedEntityVersion;
 
     public AggregateRecordList() {
         this._List = new List<T>();
@@ -62,15 +62,15 @@ public class AggregateRecordList<T> where T : IEntityWithVersion {
 
     public List<T> List => this._List;
 
-    public AggregationRowVersion RowVersion => this._RowVersion;
+    public AggregationEntityVersion AggregatedEntityVersion => this._AggregatedEntityVersion;
 
     public void Add(T item) {
-        item.SerialVersion.MaxRowVersion(ref this._RowVersion);
+        item.EntityVersion.MaxEntityVersion(ref this._AggregatedEntityVersion);
         this._List.Add(item);
     }
 
     public void Add(T item, Func<T, T, int> compare) {
-        item.SerialVersion.MaxRowVersion(ref this._RowVersion);
+        item.EntityVersion.MaxEntityVersion(ref this._AggregatedEntityVersion);
         var pos = this._List.BinarySearchByValue(item, compare);
         if (pos < 0) {
             this._List.Insert(~pos, item);

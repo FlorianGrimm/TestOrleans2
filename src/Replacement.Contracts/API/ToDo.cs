@@ -10,7 +10,7 @@ public record class ToDo(
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
-    long SerialVersion
+    long DataVersion
 ) : IOperationRelatedAPI {
     public ToDoPK GetPrimaryKey() => new ToDoPK(this.ProjectId, this.ToDoId);
     public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
@@ -21,8 +21,8 @@ public record class ToDo(
     public ToDo SetOperation(OperationEntity value) {
         return this with {
             OperationId = value.OperationId,
-            CreatedAt = this.SerialVersion == 0 ? value.CreatedAt : this.CreatedAt,
-            CreatedBy = this.SerialVersion == 0 ? value.UserId : this.CreatedBy,
+            CreatedAt = this.DataVersion == 0 ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = this.DataVersion == 0 ? value.UserId : this.CreatedBy,
             ModifiedAt = value.CreatedAt,
             ModifiedBy = value.UserId
         };

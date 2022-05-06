@@ -228,7 +228,7 @@ public sealed partial class ProjectGrain : GrainBase<ProjectEntity>, IProjectGra
             if (state is null) {
                 // new
             } else {
-                if (!state.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
+                if (!state.EntityVersion.SerialVersionDoesMatch(value.EntityVersion)) {
                     return null;
                 }
             }
@@ -296,7 +296,7 @@ public sealed partial class ProjectGrain : GrainBase<ProjectEntity>, IProjectGra
             TrackingObject<OperationEntity> operationTO;
             TrackingObject<ToDoEntity> result;
             if (this._DBContext.ToDo.TryGetValue(value.GetPrimaryKey(), out var currentToDo)) {
-                if (!currentToDo.SerialVersion.SerialVersionDoesMatch(value.SerialVersion)) {
+                if (!currentToDo.EntityVersion.SerialVersionDoesMatch(value.EntityVersion)) {
                     return null;
                 }
                 operationTO = this._DBContext.Operation.Add(operation);

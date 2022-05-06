@@ -56,7 +56,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
+                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.ProjectPK>(cmd, ReadRecordProjectDeletePK);
             }
         } 
@@ -149,7 +149,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
+                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
                 Replacement.Contracts.Entity.ProjectEntity result_DataResult = default!;
                 Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
@@ -214,7 +214,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
+                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.ToDoPK>(cmd, ReadRecordToDoDeletePK);
             }
         } 
@@ -311,7 +311,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
+                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
                 Replacement.Contracts.Entity.ToDoEntity result_DataResult = default!;
                 Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
@@ -362,7 +362,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
+                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.UserPK>(cmd, ReadRecordUserDeletePK);
             }
         } 
@@ -425,7 +425,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@SerialVersion", args.SerialVersion);
+                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
                 Replacement.Contracts.Entity.UserEntity result_DataResult = default!;
                 Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {

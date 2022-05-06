@@ -972,7 +972,7 @@ namespace Replacement.DatabaseDevTool {
             hsExcludeFromCompare.Add("OperationId");
             hsExcludeFromCompare.Add("CreatedAt");
             hsExcludeFromCompare.Add("ModifiedAt");
-            hsExcludeFromCompare.Add("SerialVersion");
+            hsExcludeFromCompare.Add("DataVersion");
 
             foreach (var t in databaseInfo.Tables.Where(
                 t => IsADataTable(t))) {

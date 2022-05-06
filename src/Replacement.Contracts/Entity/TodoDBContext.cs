@@ -31,7 +31,7 @@
 //            modelBuilder.Entity<Operation>(entity => {
 //                entity.HasKey(e => new { e.CreatedAt, e.Id });
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 //            });
@@ -39,7 +39,7 @@
 //            modelBuilder.Entity<Project>(entity => {
 //                entity.Property(e => e.Id).ValueGeneratedNever();
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
@@ -53,7 +53,7 @@
 //                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.OperationId, e.Id })
 //                    .HasName("PK_history_ProjectHistory");
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
@@ -67,7 +67,7 @@
 //            modelBuilder.Entity<ToDo>(entity => {
 //                entity.Property(e => e.Id).ValueGeneratedNever();
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
@@ -91,7 +91,7 @@
 //                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.OperationId, e.Id })
 //                    .HasName("PK_history_ToDoistory");
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
@@ -105,7 +105,7 @@
 //            modelBuilder.Entity<User>(entity => {
 //                entity.Property(e => e.Id).ValueGeneratedNever();
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 
@@ -119,7 +119,7 @@
 //                entity.HasKey(e => new { e.ValidTo, e.ValidFrom, e.OperationId, e.Id })
 //                    .HasName("PK_history_UserHistory");
 
-//                entity.Property(e => e.SerialVersion)
+//                entity.Property(e => e.DataVersion)
 //                    .IsRowVersion()
 //                    .IsConcurrencyToken();
 

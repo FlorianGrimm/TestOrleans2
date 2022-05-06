@@ -57,7 +57,7 @@ public class AggregateDictionary<K, V>
     where K : notnull
     where V : notnull, IEntityWithVersion {
     private readonly Dictionary<K, V> _Dict;
-    private AggregationRowVersion _RowVersion;
+    private AggregationEntityVersion _EntityVersion;
 
     public AggregateDictionary() {
         this._Dict = new Dictionary<K, V>();
@@ -65,10 +65,10 @@ public class AggregateDictionary<K, V>
 
     public Dictionary<K, V> Dict => this._Dict;
 
-    public AggregationRowVersion RowVersion => this._RowVersion;
+    public AggregationEntityVersion EntityVersion => this._EntityVersion;
 
     public void Add(K key, V item) {
         this._Dict[key] = item;
-        item.SerialVersion.MaxRowVersion(ref this._RowVersion);
+        item.EntityVersion.MaxEntityVersion(ref this._EntityVersion);
     }
 }

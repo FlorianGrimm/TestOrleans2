@@ -136,7 +136,7 @@ public static class Program {
                             CreatedBy: null,
                             ModifiedAt: new System.DateTimeOffset(),
                             ModifiedBy: null,
-                            SerialVersion: 0
+                            DataVersion: 0
                             );
                     var projectB = await client.ProjectPostAsync(projectA);
                     System.Threading.Interlocked.Increment(ref cntProjectWrite);

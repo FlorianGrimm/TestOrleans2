@@ -1,27 +1,27 @@
 ﻿namespace Brimborium.RowVersion.Extensions;
 
-public class AggregationRowVersionExtensionTests {
+public class AggregationEntityVersionExtensionTests {
     [Fact()]
-    public void ToAggregationRowVersion_Test() {
+    public void ToAggregationEntityVersion_Test() {
         {
             var sut = new List<TestEntityWithVersion>() { };
-            var act = sut.ToAggregationRowVersion();
-            Assert.Equal(0, act.RowVersion);
+            var act = sut.ToAggregationEntityVersion();
+            Assert.Equal(0, act.EntityVersion);
             Assert.Equal(0, act.CountVersion);
         }
         {
             var sut = new List<TestEntityWithVersion>() { new TestEntityWithVersion(1), new TestEntityWithVersion(3), new TestEntityWithVersion(2), new TestEntityWithVersion(2) };
-            var act = sut.ToAggregationRowVersion();
-            Assert.Equal(3, act.RowVersion);
+            var act = sut.ToAggregationEntityVersion();
+            Assert.Equal(3, act.EntityVersion);
             Assert.Equal(4, act.CountVersion);
         }
     }
 
     [Fact()]
     public void CalculateArguments_Test() {
-        var a = AggregationRowVersionExtension.CalculateArguments("A");
-        var b = AggregationRowVersionExtension.CalculateArguments("A");
-        var c = AggregationRowVersionExtension.CalculateArguments("B");
+        var a = AggregationEntityVersionExtension.CalculateArguments("A");
+        var b = AggregationEntityVersionExtension.CalculateArguments("A");
+        var c = AggregationEntityVersionExtension.CalculateArguments("B");
         Assert.True(a == b);
         Assert.True(a != c);
     }
@@ -30,15 +30,15 @@ public class AggregationRowVersionExtensionTests {
     public void ToCacheKey_Test() {
         {
             var sut1 = new List<TestEntityWithVersion>() { new TestEntityWithVersion(1), new TestEntityWithVersion(3), new TestEntityWithVersion(2), new TestEntityWithVersion(2) };
-            var arv1 = sut1.ToAggregationRowVersion();
+            var arv1 = sut1.ToAggregationEntityVersion();
             var act1= arv1.ToCacheKey();
          
             var sut2 = new List<TestEntityWithVersion>() { new TestEntityWithVersion(1), new TestEntityWithVersion(3), new TestEntityWithVersion(2), new TestEntityWithVersion(2) };
-            var arv2 = sut2.ToAggregationRowVersion();
+            var arv2 = sut2.ToAggregationEntityVersion();
             var act2 = arv2.ToCacheKey();
 
             var sut3 = new List<TestEntityWithVersion>() { new TestEntityWithVersion(1) };
-            var arv3 = sut3.ToAggregationRowVersion();
+            var arv3 = sut3.ToAggregationEntityVersion();
             var act3 = arv3.ToCacheKey();
 
             Assert.True(act1 == act2);
@@ -48,23 +48,23 @@ public class AggregationRowVersionExtensionTests {
 
 
     [Fact()]
-    public void MaxRowVersion_Test() {
+    public void MaxEntityVersion_Test() {
         long rowVersion = 0;
-        (1L).MaxRowVersion(ref rowVersion);
-        (3L).MaxRowVersion(ref rowVersion);
-        (2L).MaxRowVersion(ref rowVersion);
+        (1L).MaxEntityVersion(ref rowVersion);
+        (3L).MaxEntityVersion(ref rowVersion);
+        (2L).MaxEntityVersion(ref rowVersion);
         Assert.Equal(3L, rowVersion);
     }
 
     [Fact()]
-    public void MaxRowVersion_Test1() {
-        AggregationRowVersion aggregationRowVersion = new AggregationRowVersion();
-        (1L).MaxRowVersion(ref aggregationRowVersion);
-        (3L).MaxRowVersion(ref aggregationRowVersion);
-        (2L).MaxRowVersion(ref aggregationRowVersion);
-        (1L).MaxRowVersion(ref aggregationRowVersion);
+    public void MaxEntityVersion_Test1() {
+        AggregationEntityVersion aggregationEntityVersion = new AggregationEntityVersion();
+        (1L).MaxEntityVersion(ref aggregationEntityVersion);
+        (3L).MaxEntityVersion(ref aggregationEntityVersion);
+        (2L).MaxEntityVersion(ref aggregationEntityVersion);
+        (1L).MaxEntityVersion(ref aggregationEntityVersion);
 
-        Assert.Equal(3L, aggregationRowVersion.RowVersion);
-        Assert.Equal(4, aggregationRowVersion.CountVersion);
+        Assert.Equal(3L, aggregationEntityVersion.EntityVersion);
+        Assert.Equal(4, aggregationEntityVersion.CountVersion);
     }
 }

@@ -10,5 +10,5 @@ public record class UserHistory(
     Guid? ModifiedBy,
     DateTimeOffset ValidFrom,
     DateTimeOffset ValidTo,
-    long SerialVersion
+    long DataVersion
 ) : IHistoryAPI;

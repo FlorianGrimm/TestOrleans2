@@ -10,5 +10,5 @@ public record class RequestLogEntity(
     string? Argument,
     Guid? UserId,
     DateTimeOffset CreatedAt,
-    long SerialVersion
+    long EntityVersion
 ) : IDataEntity;

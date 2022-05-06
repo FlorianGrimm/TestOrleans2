@@ -12,5 +12,5 @@
 //     string? UserName,
 //     Guid? UserId,
 //     DateTimeOffset CreatedAt,
-//     long SerialVersion
+//     long DataVersion
 // );

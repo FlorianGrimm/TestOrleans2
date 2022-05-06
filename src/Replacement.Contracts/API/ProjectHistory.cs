@@ -9,5 +9,5 @@ public record class ProjectHistory(
     Guid? ModifiedBy,
     DateTimeOffset ValidFrom,
     DateTimeOffset ValidTo,
-    long SerialVersion
+    long DataVersion
 ) : IHistoryAPI;
