@@ -153,7 +153,7 @@ public partial class ProjectCollectionGrain : GrainCollectionBase, IProjectColle
     }
 }
 
-public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
+public sealed partial class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     private readonly ILogger<ProjectGrain> _Logger;
 
     public ProjectGrain(
@@ -173,6 +173,8 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     //    return base.OnDeactivateAsync();
     //}
 
+    private ProjectPK GetProjectPrimaryKey()
+        => new ProjectPK(this.GetGrainIdentity().PrimaryKey);
 
     [LoggerMessage(
         EventId = (int)LogEventId.ProjectGrain_Load,
@@ -181,7 +183,7 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     private partial void LogLoad(ProjectPK projectPK, bool found, int toDosCount);
 
     protected override async Task<ProjectEntity?> Load() {
-        var projectPK = new ProjectPK(this.GetGrainIdentity().PrimaryKey);
+        ProjectPK? projectPK = GetProjectPrimaryKey();
         List<ProjectEntity> projects;
         List<ToDoEntity> lstToDos;
         using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
@@ -201,17 +203,19 @@ public sealed class ProjectGrain : GrainBase<ProjectEntity>, IProjectGrain {
     }
 
     [LoggerMessage(
-    EventId = (int)LogEventId.ProjectGrain_GetProject,
-    Level = LogLevel.Trace,
-    Message = "GetProject projectPK:{projectPK}; found:{found}; toDosCount:{toDosCount};")]
+        EventId = (int)LogEventId.ProjectGrain_GetProject,
+        Level = LogLevel.Trace,
+        Message = "GetProject projectPK:{projectPK}; found:{found};")]
     private partial void LogGetProject(ProjectPK projectPK, bool found);
 
     public async Task<ProjectEntity?> GetProject(UserEntity user, OperationEntity operation) {
         var state = await this.GetState();
         if (state is null) {
             this.DeactivateOnIdle();
+            this.LogGetProject(this.GetProjectPrimaryKey(), false);
             return state;
         } else { 
+            this.LogGetProject(state.GetPrimaryKey(), true);
             return state;
         }
     }

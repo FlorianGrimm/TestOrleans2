@@ -50,6 +50,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Tracking", "exte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Extensions.Logging.LocalFile", "external\Brimborium.Extensions.Logging.LocalFile\src\Brimborium.Extensions.Logging.LocalFile.csproj", "{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion.Contracts", "external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj", "{80971B70-04AA-4D49-9E29-39BFBCAA9159}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion", "external\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj", "{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion.Test", "external\Brimborium.RowVersion\Brimborium.RowVersion.Test\Brimborium.RowVersion.Test.csproj", "{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -124,6 +130,18 @@ Global
 		{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80971B70-04AA-4D49-9E29-39BFBCAA9159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80971B70-04AA-4D49-9E29-39BFBCAA9159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80971B70-04AA-4D49-9E29-39BFBCAA9159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80971B70-04AA-4D49-9E29-39BFBCAA9159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -146,6 +164,9 @@ Global
 		{4D301368-5D30-4D57-88B3-18A2261A9678} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
 		{DEA1746A-2122-4E3D-A29F-0946F0E3F1EA} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
 		{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
+		{80971B70-04AA-4D49-9E29-39BFBCAA9159} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
+		{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
+		{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545} = {3AB75250-1F79-41F6-BC21-23B4B79FC0B8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD958C01-5C66-4EA6-9349-07977081E079}
