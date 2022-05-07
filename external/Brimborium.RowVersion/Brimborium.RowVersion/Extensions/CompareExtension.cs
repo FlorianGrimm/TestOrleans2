@@ -1,6 +1,7 @@
 ﻿namespace Brimborium.RowVersion.Extensions;
 
 public static class CompareExtension {
+    /*
     public static Func<T, T, int> ChainCompareDTValidRangeQ<T>(Func<T, T, int> before)
         where T : IDTValidRangeQ {
         return compare;
@@ -13,6 +14,7 @@ public static class CompareExtension {
             }
         }
     }
+    */
 
     public static int CompareDTValidRange<T>(T a, T b)
         where T : IDTValidRange {
