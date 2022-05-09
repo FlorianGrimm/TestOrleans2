@@ -11,7 +11,7 @@
     [ModifiedBy]    UNIQUEIDENTIFIER   NULL,
     [ValidFrom]     DATETIMEOFFSET (7) NOT NULL,
     [ValidTo]       DATETIMEOFFSET (7) NOT NULL,
-    [SerialVersion] ROWVERSION         NOT NULL,
+    [EntityVersion] ROWVERSION         NOT NULL,
     CONSTRAINT [PK_history_ToDoistory] PRIMARY KEY CLUSTERED ([ValidTo] ASC, [ValidFrom] ASC, [OperationId] ASC, [ProjectId] ASC, [ToDoId] ASC),
     CONSTRAINT [FK_history_ToDoHistory_dbo_Operation] FOREIGN KEY ([ValidFrom], [OperationId]) REFERENCES [dbo].[Operation] ([CreatedAt], [OperationId])
 );

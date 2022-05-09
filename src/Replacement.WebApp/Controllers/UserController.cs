@@ -27,6 +27,9 @@ public class UserController : ReplacementControllerBase {
         {
             var grain = this.Client.GetGrain<IUserCollectionGrain>(Guid.Empty)!;
             var result = await grain.GetAllUsers(operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToListUser();
         }
     }

@@ -15,7 +15,7 @@ public static class RequestOperationExtensions {
             EntityId: requestOperation.EntityId,
             UserId: requestOperation.UserId,
             CreatedAt: requestOperation.CreatedAt,
-            SerialVersion: 0);
+            EntityVersion: 0);
         if (operation.UserId.HasValue
             || string.IsNullOrEmpty(requestOperation.UserName)) {
             var requestLog = new RequestLogEntity(
@@ -28,7 +28,7 @@ public static class RequestOperationExtensions {
                 Argument: requestOperation.Argument,
                 UserId: requestOperation.UserId,
                 CreatedAt: requestOperation.CreatedAt,
-                SerialVersion: 0);
+                EntityVersion: 0);
             if (requestLogService is not null) {
                 await requestLogService.InsertAsync(requestLog, canModifyState);
             }
@@ -52,7 +52,7 @@ public static class RequestOperationExtensions {
                     Argument: requestOperation.Argument,
                     UserId: user?.UserId,
                     CreatedAt: operationNext.CreatedAt,
-                    SerialVersion: 0);
+                    EntityVersion: 0);
                 if (requestLogService is not null) {
                     await requestLogService.InsertAsync(requestLog, canModifyState);
                 }
@@ -71,7 +71,7 @@ public static class RequestOperationExtensions {
                     Argument: requestOperation.Argument,
                     UserId: user?.UserId,
                     CreatedAt: requestOperation.CreatedAt,
-                    SerialVersion: 0);
+                    EntityVersion: 0);
                 if (requestLogService is not null) {
                     await requestLogService.InsertAsync(requestLog, canModifyState);
                 }

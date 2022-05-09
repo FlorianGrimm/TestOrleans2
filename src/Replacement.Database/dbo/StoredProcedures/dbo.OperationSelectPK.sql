@@ -11,7 +11,7 @@ AS BEGIN
             [EntityId] = [EntityId],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[Operation]
         WHERE

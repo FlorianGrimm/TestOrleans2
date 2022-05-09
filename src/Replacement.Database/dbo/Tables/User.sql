@@ -6,7 +6,7 @@
     [CreatedBy]     UNIQUEIDENTIFIER   NULL,
     [ModifiedAt]    DATETIMEOFFSET (7) NOT NULL,
     [ModifiedBy]    UNIQUEIDENTIFIER   NULL,
-    [SerialVersion] ROWVERSION         NOT NULL,
+    [EntityVersion] ROWVERSION         NOT NULL,
     CONSTRAINT [PK_dbo_User] PRIMARY KEY CLUSTERED ([UserId] ASC),
     CONSTRAINT [FK_dbo_User_dbo_Operation] FOREIGN KEY ([ModifiedAt], [OperationId]) REFERENCES [dbo].[Operation] ([CreatedAt], [OperationId])
 );

@@ -3,8 +3,8 @@
 class TestEntityWithVersion : IEntityWithVersion {
     public TestEntityWithVersion() {
     }
-    public TestEntityWithVersion(long serialVersion) {
-        this.EntityVersion = serialVersion;
+    public TestEntityWithVersion(long entityVersion) {
+        this.EntityVersion = entityVersion;
     }
 
     public long EntityVersion { get; set; }

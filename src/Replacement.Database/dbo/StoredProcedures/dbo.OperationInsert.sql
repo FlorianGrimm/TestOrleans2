@@ -18,7 +18,7 @@ AS BEGIN
         [EntityId] nvarchar(100) NOT NULL,
         [CreatedAt] datetimeoffset NOT NULL,
         [UserId] uniqueidentifier NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [CreatedAt],
             [OperationId]
@@ -41,7 +41,7 @@ AS BEGIN
         INSERTED.[EntityId] as [EntityId],
         INSERTED.[CreatedAt] as [CreatedAt],
         INSERTED.[UserId] as [UserId],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_dbo_Operation
     VALUES (
         @OperationId,
@@ -61,7 +61,7 @@ AS BEGIN
             [EntityId] = [EntityId],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_dbo_Operation
         ;

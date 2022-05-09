@@ -96,7 +96,7 @@
         [EntityId] nvarchar(100) NOT NULL,
         [CreatedAt] datetimeoffset NOT NULL,
         [UserId] uniqueidentifier NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [CreatedAt],
             [OperationId]
@@ -112,7 +112,7 @@
         [CreatedBy] uniqueidentifier NULL,
         [ModifiedAt] datetimeoffset NOT NULL,
         [ModifiedBy] uniqueidentifier NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [ProjectId]
         ));
@@ -129,7 +129,7 @@
         [Argument] nvarchar(MAX) NULL,
         [CreatedAt] datetimeoffset NOT NULL,
         [UserId] uniqueidentifier NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [RequestLogId]
         ));
@@ -147,7 +147,7 @@
         [CreatedBy] uniqueidentifier NULL,
         [ModifiedAt] datetimeoffset NOT NULL,
         [ModifiedBy] uniqueidentifier NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [ProjectId],
             [ToDoId]
@@ -163,7 +163,7 @@
         [CreatedBy] uniqueidentifier NULL,
         [ModifiedAt] datetimeoffset NOT NULL,
         [ModifiedBy] uniqueidentifier NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [UserId]
         ));
@@ -180,7 +180,7 @@
         [ModifiedBy] uniqueidentifier NULL,
         [ValidFrom] datetimeoffset NOT NULL,
         [ValidTo] datetimeoffset NOT NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [ValidTo],
             [ValidFrom],
@@ -203,7 +203,7 @@
         [ModifiedBy] uniqueidentifier NULL,
         [ValidFrom] datetimeoffset NOT NULL,
         [ValidTo] datetimeoffset NOT NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [ValidTo],
             [ValidFrom],
@@ -224,7 +224,7 @@
         [ModifiedBy] uniqueidentifier NULL,
         [ValidFrom] datetimeoffset NOT NULL,
         [ValidTo] datetimeoffset NOT NULL,
-        [SerialVersion] BIGINT NOT NULL
+        [EntityVersion] BIGINT NOT NULL
         PRIMARY KEY CLUSTERED (
             [ValidTo],
             [ValidFrom],
@@ -234,35 +234,35 @@
     -- Replace#AtTableResultTempate.[history].[UserHistory] --
 
     -- Replace=ColumnRowversion.[dbo].[Operation] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[dbo].[Operation] --
 
     -- Replace=ColumnRowversion.[dbo].[Project] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[dbo].[Project] --
 
     -- Replace=ColumnRowversion.[dbo].[RequestLog] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[dbo].[RequestLog] --
 
     -- Replace=ColumnRowversion.[dbo].[ToDo] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[dbo].[ToDo] --
 
     -- Replace=ColumnRowversion.[dbo].[User] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[dbo].[User] --
 
     -- Replace=ColumnRowversion.[history].[ProjectHistory] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[history].[ProjectHistory] --
 
     -- Replace=ColumnRowversion.[history].[ToDoHistory] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[history].[ToDoHistory] --
 
     -- Replace=ColumnRowversion.[history].[UserHistory] --
-    [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    [EntityVersion] = CAST([EntityVersion] as BIGINT)
     -- Replace#ColumnRowversion.[history].[UserHistory] --
 
     -- Replace=ConditionColumnsParameterPKTempate.[dbo].[Operation] --
@@ -314,7 +314,7 @@
     @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @ModifiedBy uniqueidentifier,
-    @SerialVersion BIGINT
+    @EntityVersion BIGINT
     -- Replace#DeletePKTempateParameter.[dbo].[Project] --
 
     -- Replace=DeletePKTempateParameter.[dbo].[ToDo] --
@@ -323,7 +323,7 @@
     @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @ModifiedBy uniqueidentifier,
-    @SerialVersion BIGINT
+    @EntityVersion BIGINT
     -- Replace#DeletePKTempateParameter.[dbo].[ToDo] --
 
     -- Replace=DeletePKTempateParameter.[dbo].[User] --
@@ -331,7 +331,7 @@
     @OperationId uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @ModifiedBy uniqueidentifier,
-    @SerialVersion BIGINT
+    @EntityVersion BIGINT
     -- Replace#DeletePKTempateParameter.[dbo].[User] --
 
     -- Replace=InsertIntoTableOutputAtTableResultValuesParameterTemplate.[dbo].[Operation] --
@@ -350,7 +350,7 @@
         INSERTED.[EntityId] as [EntityId],
         INSERTED.[CreatedAt] as [CreatedAt],
         INSERTED.[UserId] as [UserId],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_dbo_Operation
     VALUES (
         @OperationId,
@@ -380,7 +380,7 @@
         INSERTED.[CreatedBy] as [CreatedBy],
         INSERTED.[ModifiedAt] as [ModifiedAt],
         INSERTED.[ModifiedBy] as [ModifiedBy],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_dbo_Project
     VALUES (
         @ProjectId,
@@ -415,7 +415,7 @@
         INSERTED.[Argument] as [Argument],
         INSERTED.[CreatedAt] as [CreatedAt],
         INSERTED.[UserId] as [UserId],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_dbo_RequestLog
     VALUES (
         @RequestLogId,
@@ -454,7 +454,7 @@
         INSERTED.[CreatedBy] as [CreatedBy],
         INSERTED.[ModifiedAt] as [ModifiedAt],
         INSERTED.[ModifiedBy] as [ModifiedBy],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_dbo_ToDo
     VALUES (
         @ProjectId,
@@ -488,7 +488,7 @@
         INSERTED.[CreatedBy] as [CreatedBy],
         INSERTED.[ModifiedAt] as [ModifiedAt],
         INSERTED.[ModifiedBy] as [ModifiedBy],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_dbo_User
     VALUES (
         @UserId,
@@ -523,7 +523,7 @@
         INSERTED.[ModifiedBy] as [ModifiedBy],
         INSERTED.[ValidFrom] as [ValidFrom],
         INSERTED.[ValidTo] as [ValidTo],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_history_ProjectHistory
     VALUES (
         @OperationId,
@@ -566,7 +566,7 @@
         INSERTED.[ModifiedBy] as [ModifiedBy],
         INSERTED.[ValidFrom] as [ValidFrom],
         INSERTED.[ValidTo] as [ValidTo],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_history_ToDoHistory
     VALUES (
         @OperationId,
@@ -606,7 +606,7 @@
         INSERTED.[ModifiedBy] as [ModifiedBy],
         INSERTED.[ValidFrom] as [ValidFrom],
         INSERTED.[ValidTo] as [ValidTo],
-        CAST(INSERTED.[SerialVersion] AS BIGINT) as [SerialVersion]
+        CAST(INSERTED.[EntityVersion] AS BIGINT) as [EntityVersion]
     INTO @Result_history_UserHistory
     VALUES (
         @OperationId,
@@ -823,7 +823,7 @@
             [EntityId] = [EntityId],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_dbo_Operation
         ;
@@ -838,7 +838,7 @@
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_dbo_Project
         ;
@@ -855,7 +855,7 @@
             [Argument] = [Argument],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_dbo_RequestLog
         ;
@@ -873,7 +873,7 @@
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_dbo_ToDo
         ;
@@ -888,7 +888,7 @@
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_dbo_User
         ;
@@ -905,7 +905,7 @@
             [ModifiedBy] = [ModifiedBy],
             [ValidFrom] = [ValidFrom],
             [ValidTo] = [ValidTo],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_history_ProjectHistory
         ;
@@ -925,7 +925,7 @@
             [ModifiedBy] = [ModifiedBy],
             [ValidFrom] = [ValidFrom],
             [ValidTo] = [ValidTo],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_history_ToDoHistory
         ;
@@ -942,7 +942,7 @@
             [ModifiedBy] = [ModifiedBy],
             [ValidFrom] = [ValidFrom],
             [ValidTo] = [ValidTo],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             @Result_history_UserHistory
         ;
@@ -1000,7 +1000,7 @@
             [EntityId] = [EntityId],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[Operation]
         WHERE
@@ -1018,7 +1018,7 @@
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[Project]
         WHERE
@@ -1037,7 +1037,7 @@
             [Argument] = [Argument],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[RequestLog]
         WHERE
@@ -1057,7 +1057,7 @@
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[ToDo]
         WHERE
@@ -1075,7 +1075,7 @@
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[User]
         WHERE
@@ -1094,7 +1094,7 @@
             [ModifiedBy] = [ModifiedBy],
             [ValidFrom] = [ValidFrom],
             [ValidTo] = [ValidTo],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [history].[ProjectHistory]
         WHERE
@@ -1119,7 +1119,7 @@
             [ModifiedBy] = [ModifiedBy],
             [ValidFrom] = [ValidFrom],
             [ValidTo] = [ValidTo],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [history].[ToDoHistory]
         WHERE
@@ -1142,7 +1142,7 @@
             [ModifiedBy] = [ModifiedBy],
             [ValidFrom] = [ValidFrom],
             [ValidTo] = [ValidTo],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [history].[UserHistory]
         WHERE
@@ -1160,7 +1160,7 @@
     [EntityId] = [EntityId],
     [CreatedAt] = [CreatedAt],
     [UserId] = [UserId],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[dbo].[Operation] --
 
     -- Replace=SelectTableColumns.[dbo].[Project] --
@@ -1171,7 +1171,7 @@
     [CreatedBy] = [CreatedBy],
     [ModifiedAt] = [ModifiedAt],
     [ModifiedBy] = [ModifiedBy],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[dbo].[Project] --
 
     -- Replace=SelectTableColumns.[dbo].[RequestLog] --
@@ -1184,7 +1184,7 @@
     [Argument] = [Argument],
     [CreatedAt] = [CreatedAt],
     [UserId] = [UserId],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[dbo].[RequestLog] --
 
     -- Replace=SelectTableColumns.[dbo].[ToDo] --
@@ -1198,7 +1198,7 @@
     [CreatedBy] = [CreatedBy],
     [ModifiedAt] = [ModifiedAt],
     [ModifiedBy] = [ModifiedBy],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[dbo].[ToDo] --
 
     -- Replace=SelectTableColumns.[dbo].[User] --
@@ -1209,7 +1209,7 @@
     [CreatedBy] = [CreatedBy],
     [ModifiedAt] = [ModifiedAt],
     [ModifiedBy] = [ModifiedBy],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[dbo].[User] --
 
     -- Replace=SelectTableColumns.[history].[ProjectHistory] --
@@ -1222,7 +1222,7 @@
     [ModifiedBy] = [ModifiedBy],
     [ValidFrom] = [ValidFrom],
     [ValidTo] = [ValidTo],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[history].[ProjectHistory] --
 
     -- Replace=SelectTableColumns.[history].[ToDoHistory] --
@@ -1238,7 +1238,7 @@
     [ModifiedBy] = [ModifiedBy],
     [ValidFrom] = [ValidFrom],
     [ValidTo] = [ValidTo],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[history].[ToDoHistory] --
 
     -- Replace=SelectTableColumns.[history].[UserHistory] --
@@ -1251,7 +1251,7 @@
     [ModifiedBy] = [ModifiedBy],
     [ValidFrom] = [ValidFrom],
     [ValidTo] = [ValidTo],
-    [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+    [EntityVersion] = CAST([EntityVersion] AS BIGINT)
     -- Replace#SelectTableColumns.[history].[UserHistory] --
 
     -- Replace=TableColumnsAsParameter.[dbo].[Operation] --

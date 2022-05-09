@@ -5,7 +5,7 @@
     [EntityId]      NVARCHAR (100)     NOT NULL,
     [CreatedAt]     DATETIMEOFFSET (7) NOT NULL,
     [UserId]        UNIQUEIDENTIFIER   NULL,
-    [SerialVersion] ROWVERSION         NOT NULL,
+    [EntityVersion] ROWVERSION         NOT NULL,
     CONSTRAINT [PK_dbo_Operation] PRIMARY KEY CLUSTERED ([CreatedAt] ASC,[OperationId] ASC)
 );
 

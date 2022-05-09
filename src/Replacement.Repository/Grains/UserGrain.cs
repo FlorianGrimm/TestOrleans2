@@ -143,7 +143,6 @@ public static partial class GrainExtensions {
         return grain;
     }
 
-#warning here
     public static async Task<(UserEntity? user, bool created)> GetUserByUserName(this IClusterClient client, string username, bool createIfNeeded, OperationEntity operation) {
         return await client.GetUserCollectionGrain().GetUserByUserName(username, createIfNeeded, operation);
     }

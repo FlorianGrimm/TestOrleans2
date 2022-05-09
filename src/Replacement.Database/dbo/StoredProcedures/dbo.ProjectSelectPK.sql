@@ -16,7 +16,7 @@ AS BEGIN
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[Project]
         WHERE
@@ -40,7 +40,7 @@ AS BEGIN
         [CreatedBy] = [CreatedBy],
         [ModifiedAt] = [ModifiedAt],
         [ModifiedBy] = [ModifiedBy],
-        [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+        [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         -- Replace#SelectTableColumns.[dbo].[ToDo] --
     FROM [dbo].[ToDO]
     WHERE (@ProjectId = [ProjectId])
@@ -54,7 +54,7 @@ AS BEGIN
     --          [CreatedBy],
     --          [ModifiedAt],
     --          [ModifiedBy],
-    --          [SerialVersion] = CAST([SerialVersion] as BIGINT)
+    --          [EntityVersion] = CAST([EntityVersion] as BIGINT)
     --      FROM
     --          [dbo].[User]
     --      WHERE

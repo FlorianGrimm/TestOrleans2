@@ -13,7 +13,7 @@ AS BEGIN
             [Argument] = [Argument],
             [CreatedAt] = [CreatedAt],
             [UserId] = [UserId],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[RequestLog]
         WHERE

@@ -9,7 +9,7 @@
     [CreatedBy]     UNIQUEIDENTIFIER   NULL,
     [ModifiedAt]    DATETIMEOFFSET (7) NOT NULL,
     [ModifiedBy]    UNIQUEIDENTIFIER   NULL,
-    [SerialVersion] ROWVERSION         NOT NULL,
+    [EntityVersion] ROWVERSION         NOT NULL,
     CONSTRAINT [PK_dbo_ToDo] PRIMARY KEY CLUSTERED ([ProjectId] ASC, [ToDoId] ASC),
     CONSTRAINT [FK_dbo_ToDo_dbo_Operation] FOREIGN KEY ([ModifiedAt], [OperationId]) REFERENCES [dbo].[Operation] ([CreatedAt], [OperationId]),
     CONSTRAINT [FK_dbo_ToDo_dbo_Project] FOREIGN KEY ([ProjectId]) REFERENCES [dbo].[Project] ([ProjectId]),

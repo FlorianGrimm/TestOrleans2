@@ -8,5 +8,5 @@ public interface IEntityWithDataEntityVersion
 
     string DataVersion { get; set; }
 
-    DataEntitiyVersion DataEntityVersion { get; set; }
+    DataEntityVersion DataEntityVersion { get; set; }
 }

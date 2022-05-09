@@ -24,7 +24,7 @@ namespace Replacement.Repository.Service {
                 @EntityId: this.ReadString(reader, 3),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 4),
                 @UserId: this.ReadGuidQ(reader, 5),
-                @SerialVersion: this.ReadInt64(reader, 6)
+                @EntityVersion: this.ReadInt64(reader, 6)
             );
             return result;
         } 
@@ -45,7 +45,7 @@ namespace Replacement.Repository.Service {
                 @EntityId: this.ReadString(reader, 3),
                 @CreatedAt: this.ReadDateTimeOffset(reader, 4),
                 @UserId: this.ReadGuidQ(reader, 5),
-                @SerialVersion: this.ReadInt64(reader, 6)
+                @EntityVersion: this.ReadInt64(reader, 6)
             );
             return result;
         } 
@@ -56,7 +56,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
+                this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.ProjectPK>(cmd, ReadRecordProjectDeletePK);
             }
         } 
@@ -83,7 +83,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 4),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
                 @ModifiedBy: this.ReadGuidQ(reader, 6),
-                @SerialVersion: this.ReadInt64(reader, 7)
+                @EntityVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -118,7 +118,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 4),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
                 @ModifiedBy: this.ReadGuidQ(reader, 6),
-                @SerialVersion: this.ReadInt64(reader, 7)
+                @EntityVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -135,7 +135,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 7),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
                 @ModifiedBy: this.ReadGuidQ(reader, 9),
-                @SerialVersion: this.ReadInt64(reader, 10)
+                @EntityVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -149,7 +149,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
+                this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
                 Replacement.Contracts.Entity.ProjectEntity result_DataResult = default!;
                 Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
@@ -177,7 +177,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 4),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
                 @ModifiedBy: this.ReadGuidQ(reader, 6),
-                @SerialVersion: this.ReadInt64(reader, 7)
+                @EntityVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -214,7 +214,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
+                this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.ToDoPK>(cmd, ReadRecordToDoDeletePK);
             }
         } 
@@ -245,7 +245,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 7),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
                 @ModifiedBy: this.ReadGuidQ(reader, 9),
-                @SerialVersion: this.ReadInt64(reader, 10)
+                @EntityVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -270,7 +270,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 7),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
                 @ModifiedBy: this.ReadGuidQ(reader, 9),
-                @SerialVersion: this.ReadInt64(reader, 10)
+                @EntityVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -294,7 +294,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 7),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
                 @ModifiedBy: this.ReadGuidQ(reader, 9),
-                @SerialVersion: this.ReadInt64(reader, 10)
+                @EntityVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -311,7 +311,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
+                this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
                 Replacement.Contracts.Entity.ToDoEntity result_DataResult = default!;
                 Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
@@ -342,7 +342,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 7),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 8),
                 @ModifiedBy: this.ReadGuidQ(reader, 9),
-                @SerialVersion: this.ReadInt64(reader, 10)
+                @EntityVersion: this.ReadInt64(reader, 10)
             );
             return result;
         } 
@@ -362,7 +362,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
+                this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
                 return await this.CommandQueryAsync<Replacement.Contracts.API.UserPK>(cmd, ReadRecordUserDeletePK);
             }
         } 
@@ -390,7 +390,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 4),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
                 @ModifiedBy: this.ReadGuidQ(reader, 6),
-                @SerialVersion: this.ReadInt64(reader, 7)
+                @EntityVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -411,7 +411,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 4),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
                 @ModifiedBy: this.ReadGuidQ(reader, 6),
-                @SerialVersion: this.ReadInt64(reader, 7)
+                @EntityVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 
@@ -425,7 +425,7 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@CreatedBy", args.CreatedBy);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
-                this.AddParameterLong(cmd, "@DataVersion", args.EntityVersion);
+                this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
                 Replacement.Contracts.Entity.UserEntity result_DataResult = default!;
                 Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
@@ -453,7 +453,7 @@ namespace Replacement.Repository.Service {
                 @CreatedBy: this.ReadGuidQ(reader, 4),
                 @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
                 @ModifiedBy: this.ReadGuidQ(reader, 6),
-                @SerialVersion: this.ReadInt64(reader, 7)
+                @EntityVersion: this.ReadInt64(reader, 7)
             );
             return result;
         } 

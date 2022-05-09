@@ -1,40 +1,40 @@
 ﻿namespace Brimborium.RowVersion.Entity;
 
-public struct DataEntitiyVersion {
+public struct DataEntityVersion {
     private long _EntityVersion;
 
     private string? _DataVersion;
 
-    public DataEntitiyVersion(long entityVersion) {
+    public DataEntityVersion(long entityVersion) {
         this._EntityVersion = entityVersion;
         this._DataVersion = null;
     }
 
-    public DataEntitiyVersion(string dataVersion) {
+    public DataEntityVersion(string dataVersion) {
         this._EntityVersion = 0;
         this._DataVersion = dataVersion;
     }
 
-    public DataEntitiyVersion(long serialVersion, string entityVersion) {
-        this._EntityVersion = serialVersion;
-        this._DataVersion = entityVersion;
+    public DataEntityVersion(long entityVersion, string dataVersion) {
+        this._EntityVersion = entityVersion;
+        this._DataVersion = dataVersion;
     }
 
-    public string GetDataVersion(ref DataEntitiyVersion that) {
+    public string GetDataVersion(ref DataEntityVersion that) {
         if (this._DataVersion is null) {
             var result = this._EntityVersion.ToString("x16");
-            that = new DataEntitiyVersion(this._EntityVersion, result);
+            that = new DataEntityVersion(this._EntityVersion, result);
             return result;
         } else {
             return this._DataVersion;
         }
     }
 
-    public long GetEntityVersion(ref DataEntitiyVersion that) {
+    public long GetEntityVersion(ref DataEntityVersion that) {
         if (this._EntityVersion == 0 && this._DataVersion is not null) {
-            if (long.TryParse(this._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var serialVersion)) {
-                that = new DataEntitiyVersion(serialVersion, this._DataVersion);
-                return serialVersion;
+            if (long.TryParse(this._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var dataVersion)) {
+                that = new DataEntityVersion(dataVersion, this._DataVersion);
+                return dataVersion;
             } else {
                 return 0;
             }
@@ -43,14 +43,14 @@ public struct DataEntitiyVersion {
         }
     }
 
-    public static implicit operator DataEntitiyVersion(long entityVersion)
-        => new DataEntitiyVersion(entityVersion);
+    public static implicit operator DataEntityVersion(long entityVersion)
+        => new DataEntityVersion(entityVersion);
 
-    public static implicit operator DataEntitiyVersion(string dataVersion)
-        => new DataEntitiyVersion(dataVersion);
+    public static implicit operator DataEntityVersion(string dataVersion)
+        => new DataEntityVersion(dataVersion);
 
 
-    public static implicit operator string(DataEntitiyVersion entryVersion) {
+    public static implicit operator string(DataEntityVersion entryVersion) {
         if (entryVersion._DataVersion is null) {
             return entryVersion._EntityVersion.ToString("x16");
         } else { 
@@ -58,10 +58,10 @@ public struct DataEntitiyVersion {
         }
     }
 
-    public static implicit operator long(DataEntitiyVersion entryVersion) {
+    public static implicit operator long(DataEntityVersion entryVersion) {
         if (entryVersion._EntityVersion == 0 && entryVersion._DataVersion is not null) {
-            if (long.TryParse(entryVersion._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var serialVersion)) {
-                return serialVersion;
+            if (long.TryParse(entryVersion._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var dataVersion)) {
+                return dataVersion;
             } else {
                 return 0;
             }

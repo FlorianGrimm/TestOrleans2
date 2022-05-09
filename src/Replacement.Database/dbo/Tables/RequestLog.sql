@@ -9,6 +9,6 @@
     [Argument]      NVARCHAR (MAX)     NULL,
     [CreatedAt]     DATETIMEOFFSET (7) NOT NULL,
     [UserId]        UNIQUEIDENTIFIER   NULL,
-    [SerialVersion] ROWVERSION         NOT NULL,
+    [EntityVersion] ROWVERSION         NOT NULL,
     CONSTRAINT [PK_dbo_RequestLog] PRIMARY KEY CLUSTERED ([RequestLogId] ASC)
 )

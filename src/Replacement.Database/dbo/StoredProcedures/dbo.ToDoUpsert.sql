@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[ToDoUpsert]
     @CreatedBy uniqueidentifier,
     @ModifiedAt datetimeoffset,
     @ModifiedBy uniqueidentifier,
-    @SerialVersion BIGINT
+    @EntityVersion BIGINT
 AS BEGIN
     SET NOCOUNT ON;
 
@@ -23,7 +23,7 @@ AS BEGIN
     DECLARE @CurrentCreatedBy uniqueidentifier;
     DECLARE @CurrentModifiedAt datetimeoffset;
     DECLARE @CurrentModifiedBy uniqueidentifier;
-    DECLARE @CurrentSerialVersion BIGINT;
+    DECLARE @CurrentEntityVersion BIGINT;
     DECLARE @ResultValue INT;
 
     SELECT TOP(1)
@@ -37,14 +37,14 @@ AS BEGIN
             @CurrentCreatedBy = [CreatedBy],
             @CurrentModifiedAt = [ModifiedAt],
             @CurrentModifiedBy = [ModifiedBy],
-            @CurrentSerialVersion = CAST([SerialVersion] as BIGINT)
+            @CurrentEntityVersion = CAST([EntityVersion] as BIGINT)
         FROM
             [dbo].[ToDo]
         WHERE
             (@ProjectId = [ProjectId])
              AND (@ToDoId = [ToDoId])
         ;
-    IF ((@CurrentSerialVersion IS NULL)) BEGIN
+    IF ((@CurrentEntityVersion IS NULL)) BEGIN
         INSERT INTO [dbo].[ToDo] (
             [ProjectId],
             [ToDoId],
@@ -99,8 +99,8 @@ AS BEGIN
             CAST('3141-05-09T00:00:00Z' as datetimeoffset)
         );
     END ELSE BEGIN
-        IF ((@SerialVersion <= 0)
-            OR ((0 < @SerialVersion) AND (@SerialVersion = @CurrentSerialVersion))
+        IF ((@EntityVersion <= 0)
+            OR ((0 < @EntityVersion) AND (@EntityVersion = @CurrentEntityVersion))
         ) BEGIN
             IF (EXISTS(
                     SELECT
@@ -190,7 +190,7 @@ AS BEGIN
             [CreatedBy],
             [ModifiedAt],
             [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] as BIGINT)
+            [EntityVersion] = CAST([EntityVersion] as BIGINT)
         FROM
             [dbo].[ToDo]
         WHERE

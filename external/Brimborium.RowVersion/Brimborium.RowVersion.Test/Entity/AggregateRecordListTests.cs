@@ -5,14 +5,14 @@ public class AggregateRecordListTests {
     public void ToAggregateRecordList_Test() {
         var sut = new List<TestEntityWithVersion>() { new TestEntityWithVersion(4), new TestEntityWithVersion(2) };
         var act = sut.ToAggregateRecordList();
-        Assert.Equal(4, act.RowVersion.RowVersion);
+        Assert.Equal(4, act.AggregatedEntityVersion.EntityVersion);
     }
 
     [Fact()]
     public void ToAggregateRecordList_Predicate_Test1() {
         var sut = new List<TestEntityWithVersion>() { new TestEntityWithVersion(4), new TestEntityWithVersion(2) };
-        var act = sut.ToAggregateRecordList(i => (i.SerialVersion < 4));
-        Assert.Equal(2, act.RowVersion.RowVersion);
+        var act = sut.ToAggregateRecordList(i => (i.EntityVersion < 4));
+        Assert.Equal(2, act.AggregatedEntityVersion.EntityVersion);
     }
 
     /*

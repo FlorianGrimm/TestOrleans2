@@ -19,7 +19,7 @@ AS BEGIN
             [CreatedBy] = [CreatedBy],
             [ModifiedAt] = [ModifiedAt],
             [ModifiedBy] = [ModifiedBy],
-            [SerialVersion] = CAST([SerialVersion] AS BIGINT)
+            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
         FROM
             [dbo].[User]
         WHERE

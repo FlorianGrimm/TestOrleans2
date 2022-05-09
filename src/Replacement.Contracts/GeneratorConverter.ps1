@@ -69,7 +69,7 @@ if (-not $?) {
     $hsMappingProperty["EntityVersion"] = "DataVersion"
     #
     function mapProperties() {
-        params(
+        param(
             [System.Reflection.PropertyInfo[]] $propertiesAPI,
             [System.Reflection.PropertyInfo[]] $propertiesEntity
         )
