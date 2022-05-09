@@ -1,6 +1,5 @@
-﻿using Replacement.Contracts.Entity;
+﻿namespace Replacement.Repository.Service;
 
-namespace Replacement.Repository.Service;
 public class RequestLogServiceTests {
     [Fact]
     public async Task RequestLogService_001Async() {

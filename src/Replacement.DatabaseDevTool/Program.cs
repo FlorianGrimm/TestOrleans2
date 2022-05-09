@@ -323,10 +323,15 @@ public static partial class Program {
             psi.WorkingDirectory = sqlProjectDirectory;
             var process = System.Diagnostics.Process.Start(psi);
             if (process is not null) {
-                process.WaitForExit(30_000);
+                var processExitCode = 0;
+                if (process.WaitForExit(30_000)) {
+                    processExitCode = process.ExitCode;
+                } else {
+                    processExitCode = -1;
+                }
                 var stop = System.DateTime.Now;
                 System.Console.Out.WriteLine($"{(stop - start).TotalSeconds} sec");
-                if (process.ExitCode == 0) {
+                if (processExitCode == 0) {
                     System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} OK");
                 } else {
                     System.Console.Out.WriteLine($"dotnet publish {sqlProject_csproj} Failed");
