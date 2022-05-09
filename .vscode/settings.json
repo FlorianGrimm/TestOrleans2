@@ -1,3 +1,4 @@
 {
-    "testExplorer.useNativeTesting": false
+    "testExplorer.useNativeTesting": true,
+    "dotnet-test-explorer.testProjectPath":"**/*.Test.csproj"
 }

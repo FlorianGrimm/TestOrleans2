@@ -70,7 +70,7 @@ public class CompareExtensionTests {
     [Fact()]
     public void ChainCompareValidRangeQ_Test() {
         CompareExtension.ChainCompareDTValidRangeQ()
-        Assert.True(false, "This test needs an implementation");
+#warning Assert.True(false, "This test needs an implementation");
     }
     */
 
@@ -84,9 +84,9 @@ public class CompareExtensionTests {
     [Fact()]
     public void CompareValidRangeQ_Test() {
         Assert.True(0 == CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQAB));
-        Assert.True(0 < CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQAC));
-        Assert.True(0 == CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQAN));
-        Assert.True(0 == CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQBN));
+        Assert.True(CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQAC) < 0);
+        Assert.True(CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQAN) < 0);
+        Assert.True(CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQBN) < 0);
         Assert.True(CompareExtension.CompareDTValidRangeQ(this.dtQAB, dtQCN) < 0);
     }
 }

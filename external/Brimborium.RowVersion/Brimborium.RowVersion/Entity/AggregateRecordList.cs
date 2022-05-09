@@ -9,7 +9,7 @@ public static class AggregateRecordList {
         return result;
     }
 
-    public static AggregateRecordList<T> ToAggregateRecordList<T>(IEnumerable<T> src, Func<T, bool> predicate)
+    public static AggregateRecordList<T> ToAggregateRecordList<T>(this IEnumerable<T> src, Func<T, bool> predicate)
         where T : IEntityWithVersion {
         var result = new AggregateRecordList<T>();
         foreach (var item in src) {
