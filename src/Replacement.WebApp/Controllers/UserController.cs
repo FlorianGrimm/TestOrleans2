@@ -10,7 +10,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // GET: api/User
-    [HttpGet]
+    [HttpGet(Name = "UserAll")]
     public async Task<ActionResult<IEnumerable<User>>> Get() {
         var requestOperation = this.CreateRequestOperation(
                     pk: "",
@@ -35,7 +35,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // GET api/User/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
-    [HttpGet("{userId}")]
+    [HttpGet("{userId}", Name = "UserOne")]
     public async Task<ActionResult<User?>> Get(Guid userId) {
         var requestOperation = this.CreateRequestOperation(
                     pk: userId,
@@ -52,12 +52,15 @@ public class UserController : ReplacementControllerBase {
         {
             var grain = this.Client.GetUserGrain(userId);
             var result = await grain.GetUser(operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToUser();
         }
     }
 
     // POST api/User
-    [HttpPost]
+    [HttpPost(Name = "User")]
     public async Task<ActionResult<User>> Post([FromBody] User value) {
         if (value.UserId == Guid.Empty) {
             value = value with {

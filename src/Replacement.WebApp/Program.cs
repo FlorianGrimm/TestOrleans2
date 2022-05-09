@@ -1,5 +1,6 @@
 namespace Replacement.WebApp;
 
+[ExcludeFromCodeCoverage]
 public static class Program {
     public static async Task<int> Main(string[] args) {
         try {
@@ -23,7 +24,7 @@ public static class Program {
         }
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) {
+    public static Microsoft.Extensions.Hosting.IHostBuilder CreateHostBuilder(string[] args) {
         var hostBuilder = Host.CreateDefaultBuilder(args);
         //hostBuilder.ConfigureServices(services => {
         //    services.AddTransient<IDBContext, DBContext>();

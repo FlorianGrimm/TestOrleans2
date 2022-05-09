@@ -11,6 +11,10 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using Microsoft.Extensions.Configuration;
 
+global using Microsoft.AspNetCore.Hosting;
+global using Microsoft.AspNetCore.TestHost;
+global using Microsoft.Extensions.Hosting;
+
 global using Orleans;
 global using Orleans.Configuration;
 global using Orleans.Providers;
@@ -40,3 +44,4 @@ global using Replacement.TestExtensions;
 global using Xunit;
 global using Xunit.Abstractions;
 
+[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

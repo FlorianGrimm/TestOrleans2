@@ -49,6 +49,9 @@ public class MeController : ReplacementControllerBase {
         }
         {
             var result = await this.Client.GetProjectCollectionGrain().GetUsersProjects(user, operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToListProject();
         }
     }

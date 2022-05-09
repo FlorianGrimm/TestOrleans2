@@ -1,7 +1,5 @@
 ﻿using Orleans.Concurrency;
 
-using Replacement.Contracts.Entity;
-
 namespace Replacement.Repository.Grains;
 public interface IProjectCollectionGrain : IGrainWithGuidKey {
     Task<List<ProjectEntity>> GetAllProjects(UserEntity user, OperationEntity operation);

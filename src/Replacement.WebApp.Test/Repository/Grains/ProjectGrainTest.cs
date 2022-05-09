@@ -38,6 +38,7 @@ public class ProjectGrainTest
         var requestOperation1 = this.CreateRequestOperation(project1.ProjectId.ToString(), project1, "UnitTestUser");
         var (operation1, user) = await this.InitializeOperation(requestOperation1);
         if (user is null) { throw new Xunit.Sdk.XunitException("user is null"); }
+        if (project1 is null) { throw new Xunit.Sdk.XunitException("project1 is null"); }
 
         var projectEntity1 = project1.ToProjectEntity();
 
@@ -51,7 +52,8 @@ public class ProjectGrainTest
         var operation2 = operation1.Renew();
         project2 = project2 with { Title = $"Test1{operation2.CreatedAt.ToString("s")}" };
 
-        var projectEntity = project2.ToProjectEntity();
+        if (project2 is null) { throw new Xunit.Sdk.XunitException("project2 is null"); }
+        var projectEntity = project2!.ToProjectEntity();
 
         var projectEntityAct2 = await projectGrain.UpsertProject(projectEntity, user, operation2);
         if (projectEntityAct2 is null) { throw new Xunit.Sdk.XunitException("projectEntityAct is null"); }

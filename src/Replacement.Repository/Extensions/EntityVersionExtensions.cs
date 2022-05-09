@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.Entity;
+﻿namespace Replacement.Repository.Extensions;
 
 public static class EntityVersionExtensions {
 #warning TODO: TEST

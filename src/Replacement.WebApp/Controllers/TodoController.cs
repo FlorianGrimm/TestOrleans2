@@ -24,6 +24,9 @@ public class ToDoController : ReplacementControllerBase {
         }
         {
             var result = await this.Client.GetUserToDoGrain(user.UserId).GetAllToDos(operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToListToDo();
         }
     }
@@ -47,6 +50,9 @@ public class ToDoController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(toDoPK.ProjectId);
             var result = await grain.GetToDo(toDoPK, user, operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToToDo();
         }
     }

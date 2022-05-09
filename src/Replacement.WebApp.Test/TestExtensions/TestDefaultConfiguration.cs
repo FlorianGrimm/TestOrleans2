@@ -111,7 +111,6 @@ public class TestDefaultConfiguration {
     }
 
     public static void ConfigureTestCluster(TestClusterBuilder builder) {
-
         builder.ConfigureHostConfiguration(ConfigureHostConfiguration);
     }
 }

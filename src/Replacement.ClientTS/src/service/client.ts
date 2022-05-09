@@ -398,7 +398,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    toDoPOSTPOST(body: ToDo | undefined): Promise<ToDo> {
+    toDoPOST(body: ToDo | undefined): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -414,11 +414,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoPOSTPOST(_response);
+            return this.processToDoPOST(_response);
         });
     }
 
-    protected processToDoPOSTPOST(response: Response): Promise<ToDo> {
+    protected processToDoPOST(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -569,7 +569,7 @@ export class Client {
     /**
      * @return Success
      */
-    userAllAll(): Promise<User[]> {
+    userAll(): Promise<User[]> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -581,11 +581,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserAllAll(_response);
+            return this.processUserAll(_response);
         });
     }
 
-    protected processUserAllAll(response: Response): Promise<User[]> {
+    protected processUserAll(response: Response): Promise<User[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -655,7 +655,7 @@ export class Client {
     /**
      * @return Success
      */
-    userGETGET(userId: string): Promise<User> {
+    userOne(userId: string): Promise<User> {
         let url_ = this.baseUrl + "/api/User/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -670,11 +670,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserGETGET(_response);
+            return this.processUserOne(_response);
         });
     }
 
-    protected processUserGETGET(response: Response): Promise<User> {
+    protected processUserOne(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -782,7 +782,7 @@ export class Project implements IProject {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    serialVersion?: number;
+    dataVersion?: number;
 
     constructor(data?: IProject) {
         if (data) {
@@ -802,7 +802,7 @@ export class Project implements IProject {
             this.createdBy = _data["createdBy"];
             this.modifiedAt = _data["modifiedAt"] ? new Date(_data["modifiedAt"].toString()) : <any>undefined;
             this.modifiedBy = _data["modifiedBy"];
-            this.serialVersion = _data["serialVersion"];
+            this.dataVersion = _data["dataVersion"];
         }
     }
 
@@ -822,7 +822,7 @@ export class Project implements IProject {
         data["createdBy"] = this.createdBy;
         data["modifiedAt"] = this.modifiedAt ? this.modifiedAt.toISOString() : <any>undefined;
         data["modifiedBy"] = this.modifiedBy;
-        data["serialVersion"] = this.serialVersion;
+        data["dataVersion"] = this.dataVersion;
         return data;
     }
 }
@@ -835,7 +835,7 @@ export interface IProject {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    serialVersion?: number;
+    dataVersion?: number;
 }
 
 export class ToDo implements IToDo {
@@ -849,7 +849,7 @@ export class ToDo implements IToDo {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    serialVersion?: number;
+    dataVersion?: number;
 
     constructor(data?: IToDo) {
         if (data) {
@@ -872,7 +872,7 @@ export class ToDo implements IToDo {
             this.createdBy = _data["createdBy"];
             this.modifiedAt = _data["modifiedAt"] ? new Date(_data["modifiedAt"].toString()) : <any>undefined;
             this.modifiedBy = _data["modifiedBy"];
-            this.serialVersion = _data["serialVersion"];
+            this.dataVersion = _data["dataVersion"];
         }
     }
 
@@ -895,7 +895,7 @@ export class ToDo implements IToDo {
         data["createdBy"] = this.createdBy;
         data["modifiedAt"] = this.modifiedAt ? this.modifiedAt.toISOString() : <any>undefined;
         data["modifiedBy"] = this.modifiedBy;
-        data["serialVersion"] = this.serialVersion;
+        data["dataVersion"] = this.dataVersion;
         return data;
     }
 }
@@ -911,7 +911,7 @@ export interface IToDo {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    serialVersion?: number;
+    dataVersion?: number;
 }
 
 export class User implements IUser {
@@ -922,7 +922,7 @@ export class User implements IUser {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    serialVersion?: number;
+    dataVersion?: number;
 
     constructor(data?: IUser) {
         if (data) {
@@ -942,7 +942,7 @@ export class User implements IUser {
             this.createdBy = _data["createdBy"];
             this.modifiedAt = _data["modifiedAt"] ? new Date(_data["modifiedAt"].toString()) : <any>undefined;
             this.modifiedBy = _data["modifiedBy"];
-            this.serialVersion = _data["serialVersion"];
+            this.dataVersion = _data["dataVersion"];
         }
     }
 
@@ -962,7 +962,7 @@ export class User implements IUser {
         data["createdBy"] = this.createdBy;
         data["modifiedAt"] = this.modifiedAt ? this.modifiedAt.toISOString() : <any>undefined;
         data["modifiedBy"] = this.modifiedBy;
-        data["serialVersion"] = this.serialVersion;
+        data["dataVersion"] = this.dataVersion;
         return data;
     }
 }
@@ -975,7 +975,7 @@ export interface IUser {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    serialVersion?: number;
+    dataVersion?: number;
 }
 
 export class ApiException extends Error {

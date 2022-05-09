@@ -9,7 +9,7 @@ public class ProjectController : ReplacementControllerBase {
         IClusterClient client,
         AppPolicies appPolicies,
         ILogger<UserController> logger
-        )  : base(client, logger) {
+        ) : base(client, logger) {
         this._AppPolicies = appPolicies;
     }
 
@@ -31,6 +31,9 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetGrain<IProjectCollectionGrain>(Guid.Empty)!;
             var result = await grain.GetAllProjects(user, operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToListProject();
         }
     }
@@ -53,6 +56,9 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(projectId);
             var result = await grain.GetProject(user, operation);
+            if (result is null) {
+                return this.Forbid();
+            }
             return result.ToProject();
         }
     }
@@ -82,12 +88,11 @@ public class ProjectController : ReplacementControllerBase {
         {
             var grain = this.Client.GetProjectGrain(value.ProjectId);
             var result = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
-            if (result is not null) {
-                return result.ToProject();
-                //return this.Ok();
-            } else {
+            if (result is null) {
                 return this.Conflict();
             }
+            return result.ToProject();
+
         }
     }
 
@@ -133,12 +138,12 @@ public class ProjectController : ReplacementControllerBase {
 #endif
 #if true
             var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var project = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
-            if (project is not null) {
-                return project.ToProject();
-            } else {
+            var result = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
+            if (result is null) {
                 return this.Conflict();
             }
+            return result.ToProject();
+
 #endif
 
 #if false

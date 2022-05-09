@@ -553,6 +553,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "UserAll",
         "responses": {
           "200": {
             "description": "Success",
@@ -589,6 +590,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "User",
         "requestBody": {
           "content": {
             "application/json": {
@@ -637,6 +639,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "UserOne",
         "parameters": [
           {
             "name": "userId",
@@ -786,7 +789,7 @@
             "format": "uuid",
             "nullable": true
           },
-          "serialVersion": {
+          "dataVersion": {
             "type": "integer",
             "format": "int64"
           }
@@ -837,7 +840,7 @@
             "format": "uuid",
             "nullable": true
           },
-          "serialVersion": {
+          "dataVersion": {
             "type": "integer",
             "format": "int64"
           }
@@ -877,7 +880,7 @@
             "format": "uuid",
             "nullable": true
           },
-          "serialVersion": {
+          "dataVersion": {
             "type": "integer",
             "format": "int64"
           }

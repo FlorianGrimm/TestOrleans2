@@ -46,7 +46,7 @@ public static class HostedTestBaseClusterStartedExtensions {
             createUserIfNeeded: createUserIfNeeded,
             client: that.Client,
             requestLogService: requestLogService  ?? that.CreateTestRequestLogService()
-            //?? that.Client.ServiceProvider.GetService<IRequestLogService>()
+            //?? that.ClusterClient.ServiceProvider.GetService<IRequestLogService>()
             );
     }
 
