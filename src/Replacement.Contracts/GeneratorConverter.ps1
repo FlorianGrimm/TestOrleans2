@@ -64,6 +64,32 @@ if (-not $?) {
         }
     }
 
+    $hsMappingProperty=New-Object "System.Collections.Hashtable"
+    #$hsMappingProperty["DataVersion"] = "EntityVersion"
+    $hsMappingProperty["EntityVersion"] = "DataVersion"
+    #
+    function mapProperties() {
+        params(
+            [System.Reflection.PropertyInfo[]] $propertiesAPI,
+            [System.Reflection.PropertyInfo[]] $propertiesEntity
+        )
+
+        [PSCustomObject[]]$propertiesEntityAPI = $propertiesEntity | ForEach-Object {
+            $propertyEntity = $_
+            [string] $propertyNameAPI = $hsMappingProperty[$propertyEntity.Name]
+            $propertyAPI = $propertiesAPI | Where-Object { ($_.Name -eq $propertyEntity.Name) -or ($_.Name -eq $propertyNameAPI)  } | Select-Object -First 1
+            #
+            if ($null -ne $propertyAPI) {
+                [PSCustomObject]@{
+                    PropertyEntity = $propertyEntity
+                    PropertyAPI    = $propertyAPI
+                }
+            }
+        }
+        $propertiesEntityAPI
+    }
+
+
     #
     function buildConverterToEntity() {
         Write-Host "buildConverterToEntity"
@@ -93,26 +119,16 @@ if (-not $?) {
                     $output.AppendLine("            return default;") | Out-Null
                     $output.AppendLine("        } else {") | Out-Null
                     $output.AppendLine("            return new $($nameEntity)(") | Out-Null
-                    [PSCustomObject[]]$propertiesEntityAPI = $propertiesEntity | ForEach-Object {
-                        $propertyEntity = $_
-                        $propertyAPI = $propertiesAPI | Where-Object {$_.Name -eq $propertyEntity.Name } | Select-Object -First 1
-                        if ($null -ne $propertyAPI) {
-                            [PSCustomObject]@{
-                                PropertyName   = $propertyEntity.Name
-                                PropertyEntity = $propertyEntity
-                                PropertyAPI    = $propertyAPI
-                            }
-                        }
-                    }
-                    [int] $lastIdx = $propertiesEntityAPI.Length-1
+                    
+                    [PSCustomObject[]]$propertiesMapped = mapProperties $propertiesAPI $propertiesEntity
+                    [int] $lastIdx = $propertiesMapped.Length-1
                     for ([int] $idx=0;$idx -le $lastIdx; $idx++){
-                        [PSCustomObject] $propertyEntityAPI = $propertiesEntityAPI[$idx]
+                        [PSCustomObject] $propertyMapped = $propertiesMapped[$idx]
                         #[string] $suffix
                         #(if ($idx -eq $lastIdx) { $suffix="" } else { $suffix="," })
                         [string] $suffix = if ($idx -eq $lastIdx) { "" } else { "," }
                         
-                        [string]$propName = $propertyEntityAPI.PropertyName
-                        $output.AppendLine("                $($propName): that.$($propName)$($suffix)") | Out-Null
+                        $output.AppendLine("                $($propertyMapped.PropertyEntity.Name): that.$($propertyMapped.PropertyAPI.Name)$($suffix)") | Out-Null
                     }
                     $output.AppendLine("                );") | Out-Null
                     $output.AppendLine("        }") | Out-Null
@@ -176,26 +192,17 @@ if (-not $?) {
                     $output.AppendLine("            return default;") | Out-Null
                     $output.AppendLine("        } else {") | Out-Null
                     $output.AppendLine("            return new $($nameAPI)(") | Out-Null
-                    [PSCustomObject[]]$propertiesEntityAPI = $propertiesEntity | ForEach-Object {
-                        $propertyEntity = $_
-                        $propertyAPI = $propertiesAPI | Where-Object {$_.Name -eq $propertyEntity.Name } | Select-Object -First 1
-                        if ($null -ne $propertyAPI) {
-                            [PSCustomObject]@{
-                                PropertyName   = $propertyEntity.Name
-                                PropertyEntity = $propertyEntity
-                                PropertyAPI    = $propertyAPI
-                            }
-                        }
-                    }
-                    [int] $lastIdx = $propertiesEntityAPI.Length-1
+                    
+                    [PSCustomObject[]] $propertiesMapped = mapProperties $propertiesAPI $propertiesEntity
+
+                    [int] $lastIdx = $propertiesMapped.Length-1
                     for ([int] $idx=0;$idx -le $lastIdx; $idx++){
-                        [PSCustomObject] $propertyEntityAPI = $propertiesEntityAPI[$idx]
+                        [PSCustomObject] $propertyMapped = $propertiesMapped[$idx]
                         #[string] $suffix
                         #(if ($idx -eq $lastIdx) { $suffix="" } else { $suffix="," })
                         [string] $suffix = if ($idx -eq $lastIdx) { "" } else { "," }
                         
-                        [string]$propName = $propertyEntityAPI.PropertyName
-                        $output.AppendLine("                $($propName): that.$($propName)$($suffix)") | Out-Null
+                        $output.AppendLine("                $($propertyMapped.PropertyAPI.Name): that.$($propertyMapped.PropertyEntity.Name)$($suffix)") | Out-Null
                     }
                     $output.AppendLine("                );") | Out-Null
                     $output.AppendLine("        }") | Out-Null

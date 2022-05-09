@@ -1,32 +1,6 @@
 ﻿namespace Brimborium.RowVersion.Extensions;
 
 public static class NullExtension {
-    public static bool TryGetNull<T>(this T? value, [MaybeNullWhen(true)] out T result)
-        where T : class {
-        if (value is T) {
-            result = value;
-            return false;
-        }
-        {
-            result = null;
-            return true;
-        }
-    }
-
-    public static bool TryGetNull<T>(this T? value, Func<T, bool> condition, [MaybeNullWhen(true)] out T result)
-        where T : class {
-        if (value is T) {
-            if (condition(value)) {
-                result = value;
-                return false;
-            }
-        }
-        {
-            result = null;
-            return true;
-        }
-    }
-
     public static bool TryGetNotNull<T>(this T? value, [MaybeNullWhen(false)] out T result)
         where T : class {
         if (value is T) {

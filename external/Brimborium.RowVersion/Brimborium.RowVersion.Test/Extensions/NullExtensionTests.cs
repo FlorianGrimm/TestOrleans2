@@ -1,52 +1,42 @@
-﻿using Xunit;
-using Brimborium.RowVersion.Extensions;
+﻿namespace Brimborium.RowVersion.Extensions;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Brimborium.RowVersion.Extensions {
-    public class NullExtensionTests {
-        [Fact()]
-        public void TryGetNull_Test() {
-            Assert.True(false, "This test needs an implementation");
+public class NullExtensionTests {
+    [Fact()]
+    public void TryGetNotNull_Test() {
+        {
+            TestEntityWithVersion? sut = null;
+            Assert.False(sut.TryGetNotNull(out var result));
         }
-
-        [Fact()]
-        public void TryGetNull_Test1() {
-            Assert.True(false, "This test needs an implementation");
+        {
+            TestEntityWithVersion? sut = new TestEntityWithVersion(1);
+            Assert.True(sut.TryGetNotNull(out var result));
         }
+    }
 
-        [Fact()]
-        public void TryGetNotNull_Test() {
-            Assert.True(false, "This test needs an implementation");
+    [Fact()]
+    public void GetValueOrDefault_Test() {
+        {
+            TestEntityWithVersion? sut = null;
+            Assert.Equal(-1, sut.GetValueNotNullOrDefault(new TestEntityWithVersion(-1)).EntityVersion);
         }
+        {
+            TestEntityWithVersion? sut = new TestEntityWithVersion(1);
+            Assert.Equal(1, sut.GetValueNotNullOrDefault(new TestEntityWithVersion(-1)).EntityVersion);
+        }
+    }
 
-        [Fact()]
-        public void TryGetNotNull_Test1() {
-            Assert.True(false, "This test needs an implementation");
-        }
+    [Fact()]
+    public void GetValueOrDefault_Test1() {
+        Assert.True(false, "This test needs an implementation");
+    }
 
-        [Fact()]
-        public void GetValueOrDefault_Test() {
-            Assert.True(false, "This test needs an implementation");
-        }
+    [Fact()]
+    public void GetValueNotNullOrDefault_Test() {
+        Assert.True(false, "This test needs an implementation");
+    }
 
-        [Fact()]
-        public void GetValueOrDefault_Test1() {
-            Assert.True(false, "This test needs an implementation");
-        }
-
-        [Fact()]
-        public void GetValueNotNullOrDefault_Test() {
-            Assert.True(false, "This test needs an implementation");
-        }
-
-        [Fact()]
-        public void GetValueNotNullOrDefault_Test1() {
-            Assert.True(false, "This test needs an implementation");
-        }
+    [Fact()]
+    public void GetValueNotNullOrDefault_Test1() {
+        Assert.True(false, "This test needs an implementation");
     }
 }
