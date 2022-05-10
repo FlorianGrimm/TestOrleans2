@@ -21,7 +21,7 @@ export class Client {
     /**
      * @return Success
      */
-    me(): Promise<User> {
+    meUserGetOne(): Promise<User> {
         let url_ = this.baseUrl + "/api/Me";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -33,11 +33,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processMe(_response);
+            return this.processMeUserGetOne(_response);
         });
     }
 
-    protected processMe(response: Response): Promise<User> {
+    protected processMeUserGetOne(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -58,7 +58,7 @@ export class Client {
     /**
      * @return Success
      */
-    project(): Promise<Project[]> {
+    meProjectGetAll(): Promise<Project[]> {
         let url_ = this.baseUrl + "/api/Me/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -70,11 +70,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processProject(_response);
+            return this.processMeProjectGetAll(_response);
         });
     }
 
-    protected processProject(response: Response): Promise<Project[]> {
+    protected processMeProjectGetAll(response: Response): Promise<Project[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -102,7 +102,7 @@ export class Client {
     /**
      * @return Success
      */
-    toDoAllAll(): Promise<ToDo[]> {
+    meTodoGetAll(): Promise<ToDo[]> {
         let url_ = this.baseUrl + "/api/Me/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -114,11 +114,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoAllAll(_response);
+            return this.processMeTodoGetAll(_response);
         });
     }
 
-    protected processToDoAllAll(response: Response): Promise<ToDo[]> {
+    protected processMeTodoGetAll(response: Response): Promise<ToDo[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -191,7 +191,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    projectPost(body: Project | undefined): Promise<Project> {
+    projectPostOne(body: Project | undefined): Promise<Project> {
         let url_ = this.baseUrl + "/api/Project";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -207,11 +207,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processProjectPost(_response);
+            return this.processProjectPostOne(_response);
         });
     }
 
-    protected processProjectPost(response: Response): Promise<Project> {
+    protected processProjectPostOne(response: Response): Promise<Project> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -273,7 +273,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    projectPut(projectId: string, body: Project | undefined): Promise<Project> {
+    projectPutOne(projectId: string, body: Project | undefined): Promise<Project> {
         let url_ = this.baseUrl + "/api/Project/{projectId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -292,11 +292,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processProjectPut(_response);
+            return this.processProjectPutOne(_response);
         });
     }
 
-    protected processProjectPut(response: Response): Promise<Project> {
+    protected processProjectPutOne(response: Response): Promise<Project> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -317,7 +317,7 @@ export class Client {
     /**
      * @return Success
      */
-    projectDelete(projectId: string): Promise<void> {
+    projectDeleteOne(projectId: string): Promise<void> {
         let url_ = this.baseUrl + "/api/Project/{projectId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -331,11 +331,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processProjectDelete(_response);
+            return this.processProjectDeleteOne(_response);
         });
     }
 
-    protected processProjectDelete(response: Response): Promise<void> {
+    protected processProjectDeleteOne(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -353,7 +353,7 @@ export class Client {
     /**
      * @return Success
      */
-    toDoAllAll2(): Promise<ToDo[]> {
+    todoGetAll(): Promise<ToDo[]> {
         let url_ = this.baseUrl + "/api/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -365,11 +365,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoAllAll2(_response);
+            return this.processTodoGetAll(_response);
         });
     }
 
-    protected processToDoAllAll2(response: Response): Promise<ToDo[]> {
+    protected processTodoGetAll(response: Response): Promise<ToDo[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -398,7 +398,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    toDoPOST(body: ToDo | undefined): Promise<ToDo> {
+    todoPostOne(body: ToDo | undefined): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -414,11 +414,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoPOST(_response);
+            return this.processTodoPostOne(_response);
         });
     }
 
-    protected processToDoPOST(response: Response): Promise<ToDo> {
+    protected processTodoPostOne(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -439,7 +439,7 @@ export class Client {
     /**
      * @return Success
      */
-    toDoGETGET(projectId: string, toDoId: string): Promise<ToDo> {
+    todoGetOne(projectId: string, toDoId: string): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo/{projectId}/{todoId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -457,11 +457,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoGETGET(_response);
+            return this.processTodoGetOne(_response);
         });
     }
 
-    protected processToDoGETGET(response: Response): Promise<ToDo> {
+    protected processTodoGetOne(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -482,7 +482,7 @@ export class Client {
     /**
      * @return Success
      */
-    toDoDELETEDELETE(projectId: string, todoId: string): Promise<void> {
+    todoDeleteOne(projectId: string, todoId: string): Promise<void> {
         let url_ = this.baseUrl + "/api/ToDo/{projectId}/{todoId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -499,11 +499,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoDELETEDELETE(_response);
+            return this.processTodoDeleteOne(_response);
         });
     }
 
-    protected processToDoDELETEDELETE(response: Response): Promise<void> {
+    protected processTodoDeleteOne(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -522,7 +522,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    toDoPUTPUT(projectId: string, toDoId: string, body: ToDo | undefined): Promise<ToDo> {
+    todoPutOne(projectId: string, toDoId: string, body: ToDo | undefined): Promise<ToDo> {
         let url_ = this.baseUrl + "/api/ToDo/{projectId}/{toDoId}";
         if (projectId === undefined || projectId === null)
             throw new Error("The parameter 'projectId' must be defined.");
@@ -544,11 +544,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processToDoPUTPUT(_response);
+            return this.processTodoPutOne(_response);
         });
     }
 
-    protected processToDoPUTPUT(response: Response): Promise<ToDo> {
+    protected processTodoPutOne(response: Response): Promise<ToDo> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -569,7 +569,7 @@ export class Client {
     /**
      * @return Success
      */
-    userAll(): Promise<User[]> {
+    userGetAll(): Promise<User[]> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -581,11 +581,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserAll(_response);
+            return this.processUserGetAll(_response);
         });
     }
 
-    protected processUserAll(response: Response): Promise<User[]> {
+    protected processUserGetAll(response: Response): Promise<User[]> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -614,7 +614,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    userPOSTPOST(body: User | undefined): Promise<User> {
+    userPostOne(body: User | undefined): Promise<User> {
         let url_ = this.baseUrl + "/api/User";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -630,11 +630,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserPOSTPOST(_response);
+            return this.processUserPostOne(_response);
         });
     }
 
-    protected processUserPOSTPOST(response: Response): Promise<User> {
+    protected processUserPostOne(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -655,7 +655,7 @@ export class Client {
     /**
      * @return Success
      */
-    userOne(userId: string): Promise<User> {
+    userGetOne(userId: string): Promise<User> {
         let url_ = this.baseUrl + "/api/User/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -670,11 +670,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserOne(_response);
+            return this.processUserGetOne(_response);
         });
     }
 
-    protected processUserOne(response: Response): Promise<User> {
+    protected processUserGetOne(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -696,7 +696,7 @@ export class Client {
      * @param body (optional) 
      * @return Success
      */
-    userPUTPUT(userId: string, body: User | undefined): Promise<User> {
+    userPutOne(userId: string, body: User | undefined): Promise<User> {
         let url_ = this.baseUrl + "/api/User/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -715,11 +715,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserPUTPUT(_response);
+            return this.processUserPutOne(_response);
         });
     }
 
-    protected processUserPUTPUT(response: Response): Promise<User> {
+    protected processUserPutOne(response: Response): Promise<User> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {
@@ -740,7 +740,7 @@ export class Client {
     /**
      * @return Success
      */
-    userDELETEDELETE(userId: string): Promise<void> {
+    userDeleteOne(userId: string): Promise<void> {
         let url_ = this.baseUrl + "/api/User/{userId}";
         if (userId === undefined || userId === null)
             throw new Error("The parameter 'userId' must be defined.");
@@ -754,11 +754,11 @@ export class Client {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processUserDELETEDELETE(_response);
+            return this.processUserDeleteOne(_response);
         });
     }
 
-    protected processUserDELETEDELETE(response: Response): Promise<void> {
+    protected processUserDeleteOne(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 200) {

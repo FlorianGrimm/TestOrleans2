@@ -3,18 +3,20 @@
 [string] $scriptlocation = $global:MyInvocation.MyCommand.Definition
 Write-Host "scriptlocation $scriptlocation"
 
-[string] $projectDirectory = [System.IO.Path]::GetDirectoryName($scriptlocation)
-Write-Host "projectDirectory $projectDirectory"
+[string] $projectRepositoryDirectory = [System.IO.Path]::GetDirectoryName($scriptlocation)
+Write-Host "projectRepositoryDirectory $projectRepositoryDirectory"
 
-[string] $fullNamecsproj = "$($projectDirectory)\$($namecsproj)"
-dotnet build -p:ExtraDefineConstants=NOConverterToAPI -p:OutDir=bin\Debug\NOConverterToAPI\ $fullNamecsproj
+[string] $projectContractsDirectory = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($projectRepositoryDirectory), "Replacement.Contracts")
+Write-Host "projectContractsDirectory $projectContractsDirectory"
+
+[string] $fullNameContractscsproj = "$($projectContractsDirectory)\$($namecsproj)"
+dotnet build -p:ExtraDefineConstants=NOConverterToAPI -p:OutDir=bin\Debug\NOConverterToAPI\ $fullNameContractscsproj
 if (-not $?) {
     Write-Host "stopping"
 } else {
 
-    [string] $assemblylocation=[System.IO.Path]::Combine($projectDirectory, "bin\Debug\NOConverterToAPI\Replacement.Contracts.dll")
+    [string] $assemblylocation=[System.IO.Path]::Combine($projectContractsDirectory, "bin\Debug\NOConverterToAPI\Replacement.Contracts.dll")
     Write-Host "assemblylocation $assemblylocation"
-    Write-Host "assemblylocation C:\github.com\FlorianGrimm\TestOrleans2\src\Replacement.Contracts\bin\Debug\NOConverterToAPI\Replacement.Contracts.dll"
 #
     [System.Reflection.Assembly] $assembly = [System.Reflection.Assembly]::LoadFrom($assemblylocation)
     [System.Type[]] $types = $assembly.GetTypes()
@@ -24,7 +26,7 @@ if (-not $?) {
     [System.Type] $IOperationRelatedEntity = [Replacement.Contracts.Entity.IOperationRelatedEntity]
     [System.Type] $IHistoryEntity = [Replacement.Contracts.Entity.IHistoryEntity]
     $typesEntity = $types | Where-Object {$_.IsClass -and $_.Namespace -eq "Replacement.Contracts.Entity"}
-    #$typesEntity = $typesEntity | Where-Object {$_.Name.EndsWith("Entity") }
+    
     $typesEntity = $typesEntity | Where-Object {$_.GetInterfaces().Contains($IDataEntity) -or $_.GetInterfaces().Contains($IOperationRelatedEntity) -or $_.GetInterfaces().Contains($IHistoryEntity) }
     if ($false) {
         Write-Host "typesEntity"
@@ -80,9 +82,13 @@ if (-not $?) {
             $propertyAPI = $propertiesAPI | Where-Object { ($_.Name -eq $propertyEntity.Name) -or ($_.Name -eq $propertyNameAPI)  } | Select-Object -First 1
             #
             if ($null -ne $propertyAPI) {
+                [string] $ConvertToAPI = if ($propertyEntity.Name -eq "EntityVersion") { "DataVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToDataVersion(that.EntityVersion)" } else { "" }
+                [string] $ConvertToEntity = if ($propertyEntity.Name -eq "EntityVersion") { "EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)" } else { "" }
                 [PSCustomObject]@{
-                    PropertyEntity = $propertyEntity
-                    PropertyAPI    = $propertyAPI
+                    PropertyEntity  = $propertyEntity
+                    PropertyAPI     = $propertyAPI
+                    ConvertToAPI    = $ConvertToAPI
+                    ConvertToEntity = $ConvertToEntity
                 }
             }
         }
@@ -93,7 +99,7 @@ if (-not $?) {
     #
     function buildConverterToEntity() {
         Write-Host "buildConverterToEntity"
-        [string] $outputlocation=[System.IO.Path]::Combine($projectDirectory, "API\ConverterToEntity.cs")
+        [string] $outputlocation=[System.IO.Path]::Combine($projectRepositoryDirectory, "Extensions\ConverterToEntity.cs")
         #
         Write-Host "outputlocation $outputlocation"
         #
@@ -127,8 +133,13 @@ if (-not $?) {
                         #[string] $suffix
                         #(if ($idx -eq $lastIdx) { $suffix="" } else { $suffix="," })
                         [string] $suffix = if ($idx -eq $lastIdx) { "" } else { "," }
-                        
-                        $output.AppendLine("                $($propertyMapped.PropertyEntity.Name): that.$($propertyMapped.PropertyAPI.Name)$($suffix)") | Out-Null
+                        [string] $ConvertToEntity = $propertyMapped.ConvertToEntity
+
+                        if (-not [System.String]::IsNullOrEmpty($ConvertToEntity)){
+                            $output.AppendLine("                $($ConvertToEntity)$($suffix)") | Out-Null
+                        } else {
+                            $output.AppendLine("                $($propertyMapped.PropertyEntity.Name): that.$($propertyMapped.PropertyAPI.Name)$($suffix)") | Out-Null
+                        }
                     }
                     $output.AppendLine("                );") | Out-Null
                     $output.AppendLine("        }") | Out-Null
@@ -166,7 +177,8 @@ if (-not $?) {
     #
     function buildConverterToAPI() {
         Write-Host "buildConverterAPI"
-        [string] $outputlocation=[System.IO.Path]::Combine($projectDirectory, "Entity\ConverterToAPI.cs")
+        #[string] $outputlocation=[System.IO.Path]::Combine($projectContractsDirectory, "Entity\ConverterToAPI.cs")
+        [string] $outputlocation=[System.IO.Path]::Combine($projectRepositoryDirectory, "Extensions\ConverterToAPI.cs")
         #
         Write-Host "outputlocation $outputlocation"
         #
@@ -201,8 +213,14 @@ if (-not $?) {
                         #[string] $suffix
                         #(if ($idx -eq $lastIdx) { $suffix="" } else { $suffix="," })
                         [string] $suffix = if ($idx -eq $lastIdx) { "" } else { "," }
+
+                        [string] $ConvertToAPI = $propertyMapped.ConvertToAPI
+                        if (-not [System.String]::IsNullOrEmpty($ConvertToAPI)){
+                            $output.AppendLine("                $($ConvertToAPI)$($suffix)") | Out-Null
+                        } else {
+                            $output.AppendLine("                $($propertyMapped.PropertyAPI.Name): that.$($propertyMapped.PropertyEntity.Name)$($suffix)") | Out-Null
+                        }
                         
-                        $output.AppendLine("                $($propertyMapped.PropertyAPI.Name): that.$($propertyMapped.PropertyEntity.Name)$($suffix)") | Out-Null
                     }
                     $output.AppendLine("                );") | Out-Null
                     $output.AppendLine("        }") | Out-Null

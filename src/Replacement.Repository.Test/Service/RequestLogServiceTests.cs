@@ -154,5 +154,9 @@ public class RequestLogServiceTests {
         public void SetOptions(TrackingSqlConnectionOption value) {
             throw new NotImplementedException();
         }
+
+        public Task<List<UserEntity>> ExecuteUserSelectAllAsync() {
+            throw new NotImplementedException();
+        }
     }
 }

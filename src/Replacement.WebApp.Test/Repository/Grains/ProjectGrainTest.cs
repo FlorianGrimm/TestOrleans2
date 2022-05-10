@@ -27,7 +27,7 @@ public class ProjectGrainTest
             CreatedBy: null,
             ModifiedAt: DateTimeOffset.MinValue,
             ModifiedBy: null,
-            DataVersion: 0
+            DataVersion: string.Empty
         );
         ProjectEntity? projectEntityAct1;
         Project project2;

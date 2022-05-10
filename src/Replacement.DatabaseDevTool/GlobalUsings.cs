@@ -9,7 +9,11 @@ global using System.ComponentModel.DataAnnotations.Schema;
 
 // global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Configuration;
-global using Microsoft.Extensions.Configuration.CommandLine;
+
+global using Brimborium.RowVersion.API;
+global using Brimborium.RowVersion.Entity;
+global using Brimborium.RowVersion.Extensions;
 
 global using Replacement.Contracts.API;
 global using Replacement.Contracts.Entity;
+

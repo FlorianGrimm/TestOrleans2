@@ -234,41 +234,41 @@ public class TrackingSet<TKey, TValue>
         var key = this._ExtractKey.ExtractKey(value);
 
         if (this._Items.TryGetValue(key, out var result)) {
-            if (ReferenceEquals(result.GetValue(), value)) {
-                if (result.Status == TrackingStatus.Original) {
-                    this.Deleting(value);
-                    result.Set(value, TrackingStatus.Deleted);
-                    this._Items.Remove(key);
-                    this.TrackingContext.TrackingChanges.Add(new TrackingChange(TrackingStatus.Deleted, result));
-                    return;
-                }
-                if (result.Status == TrackingStatus.Deleted) {
-                    // already deleted, but found???
-                    throw new InvalidOperationException("item not found.");
-                }
-                if (result.Status == TrackingStatus.Added) {
-                    // created and deleted
-                    this.Deleting(value);
-                    this.TrackingContext.TrackingChanges.Remove(TrackingStatus.Added, result);
-                    result.Set(value, TrackingStatus.Deleted);
-                    this._Items.Remove(key);
-                    return;
-                }
-                if (result.Status == TrackingStatus.Modified) {
-                    this.Deleting(value);
-                    this.TrackingContext.TrackingChanges.Remove(TrackingStatus.Modified, result);
-                    result.Set(value, TrackingStatus.Deleted);
-                    this._Items.Remove(key);
-                    this.TrackingContext.TrackingChanges.Add(new TrackingChange(TrackingStatus.Deleted, result));
-                    return;
-                }
-                if (result.Status == TrackingStatus.Deleted) {
-                    throw new InvalidOperationException("item Delete found.");
-                }
-                throw new InvalidOperationException($"unknown state:{result.Status}");
-            } else {
+            //if (ReferenceEquals(result.GetValue(), value)) {
+            if (result.Status == TrackingStatus.Original) {
+                this.Deleting(value);
+                result.Set(value, TrackingStatus.Deleted);
+                this._Items.Remove(key);
+                this.TrackingContext.TrackingChanges.Add(new TrackingChange(TrackingStatus.Deleted, result));
+                return;
+            }
+            if (result.Status == TrackingStatus.Deleted) {
+                // already deleted, but found???
                 throw new InvalidOperationException("item not found.");
             }
+            if (result.Status == TrackingStatus.Added) {
+                // created and deleted
+                this.Deleting(value);
+                this.TrackingContext.TrackingChanges.Remove(TrackingStatus.Added, result);
+                result.Set(value, TrackingStatus.Deleted);
+                this._Items.Remove(key);
+                return;
+            }
+            if (result.Status == TrackingStatus.Modified) {
+                this.Deleting(value);
+                this.TrackingContext.TrackingChanges.Remove(TrackingStatus.Modified, result);
+                result.Set(value, TrackingStatus.Deleted);
+                this._Items.Remove(key);
+                this.TrackingContext.TrackingChanges.Add(new TrackingChange(TrackingStatus.Deleted, result));
+                return;
+            }
+            if (result.Status == TrackingStatus.Deleted) {
+                throw new InvalidOperationException("item Delete found.");
+            }
+            throw new InvalidOperationException($"unknown state:{result.Status}");
+            //} else {
+            //    throw new InvalidOperationException("item not found.");
+            //}
         } else {
             throw new InvalidOperationException("item not found.");
         }

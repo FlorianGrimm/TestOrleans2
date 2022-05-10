@@ -25,6 +25,7 @@ public class Startup {
         this.AddAppSwaggerGen(services);
         this.AddAppServicesWithRegistrator(services);
         this.AddAppAuthentication(services);
+        this.AddAppAuthenticationOptions(services);
         this.AddAppOptions(services);
         this.AddAppRequestLog(services);
     }
@@ -44,6 +45,7 @@ public class Startup {
         this.AddAppSwaggerGen(services);
         this.AddAppServicesWithRegistrator(services);
         //this.AddAppAuthentication(services);
+        this.AddAppAuthenticationOptions(services);
         this.AddAppOptions(services);
         this.AddAppRequestLog(services);
     }
@@ -77,7 +79,9 @@ public class Startup {
         services.AddAuthentication(NegotiateDefaults.AuthenticationScheme)
             .AddNegotiate((NegotiateOptions negotiateOptions) => {
             });
+    }
 
+    public void AddAppAuthenticationOptions(IServiceCollection services) {
         services.AddAuthorization(options => {
             options.FallbackPolicy = options.DefaultPolicy;
         });
@@ -102,7 +106,7 @@ public class Startup {
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
         if (env.EnvironmentName == "UnitTest") {
-
+            app.UseDeveloperExceptionPage();
         } else if (env.IsDevelopment()) {
             app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();

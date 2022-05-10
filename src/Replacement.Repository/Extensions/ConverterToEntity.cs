@@ -1,38 +1,38 @@
 #if NOConverterToAPI
 #else
-namespace Replacement.Contracts.Entity;
-public static partial class ConverterToAPI {
+namespace Replacement.Contracts.API;
+public static partial class ConverterToEntity {
     [return: NotNullIfNotNull("that")]
-    public static Operation? ToOperation(this OperationEntity? that) {
+    public static OperationEntity? ToOperationEntity(this Operation? that) {
         if (that is null) {
             return default;
         } else {
-            return new Operation(
+            return new OperationEntity(
                 OperationId: that.OperationId,
                 OperationName: that.OperationName,
                 EntityType: that.EntityType,
                 EntityId: that.EntityId,
                 UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<Operation> ToListOperation(this IEnumerable<OperationEntity> that) {
-        var result = new List<Operation>();
+    public static List<OperationEntity> ToListOperationEntity(this IEnumerable<Operation> that) {
+        var result = new List<OperationEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToOperation());
+            result.Add(item.ToOperationEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static Project? ToProject(this ProjectEntity? that) {
+    public static ProjectEntity? ToProjectEntity(this Project? that) {
         if (that is null) {
             return default;
         } else {
-            return new Project(
+            return new ProjectEntity(
                 ProjectId: that.ProjectId,
                 Title: that.Title,
                 OperationId: that.OperationId,
@@ -40,25 +40,25 @@ public static partial class ConverterToAPI {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<Project> ToListProject(this IEnumerable<ProjectEntity> that) {
-        var result = new List<Project>();
+    public static List<ProjectEntity> ToListProjectEntity(this IEnumerable<Project> that) {
+        var result = new List<ProjectEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToProject());
+            result.Add(item.ToProjectEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static ProjectHistory? ToProjectHistory(this ProjectHistoryEntity? that) {
+    public static ProjectHistoryEntity? ToProjectHistoryEntity(this ProjectHistory? that) {
         if (that is null) {
             return default;
         } else {
-            return new ProjectHistory(
+            return new ProjectHistoryEntity(
                 OperationId: that.OperationId,
                 ProjectId: that.ProjectId,
                 Title: that.Title,
@@ -68,25 +68,25 @@ public static partial class ConverterToAPI {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<ProjectHistory> ToListProjectHistory(this IEnumerable<ProjectHistoryEntity> that) {
-        var result = new List<ProjectHistory>();
+    public static List<ProjectHistoryEntity> ToListProjectHistoryEntity(this IEnumerable<ProjectHistory> that) {
+        var result = new List<ProjectHistoryEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToProjectHistory());
+            result.Add(item.ToProjectHistoryEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static RequestLog? ToRequestLog(this RequestLogEntity? that) {
+    public static RequestLogEntity? ToRequestLogEntity(this RequestLog? that) {
         if (that is null) {
             return default;
         } else {
-            return new RequestLog(
+            return new RequestLogEntity(
                 RequestLogId: that.RequestLogId,
                 OperationId: that.OperationId,
                 ActivityId: that.ActivityId,
@@ -96,25 +96,25 @@ public static partial class ConverterToAPI {
                 Argument: that.Argument,
                 UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<RequestLog> ToListRequestLog(this IEnumerable<RequestLogEntity> that) {
-        var result = new List<RequestLog>();
+    public static List<RequestLogEntity> ToListRequestLogEntity(this IEnumerable<RequestLog> that) {
+        var result = new List<RequestLogEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToRequestLog());
+            result.Add(item.ToRequestLogEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static ToDo? ToToDo(this ToDoEntity? that) {
+    public static ToDoEntity? ToToDoEntity(this ToDo? that) {
         if (that is null) {
             return default;
         } else {
-            return new ToDo(
+            return new ToDoEntity(
                 ToDoId: that.ToDoId,
                 ProjectId: that.ProjectId,
                 UserId: that.UserId,
@@ -125,25 +125,25 @@ public static partial class ConverterToAPI {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<ToDo> ToListToDo(this IEnumerable<ToDoEntity> that) {
-        var result = new List<ToDo>();
+    public static List<ToDoEntity> ToListToDoEntity(this IEnumerable<ToDo> that) {
+        var result = new List<ToDoEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToToDo());
+            result.Add(item.ToToDoEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static ToDoHistory? ToToDoHistory(this ToDoHistoryEntity? that) {
+    public static ToDoHistoryEntity? ToToDoHistoryEntity(this ToDoHistory? that) {
         if (that is null) {
             return default;
         } else {
-            return new ToDoHistory(
+            return new ToDoHistoryEntity(
                 OperationId: that.OperationId,
                 ToDoId: that.ToDoId,
                 ProjectId: that.ProjectId,
@@ -156,25 +156,25 @@ public static partial class ConverterToAPI {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<ToDoHistory> ToListToDoHistory(this IEnumerable<ToDoHistoryEntity> that) {
-        var result = new List<ToDoHistory>();
+    public static List<ToDoHistoryEntity> ToListToDoHistoryEntity(this IEnumerable<ToDoHistory> that) {
+        var result = new List<ToDoHistoryEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToToDoHistory());
+            result.Add(item.ToToDoHistoryEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static User? ToUser(this UserEntity? that) {
+    public static UserEntity? ToUserEntity(this User? that) {
         if (that is null) {
             return default;
         } else {
-            return new User(
+            return new UserEntity(
                 UserId: that.UserId,
                 UserName: that.UserName,
                 OperationId: that.OperationId,
@@ -182,25 +182,25 @@ public static partial class ConverterToAPI {
                 CreatedBy: that.CreatedBy,
                 ModifiedAt: that.ModifiedAt,
                 ModifiedBy: that.ModifiedBy,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<User> ToListUser(this IEnumerable<UserEntity> that) {
-        var result = new List<User>();
+    public static List<UserEntity> ToListUserEntity(this IEnumerable<User> that) {
+        var result = new List<UserEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToUser());
+            result.Add(item.ToUserEntity());
         }
         return result;
     }
 
     [return: NotNullIfNotNull("that")]
-    public static UserHistory? ToUserHistory(this UserHistoryEntity? that) {
+    public static UserHistoryEntity? ToUserHistoryEntity(this UserHistory? that) {
         if (that is null) {
             return default;
         } else {
-            return new UserHistory(
+            return new UserHistoryEntity(
                 OperationId: that.OperationId,
                 UserId: that.UserId,
                 UserName: that.UserName,
@@ -210,15 +210,15 @@ public static partial class ConverterToAPI {
                 ModifiedBy: that.ModifiedBy,
                 ValidFrom: that.ValidFrom,
                 ValidTo: that.ValidTo,
-                DataVersion: that.EntityVersion
+                EntityVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToEntityVersion(that.DataVersion)
                 );
         }
     }
 
-    public static List<UserHistory> ToListUserHistory(this IEnumerable<UserHistoryEntity> that) {
-        var result = new List<UserHistory>();
+    public static List<UserHistoryEntity> ToListUserHistoryEntity(this IEnumerable<UserHistory> that) {
+        var result = new List<UserHistoryEntity>();
         foreach (var item in that) { 
-            result.Add(item.ToUserHistory());
+            result.Add(item.ToUserHistoryEntity());
         }
         return result;
     }

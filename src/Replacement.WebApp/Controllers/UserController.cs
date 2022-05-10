@@ -10,7 +10,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // GET: api/User
-    [HttpGet(Name = "UserAll")]
+    [HttpGet(Name = "UserGetAll")]
     public async Task<ActionResult<IEnumerable<User>>> Get() {
         var requestOperation = this.CreateRequestOperation(
                     pk: "",
@@ -35,7 +35,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // GET api/User/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
-    [HttpGet("{userId}", Name = "UserOne")]
+    [HttpGet("{userId}", Name = "UserGetOne")]
     public async Task<ActionResult<User?>> Get(Guid userId) {
         var requestOperation = this.CreateRequestOperation(
                     pk: userId,
@@ -60,7 +60,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // POST api/User
-    [HttpPost(Name = "User")]
+    [HttpPost(Name = "UserPostOne")]
     public async Task<ActionResult<User>> Post([FromBody] User value) {
         if (value.UserId == Guid.Empty) {
             value = value with {
@@ -92,7 +92,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // PUT api/User/5
-    [HttpPut("{userId}")]
+    [HttpPut("{userId}", Name = "UserPutOne")]
     public async Task<ActionResult<User>> Put(Guid userId, [FromBody] User value) {
         value = value with { UserId = userId };
 
@@ -120,7 +120,7 @@ public class UserController : ReplacementControllerBase {
     }
 
     // DELETE api/User/5
-    [HttpDelete("{userId}")]
+    [HttpDelete("{userId}", Name = "UserDeleteOne")]
     public async Task<ActionResult> Delete(Guid userId) {
         if (userId == Guid.Empty) {
             return this.NotFound();

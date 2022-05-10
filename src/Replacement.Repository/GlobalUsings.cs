@@ -28,6 +28,10 @@ global using Brimborium.Registrator;
 global using Brimborium.Tracking;
 global using Brimborium.SqlAccess;
 
+global using Brimborium.RowVersion.API;
+global using Brimborium.RowVersion.Entity;
+global using Brimborium.RowVersion.Extensions;
+
 global using Replacement.Contracts.API;
 global using Replacement.Contracts.Entity;
 global using Replacement.Repository.Grains;

@@ -136,9 +136,9 @@ public static class Program {
                             CreatedBy: null,
                             ModifiedAt: new System.DateTimeOffset(),
                             ModifiedBy: null,
-                            DataVersion: 0
+                            DataVersion: string.Empty
                             );
-                    var projectB = await client.ProjectPostAsync(projectA);
+                    var projectB = await client.ProjectPostOneAsync(projectA);
                     System.Threading.Interlocked.Increment(ref cntProjectWrite);
                     dctProject[projectB.GetPrimaryKey()] = projectB;
                 }
@@ -162,7 +162,7 @@ public static class Program {
                     var projectId = lstProjectId[idxInner];
                     var projectA = dctProject[new ProjectPK(projectId)];
                     projectA = projectA with { Title = System.DateTime.Now.ToString() };
-                    var projectB = await client.ProjectPostAsync(projectA);
+                    var projectB = await client.ProjectPostOneAsync(projectA);
                     dctProject[projectB.GetPrimaryKey()] = projectB;
                     System.Threading.Interlocked.Increment(ref cntProjectUpdate);
                     if (projectA.ProjectId == projectB.ProjectId) {

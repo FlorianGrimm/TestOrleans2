@@ -13,7 +13,7 @@ public class MeController : ReplacementControllerBase {
     }
 
     // GET api/Me
-    [HttpGet()]
+    [HttpGet(Name = "MeUserGetOne")]
     public async Task<ActionResult<User?>> Get() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",
@@ -28,12 +28,12 @@ public class MeController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-            return user.ToAPI();
+            return user.ToUser();
         }
     }
 
     // GET api/Me
-    [HttpGet("Project")]
+    [HttpGet("Project", Name = "MeProjectGetAll")]
     public async Task<ActionResult<IEnumerable<Project>>> GetMeProject() {
         var requestOperation = this.CreateRequestOperation(
             pk: string.Empty,
@@ -57,7 +57,7 @@ public class MeController : ReplacementControllerBase {
     }
 
     // GET api/Me
-    [HttpGet("ToDo")]
+    [HttpGet("ToDo", Name = "MeTodoGetAll")]
     public async Task<ActionResult<IEnumerable<ToDo>>> GetMeToDo() {
         var requestOperation = this.CreateRequestOperation(
             pk: "",

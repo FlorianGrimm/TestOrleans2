@@ -62,10 +62,6 @@ public record class UserEntity(
             ModifiedBy = value.UserId
         };
     }
-
-    public User ToAPI() {
-        throw new NotImplementedException();
-    }
 }
 
 public record class UserSelectByUserNameArg(

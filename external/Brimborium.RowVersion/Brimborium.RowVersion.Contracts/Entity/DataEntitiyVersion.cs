@@ -32,9 +32,9 @@ public struct DataEntityVersion {
 
     public long GetEntityVersion(ref DataEntityVersion that) {
         if (this._EntityVersion == 0 && this._DataVersion is not null) {
-            if (long.TryParse(this._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var dataVersion)) {
-                that = new DataEntityVersion(dataVersion, this._DataVersion);
-                return dataVersion;
+            if (long.TryParse(this._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var entityVersion)) {
+                that = new DataEntityVersion(entityVersion, this._DataVersion);
+                return entityVersion;
             } else {
                 return 0;
             }

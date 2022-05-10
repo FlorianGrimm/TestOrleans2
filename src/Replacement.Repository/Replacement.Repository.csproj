@@ -4,20 +4,13 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>enable</Nullable>
+		<DefineConstants Condition=" '$(ExtraDefineConstants)' != '' ">$(DefineConstants);$(ExtraDefineConstants)</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <Compile Remove="Contracts\**" />
 	  <EmbeddedResource Remove="Contracts\**" />
 	  <None Remove="Contracts\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Remove="Grains\TodoGrain.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="Grains\TodoGrain.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,6 +28,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj" />
 	  <ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
 	  <ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
 	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />

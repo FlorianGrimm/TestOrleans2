@@ -374,6 +374,26 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
+        public async Task<List<Replacement.Contracts.Entity.UserEntity>> ExecuteUserSelectAllAsync()  {
+            using(var cmd = this.CreateCommand("[dbo].[UserSelectAll]", CommandType.StoredProcedure)) {
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectAll);
+            }
+        } 
+
+        protected Replacement.Contracts.Entity.UserEntity ReadRecordUserSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.UserEntity(
+                @UserId: this.ReadGuid(reader, 0),
+                @UserName: this.ReadString(reader, 1),
+                @OperationId: this.ReadGuid(reader, 2),
+                @CreatedAt: this.ReadDateTimeOffset(reader, 3),
+                @CreatedBy: this.ReadGuidQ(reader, 4),
+                @ModifiedAt: this.ReadDateTimeOffset(reader, 5),
+                @ModifiedBy: this.ReadGuidQ(reader, 6),
+                @EntityVersion: this.ReadInt64(reader, 7)
+            );
+            return result;
+        } 
+
         public async Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectByUserNameAsync(Replacement.Contracts.Entity.UserSelectByUserNameArg args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserSelectByUserName]", CommandType.StoredProcedure)) {
                 this.AddParameterString(cmd, "@UserName", SqlDbType.NVarChar, 50, args.UserName);
@@ -482,6 +502,7 @@ namespace Replacement.Repository.Service {
         Task<List<Replacement.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.API.ToDoPK args);
         Task<Replacement.Contracts.Entity.ToDoManipulationResult> ExecuteToDoUpsertAsync(Replacement.Contracts.Entity.ToDoEntity args);
         Task<List<Replacement.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(Replacement.Contracts.Entity.UserEntity args);
+        Task<List<Replacement.Contracts.Entity.UserEntity>> ExecuteUserSelectAllAsync();
         Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectByUserNameAsync(Replacement.Contracts.Entity.UserSelectByUserNameArg args);
         Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectPKAsync(Replacement.Contracts.API.UserPK args);
         Task<Replacement.Contracts.Entity.UserManipulationResult> ExecuteUserUpsertAsync(Replacement.Contracts.Entity.UserEntity args);

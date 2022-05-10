@@ -64,12 +64,12 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // POST api/Project
-    [HttpPost(Name = "ProjectPost")]
+    [HttpPost(Name = "ProjectPostOne")]
     public async Task<ActionResult<Project?>> Post([FromBody] Project value) {
         if (value.ProjectId == Guid.Empty) {
             value = value with {
                 ProjectId = Guid.NewGuid(),
-                DataVersion = 0
+                DataVersion = string.Empty
             };
         }
 
@@ -97,7 +97,7 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // PUT api/Project/5
-    [HttpPut("{projectId}", Name = "ProjectPut")]
+    [HttpPut("{projectId}", Name = "ProjectPutOne")]
     public async Task<ActionResult<Project?>> Put(Guid projectId, [FromBody] Project value) {
         value = value with { ProjectId = projectId };
         var requestOperation = this.CreateRequestOperation(
@@ -161,7 +161,7 @@ public class ProjectController : ReplacementControllerBase {
     }
 
     // DELETE api/Project/5
-    [HttpDelete("{projectId}", Name = "ProjectDelete")]
+    [HttpDelete("{projectId}", Name = "ProjectDeleteOne")]
     public async Task<ActionResult> Delete(Guid projectId) {
         if (projectId == Guid.Empty) {
             return this.NotFound();

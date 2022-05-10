@@ -9,7 +9,7 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // GET: api/ToDo
-    [HttpGet]
+    [HttpGet(Name = "TodoGetAll")]
     public async Task<ActionResult<IEnumerable<ToDo>>> Get() {
         var requestOperation = this.CreateRequestOperation(
            pk: string.Empty,
@@ -32,7 +32,7 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // GET api/ToDo/9C4490D6-9FC9-4A91-A3C1-98D5CE9A7B7A
-    [HttpGet("{projectId}/{todoId}")]
+    [HttpGet("{projectId}/{todoId}", Name = "TodoGetOne")]
     public async Task<ActionResult<ToDo?>> Get(Guid projectId, Guid toDoId) {
         var toDoPK = new ToDoPK(projectId, toDoId);
         var requestOperation = this.CreateRequestOperation(
@@ -58,7 +58,7 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // POST api/ToDo
-    [HttpPost]
+    [HttpPost(Name = "TodoPostOne")]
     public async Task<ActionResult<ToDo>> Post([FromBody] ToDo value) {
         if (value.ToDoId == Guid.Empty) {
             value = value with {
@@ -90,7 +90,7 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // PUT api/ToDo/5
-    [HttpPut("{projectId}/{toDoId}")]
+    [HttpPut("{projectId}/{toDoId}", Name = "TodoPutOne")]
     public async Task<ActionResult<ToDo>> Put(Guid projectId, Guid toDoId, [FromBody] ToDo value) {
         value = value with {
             ProjectId = projectId,
@@ -122,7 +122,7 @@ public class ToDoController : ReplacementControllerBase {
     }
 
     // DELETE api/ToDo/5
-    [HttpDelete("{projectId}/{todoId}")]
+    [HttpDelete("{projectId}/{todoId}", Name = "TodoDeleteOne")]
     public async Task<ActionResult> Delete(Guid projectId, Guid todoId) {
         if ((projectId == Guid.Empty) || (todoId == Guid.Empty)) {
             return this.NotFound();

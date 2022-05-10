@@ -10,6 +10,7 @@
         "tags": [
           "Me"
         ],
+        "operationId": "MeUserGetOne",
         "responses": {
           "200": {
             "description": "Success",
@@ -39,6 +40,7 @@
         "tags": [
           "Me"
         ],
+        "operationId": "MeProjectGetAll",
         "responses": {
           "200": {
             "description": "Success",
@@ -77,6 +79,7 @@
         "tags": [
           "Me"
         ],
+        "operationId": "MeTodoGetAll",
         "responses": {
           "200": {
             "description": "Success",
@@ -152,7 +155,7 @@
         "tags": [
           "Project"
         ],
-        "operationId": "ProjectPost",
+        "operationId": "ProjectPostOne",
         "requestBody": {
           "content": {
             "application/json": {
@@ -240,7 +243,7 @@
         "tags": [
           "Project"
         ],
-        "operationId": "ProjectPut",
+        "operationId": "ProjectPutOne",
         "parameters": [
           {
             "name": "projectId",
@@ -298,7 +301,7 @@
         "tags": [
           "Project"
         ],
-        "operationId": "ProjectDelete",
+        "operationId": "ProjectDeleteOne",
         "parameters": [
           {
             "name": "projectId",
@@ -322,6 +325,7 @@
         "tags": [
           "ToDo"
         ],
+        "operationId": "TodoGetAll",
         "responses": {
           "200": {
             "description": "Success",
@@ -358,6 +362,7 @@
         "tags": [
           "ToDo"
         ],
+        "operationId": "TodoPostOne",
         "requestBody": {
           "content": {
             "application/json": {
@@ -406,6 +411,7 @@
         "tags": [
           "ToDo"
         ],
+        "operationId": "TodoGetOne",
         "parameters": [
           {
             "name": "projectId",
@@ -453,6 +459,7 @@
         "tags": [
           "ToDo"
         ],
+        "operationId": "TodoDeleteOne",
         "parameters": [
           {
             "name": "projectId",
@@ -485,6 +492,7 @@
         "tags": [
           "ToDo"
         ],
+        "operationId": "TodoPutOne",
         "parameters": [
           {
             "name": "projectId",
@@ -553,7 +561,7 @@
         "tags": [
           "User"
         ],
-        "operationId": "UserAll",
+        "operationId": "UserGetAll",
         "responses": {
           "200": {
             "description": "Success",
@@ -590,7 +598,7 @@
         "tags": [
           "User"
         ],
-        "operationId": "User",
+        "operationId": "UserPostOne",
         "requestBody": {
           "content": {
             "application/json": {
@@ -639,7 +647,7 @@
         "tags": [
           "User"
         ],
-        "operationId": "UserOne",
+        "operationId": "UserGetOne",
         "parameters": [
           {
             "name": "userId",
@@ -678,6 +686,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "UserPutOne",
         "parameters": [
           {
             "name": "userId",
@@ -735,6 +744,7 @@
         "tags": [
           "User"
         ],
+        "operationId": "UserDeleteOne",
         "parameters": [
           {
             "name": "userId",

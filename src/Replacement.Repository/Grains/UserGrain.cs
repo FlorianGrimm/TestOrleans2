@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.Repository.Grains;
+﻿namespace Replacement.Repository.Grains;
 
 public interface IUserCollectionGrain : IGrainWithGuidKey {
     Task<List<UserEntity>> GetAllUsers(OperationEntity operation);
@@ -21,11 +19,15 @@ public class UserCollectionGrain : Grain, IUserCollectionGrain {
     public UserCollectionGrain(
         IDBContext dBContext
         ) {
+        
         this._DBContext = dBContext;
     }
 
-    public Task<List<UserEntity>> GetAllUsers(OperationEntity operation) {
-        throw new NotImplementedException();
+    public  async Task<List<UserEntity>> GetAllUsers(OperationEntity operation) {
+        using (var sqlAccess = await this._DBContext.GetDataAccessAsync()) {
+            var result=await sqlAccess.ExecuteUserSelectAllAsync();
+            return result;
+        }
     }
 
     public async Task<(UserEntity? user, bool created)> GetUserByUserName(string username, bool createIfNeeded, OperationEntity operation) {
@@ -96,11 +98,20 @@ public class UserGrain : GrainBase<UserEntity>, IUserGrain {
 
     public async Task<UserEntity?> UpsertUser(UserEntity value, UserEntity? currentUser, OperationEntity operation) {
         var user = await this.GetState();
-        value = value.SetOperation(operation);
-        this._DBContext.Operation.Add(operation);
-        var resultTO = this._DBContext.User.Upsert(value);
-        await this._DBContext.ApplyChangesAsync();
 
+        if (user is null) {
+            // new
+        } else {
+            if (!user.EntityVersion.EntityVersionDoesMatch(value.EntityVersion)) {
+                return null;
+            }
+        }
+
+        value = value.SetOperation(operation);
+        var operationTO = this._DBContext.Operation.Add(operation);
+        var resultTO = this._DBContext.User.Upsert(value);
+        await this.ApplyChangesAsync();
+        operationTO.Detach();
         var result = resultTO.Value;
         this._State = result;
         await this.PopulateDirty(result);
@@ -115,7 +126,7 @@ public class UserGrain : GrainBase<UserEntity>, IUserGrain {
             var value = user.SetOperation(operation);
             this._DBContext.Operation.Add(operation);
             this._DBContext.User.Delete(value);
-            await this._DBContext.ApplyChangesAsync();
+            await this.ApplyChangesAsync();
 
             this._State = null;
             await this.PopulateDirty(null);

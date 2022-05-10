@@ -166,8 +166,9 @@ public static partial class Program {
                                 upperDirectoryPath,
                                 sqlProjectDatabaseDevTool
                                 );
+                            var stepsCSV = string.Join(",", hsSteps.Select(n => n.ToString()));                            
                             var psi = new System.Diagnostics.ProcessStartInfo(
-                                dotnetPath, $"run \"{sqlProject_csproj}\" -- --steps 5");
+                                dotnetPath, $"run \"{sqlProject_csproj}\" -- --steps {stepsCSV}");
                             psi.WorkingDirectory = sqlProjectDirectory;
                             System.Diagnostics.Process.Start(psi);
                             // do not check exit because this prg is already running.
@@ -186,14 +187,14 @@ public static partial class Program {
                 MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
             }
             if (conditionRunStep(6, hsSteps)) {
-                // pwsh --file src\Replacement.Contracts\GeneratorConverter.ps1
+                // pwsh --file src\Replacement.Repository\GeneratorConverter.ps1
                 {
                     var start = System.DateTime.Now;
 
                     string fulllNameGeneratorConverter_ps1 = "GeneratorConverter.ps1";
                     string workingDirectory = System.IO.Path.Combine(
                         upperDirectoryPath,
-                        @"Replacement.Contracts");
+                        @"Replacement.Repository");
 
                     System.Console.Out.WriteLine($"fulllNameGeneratorConverter_ps1: {fulllNameGeneratorConverter_ps1}");
 

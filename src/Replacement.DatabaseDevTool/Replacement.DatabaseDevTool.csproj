@@ -16,6 +16,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+		<ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
 		<ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.GenerateStoredProcedure\Brimborium.GenerateStoredProcedure.csproj" />
 		<ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
 		<ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.TypedStoredProcedure\Brimborium.TypedStoredProcedure.csproj" />
@@ -28,6 +29,7 @@
 		<Compile Include="..\Replacement.Contracts\Entity\*.cs">
 			<Link>External\Replacement.Contracts\Entity\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Compile>
+		<Compile Remove="..\Replacement.Contracts\Entity\RequestOperationEntity.cs" />
 <!--
 		<Compile Include="..\Replacement.Contracts\API\PrimaryKey.cs" Link="Generated\API\PrimaryKey.cs" />
 		<Compile Include="..\Replacement.Contracts\API\PrimaryKeyLocation.cs" Link="External\API\PrimaryKeyLocation.cs" />

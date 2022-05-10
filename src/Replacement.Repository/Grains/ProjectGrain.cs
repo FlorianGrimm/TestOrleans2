@@ -238,7 +238,7 @@ public sealed partial class ProjectGrain : GrainBase<ProjectEntity>, IProjectGra
             await this.ApplyChangesAsync();
 
             this._State = projectTO.Value;
-            this._DBContext.Operation.Detach(operationTO);
+            operationTO.Detach();
             await this.PopulateDirtyProject();
 
             return projectTO.Value;

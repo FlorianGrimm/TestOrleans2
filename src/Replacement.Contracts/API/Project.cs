@@ -1,4 +1,6 @@
-﻿namespace Replacement.Contracts.API;
+﻿using Brimborium.RowVersion.Extensions;
+
+namespace Replacement.Contracts.API;
 public record class Project(
     Guid ProjectId,
     string Title,
@@ -7,7 +9,7 @@ public record class Project(
     Guid? CreatedBy,
     DateTimeOffset ModifiedAt,
     Guid? ModifiedBy,
-    long DataVersion
+    string DataVersion
 ) : IOperationRelatedAPI {
     public ProjectPK GetPrimaryKey() => new ProjectPK(this.ProjectId);
     public OperationPK GetOperationPK() => new OperationPK(this.ModifiedAt, this.OperationId);
@@ -17,8 +19,8 @@ public record class Project(
     public Project SetOperation(Operation value) {
         return this with {
             OperationId = value.OperationId,
-            CreatedAt = this.DataVersion == 0 ? value.CreatedAt : this.CreatedAt,
-            CreatedBy = this.DataVersion == 0 ? value.UserId : this.CreatedBy,
+            CreatedAt = DataVersionExtensions.DataVersionIsEmptyOrZero(this.DataVersion) ? value.CreatedAt : this.CreatedAt,
+            CreatedBy = DataVersionExtensions.DataVersionIsEmptyOrZero(this.DataVersion) ? value.UserId : this.CreatedBy,
             ModifiedAt = value.CreatedAt,
             ModifiedBy = value.UserId
         };
