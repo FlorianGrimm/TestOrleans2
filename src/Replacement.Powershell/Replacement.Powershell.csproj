@@ -11,7 +11,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
+		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
 		<ProjectReference Include="..\Replacement.Client\Replacement.Client.csproj" />
 		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
 	</ItemGroup>

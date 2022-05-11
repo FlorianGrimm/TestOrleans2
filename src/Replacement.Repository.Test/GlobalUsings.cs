@@ -30,6 +30,8 @@ global using Replacement.Contracts.Entity;
 global using Replacement.Repository.Service;
 
 global using Xunit;
+global using Moq;
+global using Moq.Language;
 
 
 [assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

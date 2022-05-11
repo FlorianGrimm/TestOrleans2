@@ -16,8 +16,9 @@ public static class RequestOperationExtensions {
             UserId: requestOperation.UserId,
             CreatedAt: requestOperation.CreatedAt,
             EntityVersion: 0);
-        if (operation.UserId.HasValue
-            || string.IsNullOrEmpty(requestOperation.UserName)) {
+        var userId = operation.UserId.GetValueOrDefault();
+
+        if (userId != Guid.Empty) {
             var requestLog = new RequestLogEntity(
                 RequestLogId: requestOperation.RequestLogId,
                 OperationId: requestOperation.OperationId,
@@ -29,11 +30,17 @@ public static class RequestOperationExtensions {
                 UserId: requestOperation.UserId,
                 CreatedAt: requestOperation.CreatedAt,
                 EntityVersion: 0);
-            if (requestLogService is not null) {
-                await requestLogService.InsertAsync(requestLog, canModifyState);
+            var userGrain = client.GetUserGrain(userId);
+            var user = await userGrain.GetUser(operation);
+            if (user is not null) {
+                if (requestLogService is not null) {
+                    await requestLogService.InsertAsync(requestLog, canModifyState);
+                }
+                return (operation, user);
             }
-            return (operation, null);
-        } else {
+        }
+
+        if (!string.IsNullOrEmpty(requestOperation.UserName)) {
             var userCollectionGrain = client.GetUserCollectionGrain();
             var (user, created) = await userCollectionGrain.GetUserByUserName(requestOperation.UserName, createUserIfNeeded, operation);
             if (created) {
@@ -78,14 +85,23 @@ public static class RequestOperationExtensions {
                 return (operationNext, user);
             }
         }
+
+        {
+            var requestLog = new RequestLogEntity(
+                RequestLogId: requestOperation.RequestLogId,
+                OperationId: requestOperation.OperationId,
+                ActivityId: requestOperation.ActivityId,
+                OperationName: requestOperation.OperationName,
+                EntityType: requestOperation.EntityType,
+                EntityId: requestOperation.EntityId,
+                Argument: requestOperation.Argument,
+                UserId: requestOperation.UserId,
+                CreatedAt: requestOperation.CreatedAt,
+                EntityVersion: 0);
+            if (requestLogService is not null) {
+                await requestLogService.InsertAsync(requestLog, canModifyState);
+            }
+            return (operation, null);
+        }
     }
-    // private static async Task InsertRequestLog(
-    //         IRequestLogService? requestLogService,
-    //         RequestLogEntity requestLog,
-    //         bool canModifyState) {
-    //     //var service = that.HttpContext.RequestServices.GetService<IRequestLogService>();
-    //     if (requestLogService is not null) {
-    //         await requestLogService.InsertAsync(requestLog, canModifyState);
-    //     }
-    // }
 }

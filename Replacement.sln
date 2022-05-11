@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.DatabaseDeploy"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Replacement.Database", "src\Replacement.Database\Replacement.Database.sqlproj", "{FBDAE3CB-E5D6-4CDD-884F-3E3C32780136}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "hack", "hack", "{3AB75250-1F79-41F6-BC21-23B4B79FC0B8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external", "external", "{3AB75250-1F79-41F6-BC21-23B4B79FC0B8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.OData", "src\Replacement.OData\Replacement.OData.csproj", "{6AD5F8A2-3D07-4419-B596-0D50E418BA63}"
 EndProject
@@ -40,23 +40,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.Console", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.Repository.Test", "src\Replacement.Repository.Test\Replacement.Repository.Test.csproj", "{BD2AEDB7-CACB-459F-9D2A-903BEC96E51C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.GenerateStoredProcedure", "external\Brimborium.TypedSql\Brimborium.GenerateStoredProcedure\Brimborium.GenerateStoredProcedure.csproj", "{C5644B88-BF88-4BE2-AA9F-D4BFA1168FD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.GenerateStoredProcedure", "external\Brimborium.Net\Brimborium.TypedSql\Brimborium.GenerateStoredProcedure\Brimborium.GenerateStoredProcedure.csproj", "{C5644B88-BF88-4BE2-AA9F-D4BFA1168FD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.SqlAccess", "external\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj", "{6212634D-1CAB-47C3-9AF3-6E18B4088387}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.SqlAccess", "external\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj", "{6212634D-1CAB-47C3-9AF3-6E18B4088387}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.TypedStoredProcedure", "external\Brimborium.TypedSql\Brimborium.TypedStoredProcedure\Brimborium.TypedStoredProcedure.csproj", "{4D301368-5D30-4D57-88B3-18A2261A9678}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.TypedStoredProcedure", "external\Brimborium.Net\Brimborium.TypedSql\Brimborium.TypedStoredProcedure\Brimborium.TypedStoredProcedure.csproj", "{4D301368-5D30-4D57-88B3-18A2261A9678}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Tracking", "external\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj", "{DEA1746A-2122-4E3D-A29F-0946F0E3F1EA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Tracking", "external\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj", "{DEA1746A-2122-4E3D-A29F-0946F0E3F1EA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Extensions.Logging.LocalFile", "external\Brimborium.Extensions.Logging.LocalFile\src\Brimborium.Extensions.Logging.LocalFile.csproj", "{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Extensions.Logging.LocalFile", "external\Brimborium.Net\Brimborium.Extensions.Logging.LocalFile\src\Brimborium.Extensions.Logging.LocalFile.csproj", "{2CB6F8CC-E58A-4DDE-AACA-1FCFE17EA358}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion.Contracts", "external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj", "{80971B70-04AA-4D49-9E29-39BFBCAA9159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion.Contracts", "external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj", "{80971B70-04AA-4D49-9E29-39BFBCAA9159}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion", "external\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj", "{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion", "external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj", "{8F3BBEF6-AE87-4AA9-82AB-36C8A4D3448F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion.Test", "external\Brimborium.RowVersion\Brimborium.RowVersion.Test\Brimborium.RowVersion.Test.csproj", "{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.RowVersion.Test", "external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Test\Brimborium.RowVersion.Test.csproj", "{C4C1554E-2CA6-4CA1-94E8-7B6EF0638545}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Tracking.Test", "external\Brimborium.TypedSql\Brimborium.Tracking.Test\Brimborium.Tracking.Test.csproj", "{39393D0B-FFD8-4DAF-877D-A908EDAFAD0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Brimborium.Tracking.Test", "external\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking.Test\Brimborium.Tracking.Test.csproj", "{39393D0B-FFD8-4DAF-877D-A908EDAFAD0C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.Powershell", "src\Replacement.Powershell\Replacement.Powershell.csproj", "{1BCFEA28-7752-4AA1-83FE-578F6F4CBFF8}"
 EndProject

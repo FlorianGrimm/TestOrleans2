@@ -1,0 +1,3 @@
+[submodule "external/Brimborium.Net"]
+	path = external/Brimborium.Net
+	url = https://github.com/FlorianGrimm/Brimborium.Net.git

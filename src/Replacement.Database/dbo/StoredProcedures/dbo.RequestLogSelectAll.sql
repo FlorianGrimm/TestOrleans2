@@ -20,7 +20,7 @@ AS BEGIN
         [ActivityId] = [ActivityId],
         [OperationName] = [OperationName],
         [EntityType] = [EntityType],
-        [EntityId] = [EntityId],
+        [EntityId] = [EntityId],	
         [Argument] = [Argument],
         [CreatedAt] = [CreatedAt],
         [UserId] = [UserId],

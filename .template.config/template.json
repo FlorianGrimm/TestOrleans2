@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Florian Grimm",
+  "classifications": [
+    "Brimborium.Net"
+  ],
+  "identity": "Brimborium.Net.TestOrleans2",
+  "name": "Brimborium.Net TestOrleans2",
+  "shortName": "TestOrleans2",
+  "tags": {
+    "language": "C#",
+    "type": "solution"
+  },
+  "sourceName": "TestOrleans2",
+  "sources": [
+    {
+      "include": [
+        "Replacement.sln",
+        "nuget.config",
+        ".gitmodules"
+      ],
+      "exclude": [
+        "**/[Bb]in/**",
+        "**/[Oo]bj/**",
+        ".template.config/**/*",
+        "**/*.filelist",
+        "**/*.user",
+        "**/*.lock.json",
+        "external/**/*"
+      ]
+    },
+    {
+      "source": "./src/",
+      "target": "./src/",
+      "rename": {}
+    }
+  ],
+  "preferNameDirectory": false,
+  "symbols": {
+    "name": {
+      "type": "parameter",
+      "datatype": "text",
+      "defaultValue": "Replacement",
+      "replaces": "Replacement",
+      "isRequired": true,
+      "fileRename": "Replacement"
+    },
+    "Replacement.Client": {"type": "generated","generator": "join","replaces": "Replacement.Client","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Client"}]}},
+    "Replacement.ClientTS": {"type": "generated","generator": "join","replaces": "Replacement.ClientTS","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".ClientTS"}]}},
+    "Replacement.Console": {"type": "generated","generator": "join","replaces": "Replacement.Console","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Console"}]}},
+    "Replacement.Contracts": {"type": "generated","generator": "join","replaces": "Replacement.Contracts","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Contracts"}]}},
+    "Replacement.Database": {"type": "generated","generator": "join","replaces": "Replacement.Database","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Database"}]}},
+    "Replacement.Database.Schema": {"type": "generated","generator": "join","replaces": "Replacement.Database.Schema","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Database.Schema"}]}},
+    "Replacement.DatabaseDeploy": {"type": "generated","generator": "join","replaces": "Replacement.DatabaseDeploy","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".DatabaseDeploy"}]}},
+    "Replacement.DatabaseDevTool": {"type": "generated","generator": "join","replaces": "Replacement.DatabaseDevTool","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".DatabaseDevTool"}]}},
+    "Replacement.DatabaseTablesDeploy": {"type": "generated","generator": "join","replaces": "Replacement.DatabaseTablesDeploy","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".DatabaseTablesDeploy"}]}},
+    "Replacement.OData": {"type": "generated","generator": "join","replaces": "Replacement.OData","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".OData"}]}},
+    "Replacement.OData.WebApi": {"type": "generated","generator": "join","replaces": "Replacement.OData.WebApi","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".OData.WebApi"}]}},
+    "Replacement.Powershell": {"type": "generated","generator": "join","replaces": "Replacement.Powershell","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Powershell"}]}},
+    "Replacement.Repository": {"type": "generated","generator": "join","replaces": "Replacement.Repository","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Repository"}]}},
+    "Replacement.RepositoryTest": {"type": "generated","generator": "join","replaces": "Replacement.Repository.Test","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".Repository.Test"}]}},
+    "Replacement.WebApp": {"type": "generated","generator": "join","replaces": "Replacement.WebApp","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".WebApp"}]}},
+    "Replacement.WebApp.Test": {"type": "generated","generator": "join","replaces": "Replacement.WebApp.Test","parameters": {"symbols": [{"type": "ref","value": "name"},{"type": "const","value": ".WebApp.Test"}]}},
+    "UserSecretsIdDev":{
+      "type": "generated",
+      "generator": "guid",
+      "replaces": "1ae00c78-4cfe-4b4e-b830-466314f1c9f5"
+    },
+    "UserSecretsIdWeb":{
+      "type": "generated",
+      "generator": "guid",
+      "replaces": "48e49a0b-31db-4fd6-b23b-5f3582f721ef"
+    }
+    
+  }
+}

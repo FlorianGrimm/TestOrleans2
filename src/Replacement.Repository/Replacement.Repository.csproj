@@ -16,7 +16,7 @@
 	<ItemGroup>
 		<PackageReference Include="Brimborium.Registrator.Abstractions" Version="1.1.79-g858c964373" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-		<PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.1">
+		<PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.6.2">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -28,10 +28,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
-	  <ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj" />
-	  <ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
-	  <ProjectReference Include="..\..\external\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
+	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
 	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
 	</ItemGroup>
 
