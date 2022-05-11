@@ -1,6 +1,7 @@
 ﻿namespace Replacement.TestExtensions;
 
 [CollectionDefinition("DefaultClusterFixture")]
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 public class DefaultClusterFixture : BaseClusterFixture {
     public DefaultClusterFixture() {
     }

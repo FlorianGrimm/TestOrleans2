@@ -4,16 +4,19 @@ AS BEGIN
     SET NOCOUNT ON;
 
     SELECT TOP(1)
-            [RequestLogId] = [RequestLogId],
-            [OperationId] = [OperationId],
-            [ActivityId] = [ActivityId],
-            [OperationName] = [OperationName],
-            [EntityType] = [EntityType],
-            [EntityId] = [EntityId],
-            [Argument] = [Argument],
-            [CreatedAt] = [CreatedAt],
-            [UserId] = [UserId],
-            [EntityVersion] = CAST([EntityVersion] AS BIGINT)
+		-- Replace=SelectTableColumns.[dbo].[RequestLog] --
+  [RequestLogId] = [RequestLogId],
+  [OperationId] = [OperationId],
+  [ActivityId] = [ActivityId],
+  [OperationName] = [OperationName],
+  [EntityType] = [EntityType],
+  [EntityId] = [EntityId],
+  [Argument] = [Argument],
+  [CreatedAt] = [CreatedAt],
+  [UserId] = [UserId],
+  [EntityVersion] = CAST([EntityVersion] AS BIGINT)
+		-- Replace#SelectTableColumns.[dbo].[RequestLog] --
+
         FROM
             [dbo].[RequestLog]
         WHERE

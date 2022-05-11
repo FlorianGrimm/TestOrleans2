@@ -47,6 +47,7 @@ public static partial class Program {
             var sqlProjectName = configuration.GetValue<string>("SqlProject");
             var sqlProjectTablesName = configuration.GetValue<string>("SqlProjectTables");
             var sqlProjectDatabaseDevTool = configuration.GetValue<string>("SqlProjectDatabaseDevTool");
+            var csProjectRepositoryName = configuration.GetValue<string>("CsProjectRepository");
 
             if (string.IsNullOrEmpty(connectionString)) {
                 System.Console.Error.WriteLine("ConnectionString is empty");
@@ -67,6 +68,10 @@ public static partial class Program {
             if (string.IsNullOrEmpty(sqlProjectDatabaseDevTool)) {
                 sqlProjectDatabaseDevTool = "Replacement.DatabaseDevTool"; // change this
             }
+            if (string.IsNullOrEmpty(csProjectRepositoryName)) {
+                csProjectRepositoryName = "Replacement.Repository"; // change this
+            }
+
 
             if (string.IsNullOrEmpty(outputFolder)) {
                 System.Console.Error.WriteLine("outputFolder is empty");
@@ -105,7 +110,6 @@ public static partial class Program {
                 var subresult = UpdateDatabase(connectionString, dotnetPath, sqlProjectTables_csproj, sqlProjectTablesDirectory, isForce);
                 if (subresult != 0) { return subresult; }
             }
-#if true
             if (conditionRunStep(2, hsSteps)) {
 
                 if (!System.IO.Path.IsPathFullyQualified(outputFolder)) {
@@ -116,11 +120,7 @@ public static partial class Program {
 
                 //changes = true;
             }
-#else
-            changes = true;
-#endif
 
-#if true
             if (conditionRunStep(3, hsSteps)) {
                 var sqlProjectComplete_csproj = System.IO.Path.Combine(
                     upperDirectoryPath,
@@ -142,9 +142,7 @@ public static partial class Program {
                 }
             }
 
-#endif
             // GenerateSqlAccess
-#if true
             AddNativeTypeConverter();
             if (conditionRunStep(4, hsSteps)) {
                 {
@@ -166,7 +164,7 @@ public static partial class Program {
                                 upperDirectoryPath,
                                 sqlProjectDatabaseDevTool
                                 );
-                            var stepsCSV = string.Join(",", hsSteps.Select(n => n.ToString()));                            
+                            var stepsCSV = string.Join(",", hsSteps.Select(n => n.ToString()));
                             var psi = new System.Diagnostics.ProcessStartInfo(
                                 dotnetPath, $"run \"{sqlProject_csproj}\" -- --steps {stepsCSV}");
                             psi.WorkingDirectory = sqlProjectDirectory;
@@ -187,36 +185,25 @@ public static partial class Program {
                 MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
             }
             if (conditionRunStep(6, hsSteps)) {
-                // pwsh --file src\Replacement.Repository\GeneratorConverter.ps1
                 {
-                    var start = System.DateTime.Now;
-
-                    string fulllNameGeneratorConverter_ps1 = "GeneratorConverter.ps1";
-                    string workingDirectory = System.IO.Path.Combine(
-                        upperDirectoryPath,
-                        @"Replacement.Repository");
-
-                    System.Console.Out.WriteLine($"fulllNameGeneratorConverter_ps1: {fulllNameGeneratorConverter_ps1}");
-
-                    var psi = new System.Diagnostics.ProcessStartInfo(
-                        "pwsh",
-                        $"-file \"{fulllNameGeneratorConverter_ps1}\"");
-                    psi.WorkingDirectory = workingDirectory;
-                    var process = System.Diagnostics.Process.Start(psi);
-                    if (process is not null) {
-                        process.WaitForExit(30_000);
-                        var stop = System.DateTime.Now;
-                        System.Console.Out.WriteLine($"{(stop - start).TotalSeconds} sec");
-                        if (process.ExitCode == 0) {
-                            System.Console.Out.WriteLine($"pwsh -file \"{fulllNameGeneratorConverter_ps1}\" in \"{workingDirectory}\" OK");
-                        } else {
-                            System.Console.Out.WriteLine($"pwsh -file \"{fulllNameGeneratorConverter_ps1}\" in \"{workingDirectory}\" Failed");
-                            return 1;
-                        }
+                    var generateConverter = new GenerateConverter();
+                    var defineMapping = new DefineMapping();
+                    {
+                        string outputPathConverterToAPI = System.IO.Path.Combine(
+                            upperDirectoryPath,
+                            csProjectRepositoryName,
+                            @"Extensions\ConverterToAPI.cs");
+                        generateConverter.GenerateConverterToAPI(defineMapping, outputPathConverterToAPI);
+                    }
+                    {
+                        string outputPathConverterToEntity = System.IO.Path.Combine(
+                            upperDirectoryPath,
+                            csProjectRepositoryName,
+                            @"Extensions\ConverterToEntity.cs");
+                        generateConverter.GenerateConverterToEntity(defineMapping, outputPathConverterToEntity);
                     }
                 }
             }
-#endif
 
             System.Console.Out.WriteLine($"done.");
 

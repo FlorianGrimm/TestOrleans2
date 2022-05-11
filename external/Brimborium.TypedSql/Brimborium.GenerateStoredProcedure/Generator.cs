@@ -42,10 +42,10 @@ namespace Brimborium.GenerateStoredProcedure {
                 System.Console.WriteLine(fc.FileName);
             }
             */
-            return GenerateCode(config, templateVariables, lstFileContent, WriteText, isForce);
+            return GenerateSqlCode(config, templateVariables, lstFileContent, WriteText, isForce);
         }
 
-        public static bool GenerateCode(
+        public static bool GenerateSqlCode(
             ConfigurationBound config,
             Dictionary<string, string> templateVariables,
             List<FileContent> lstFileContent,

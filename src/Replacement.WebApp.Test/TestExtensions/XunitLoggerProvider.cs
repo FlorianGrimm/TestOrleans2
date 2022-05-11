@@ -1,4 +1,6 @@
 ﻿namespace Replacement.TestExtensions;
+
+[ExcludeFromCodeCoverage]
 public class XunitLoggerProvider : ILoggerProvider {
     private readonly ITestOutputHelper output;
 

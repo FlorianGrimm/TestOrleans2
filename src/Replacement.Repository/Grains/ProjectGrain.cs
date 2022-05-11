@@ -46,7 +46,6 @@ public partial class ProjectCollectionGrain : GrainCollectionBase, IProjectColle
         this._ProjectGrainObservers = new ObserverManager<IProjectGrainObserver>(TimeSpan.Zero, logger, "ProjectGrainObserver");
     }
 
-
     [LoggerMessage(
         EventId = (int)LogEventId.ProjectCollectionGrain_LogSubscripe,
         Level = LogLevel.Trace,

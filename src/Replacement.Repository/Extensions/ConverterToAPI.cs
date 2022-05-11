@@ -1,6 +1,7 @@
 #if NOConverterToAPI
 #else
 namespace Replacement.Contracts.Entity;
+[ExcludeFromCodeCoverage]
 public static partial class ConverterToAPI {
     [return: NotNullIfNotNull("that")]
     public static Operation? ToOperation(this OperationEntity? that) {
@@ -23,6 +24,60 @@ public static partial class ConverterToAPI {
         var result = new List<Operation>();
         foreach (var item in that) { 
             result.Add(item.ToOperation());
+        }
+        return result;
+    }
+
+    [return: NotNullIfNotNull("that")]
+    public static User? ToUser(this UserEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new User(
+                UserId: that.UserId,
+                UserName: that.UserName,
+                OperationId: that.OperationId,
+                CreatedAt: that.CreatedAt,
+                CreatedBy: that.CreatedBy,
+                ModifiedAt: that.ModifiedAt,
+                ModifiedBy: that.ModifiedBy,
+                DataVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToDataVersion(that.EntityVersion)
+                );
+        }
+    }
+
+    public static List<User> ToListUser(this IEnumerable<UserEntity> that) {
+        var result = new List<User>();
+        foreach (var item in that) { 
+            result.Add(item.ToUser());
+        }
+        return result;
+    }
+
+    [return: NotNullIfNotNull("that")]
+    public static UserHistory? ToUserHistory(this UserHistoryEntity? that) {
+        if (that is null) {
+            return default;
+        } else {
+            return new UserHistory(
+                OperationId: that.OperationId,
+                UserId: that.UserId,
+                UserName: that.UserName,
+                CreatedAt: that.CreatedAt,
+                CreatedBy: that.CreatedBy,
+                ModifiedAt: that.ModifiedAt,
+                ModifiedBy: that.ModifiedBy,
+                ValidFrom: that.ValidFrom,
+                ValidTo: that.ValidTo,
+                DataVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToDataVersion(that.EntityVersion)
+                );
+        }
+    }
+
+    public static List<UserHistory> ToListUserHistory(this IEnumerable<UserHistoryEntity> that) {
+        var result = new List<UserHistory>();
+        foreach (var item in that) { 
+            result.Add(item.ToUserHistory());
         }
         return result;
     }
@@ -77,34 +132,6 @@ public static partial class ConverterToAPI {
         var result = new List<ProjectHistory>();
         foreach (var item in that) { 
             result.Add(item.ToProjectHistory());
-        }
-        return result;
-    }
-
-    [return: NotNullIfNotNull("that")]
-    public static RequestLog? ToRequestLog(this RequestLogEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new RequestLog(
-                RequestLogId: that.RequestLogId,
-                OperationId: that.OperationId,
-                ActivityId: that.ActivityId,
-                OperationName: that.OperationName,
-                EntityType: that.EntityType,
-                EntityId: that.EntityId,
-                Argument: that.Argument,
-                UserId: that.UserId,
-                CreatedAt: that.CreatedAt,
-                DataVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToDataVersion(that.EntityVersion)
-                );
-        }
-    }
-
-    public static List<RequestLog> ToListRequestLog(this IEnumerable<RequestLogEntity> that) {
-        var result = new List<RequestLog>();
-        foreach (var item in that) { 
-            result.Add(item.ToRequestLog());
         }
         return result;
     }
@@ -170,55 +197,29 @@ public static partial class ConverterToAPI {
     }
 
     [return: NotNullIfNotNull("that")]
-    public static User? ToUser(this UserEntity? that) {
+    public static RequestLog? ToRequestLog(this RequestLogEntity? that) {
         if (that is null) {
             return default;
         } else {
-            return new User(
-                UserId: that.UserId,
-                UserName: that.UserName,
+            return new RequestLog(
+                RequestLogId: that.RequestLogId,
                 OperationId: that.OperationId,
+                ActivityId: that.ActivityId,
+                OperationName: that.OperationName,
+                EntityType: that.EntityType,
+                EntityId: that.EntityId,
+                Argument: that.Argument,
+                UserId: that.UserId,
                 CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
                 DataVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToDataVersion(that.EntityVersion)
                 );
         }
     }
 
-    public static List<User> ToListUser(this IEnumerable<UserEntity> that) {
-        var result = new List<User>();
+    public static List<RequestLog> ToListRequestLog(this IEnumerable<RequestLogEntity> that) {
+        var result = new List<RequestLog>();
         foreach (var item in that) { 
-            result.Add(item.ToUser());
-        }
-        return result;
-    }
-
-    [return: NotNullIfNotNull("that")]
-    public static UserHistory? ToUserHistory(this UserHistoryEntity? that) {
-        if (that is null) {
-            return default;
-        } else {
-            return new UserHistory(
-                OperationId: that.OperationId,
-                UserId: that.UserId,
-                UserName: that.UserName,
-                CreatedAt: that.CreatedAt,
-                CreatedBy: that.CreatedBy,
-                ModifiedAt: that.ModifiedAt,
-                ModifiedBy: that.ModifiedBy,
-                ValidFrom: that.ValidFrom,
-                ValidTo: that.ValidTo,
-                DataVersion: Brimborium.RowVersion.Extensions.DataVersionExtensions.ToDataVersion(that.EntityVersion)
-                );
-        }
-    }
-
-    public static List<UserHistory> ToListUserHistory(this IEnumerable<UserHistoryEntity> that) {
-        var result = new List<UserHistory>();
-        foreach (var item in that) { 
-            result.Add(item.ToUserHistory());
+            result.Add(item.ToRequestLog());
         }
         return result;
     }

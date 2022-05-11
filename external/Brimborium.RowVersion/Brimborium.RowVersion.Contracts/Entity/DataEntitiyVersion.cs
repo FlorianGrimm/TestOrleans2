@@ -2,7 +2,6 @@
 
 public struct DataEntityVersion {
     private long _EntityVersion;
-
     private string? _DataVersion;
 
     public DataEntityVersion(long entityVersion) {
@@ -31,12 +30,15 @@ public struct DataEntityVersion {
     }
 
     public long GetEntityVersion(ref DataEntityVersion that) {
-        if (this._EntityVersion == 0 && this._DataVersion is not null) {
+        if (this._EntityVersion == 0) {
+            if (string.IsNullOrEmpty(this._DataVersion)) {
+                return 0;
+            }
             if (long.TryParse(this._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var entityVersion)) {
                 that = new DataEntityVersion(entityVersion, this._DataVersion);
                 return entityVersion;
             } else {
-                return 0;
+                return -1;
             }
         } else { 
             return this._EntityVersion;
@@ -59,11 +61,14 @@ public struct DataEntityVersion {
     }
 
     public static implicit operator long(DataEntityVersion entryVersion) {
-        if (entryVersion._EntityVersion == 0 && entryVersion._DataVersion is not null) {
+        if (entryVersion._EntityVersion == 0) {
+            if (string.IsNullOrEmpty(entryVersion._DataVersion)) {
+                return 0;
+            }
             if (long.TryParse(entryVersion._DataVersion, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var dataVersion)) {
                 return dataVersion;
             } else {
-                return 0;
+                return -1;
             }
         } else {
             return entryVersion._EntityVersion;

@@ -1,4 +1,5 @@
 namespace Replacement.TestExtensions;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 public static class HostedTestBaseClusterStartedExtensions {
     public static RequestOperation CreateRequestOperation<PK, T>(
         this TestClusterTestingBase that,

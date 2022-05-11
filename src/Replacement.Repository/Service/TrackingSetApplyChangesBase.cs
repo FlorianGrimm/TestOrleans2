@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.Repository.Service;
+﻿namespace Replacement.Repository.Service;
 
 public abstract class TrackingSetApplyChangesBase<TValue, TPrimaryKey>
     : ITrackingSetApplyChanges<TValue>

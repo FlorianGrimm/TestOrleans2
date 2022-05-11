@@ -2,8 +2,7 @@
 
 namespace Replacement.Repository.Grains;
 public interface IRequestLogCollectionGrain : IGrainWithGuidKey {
-    Task<List<RequestLogEntity>> GetAllRequestLogs(UserEntity user, OperationEntity operation);
-    Task<List<RequestLogEntity>> GetUsersRequestLogs(UserEntity user, OperationEntity operation);
+    Task<List<RequestLogEntity>> GetAllRequestLogs(RequestLogFilter filter, OperationEntity operation);
 }
 
 /*
@@ -25,14 +24,12 @@ public partial class RequestLogCollectionGrain : GrainCollectionBase, IRequestLo
         this._Logger = logger;
     }
 
-#warning here
-    public Task<List<RequestLogEntity>> GetAllRequestLogs(UserEntity user, OperationEntity operation) {
-        throw new NotImplementedException();
-    }
-
-#warning here
-    public Task<List<RequestLogEntity>> GetUsersRequestLogs(UserEntity user, OperationEntity operation) {
-        throw new NotImplementedException();
+    public async Task<List<RequestLogEntity>> GetAllRequestLogs(RequestLogFilter filter, OperationEntity operation) {
+        List<RequestLogEntity> result;
+        using (var dataAccess = await this._DBContext.GetDataAccessAsync()) {
+            result = await dataAccess.ExecuteRequestLogSelectAllAsync(filter);
+        }
+        return result;
     }
 
 
@@ -41,7 +38,6 @@ public partial class RequestLogCollectionGrain : GrainCollectionBase, IRequestLo
     //    Level = LogLevel.Trace,
     //    Message = "Subscripe RequestLogGrainObserver:{grainId};")]
     //private partial void LogSubscripe(string grainId);
-
 }
 
 //

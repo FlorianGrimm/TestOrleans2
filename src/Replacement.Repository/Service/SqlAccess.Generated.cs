@@ -29,6 +29,32 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
+        public async Task<List<Replacement.Contracts.Entity.OperationEntity>> ExecuteOperationSelectAllAsync(Replacement.Contracts.API.OperationFilter args)  {
+            using(var cmd = this.CreateCommand("[dbo].[OperationSelectAll]", CommandType.StoredProcedure)) {
+                this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
+                this.AddParameterString(cmd, "@OperationName", SqlDbType.VarChar, 100, args.OperationName);
+                this.AddParameterString(cmd, "@EntityType", SqlDbType.VarChar, 50, args.EntityType);
+                this.AddParameterString(cmd, "@EntityId", SqlDbType.NVarChar, 100, args.EntityId);
+                this.AddParameterGuid(cmd, "@UserId", args.UserId);
+                this.AddParameterDateTimeOffset(cmd, "@CreatedAtLow", args.CreatedAtLow);
+                this.AddParameterDateTimeOffset(cmd, "@CreatedAtHigh", args.CreatedAtHigh);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationSelectAll);
+            }
+        } 
+
+        protected Replacement.Contracts.Entity.OperationEntity ReadRecordOperationSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.OperationEntity(
+                @OperationId: this.ReadGuid(reader, 0),
+                @OperationName: this.ReadString(reader, 1),
+                @EntityType: this.ReadString(reader, 2),
+                @EntityId: this.ReadString(reader, 3),
+                @CreatedAt: this.ReadDateTimeOffset(reader, 4),
+                @UserId: this.ReadGuidQ(reader, 5),
+                @EntityVersion: this.ReadInt64(reader, 6)
+            );
+            return result;
+        } 
+
         public async Task<Replacement.Contracts.Entity.OperationEntity?> ExecuteOperationSelectPKAsync(Replacement.Contracts.API.OperationPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[OperationSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
@@ -205,6 +231,38 @@ namespace Replacement.Repository.Service {
                 await this.CommandExecuteNonQueryAsync(cmd);
                 return;
             }
+        } 
+
+        public async Task<List<Replacement.Contracts.Entity.RequestLogEntity>> ExecuteRequestLogSelectAllAsync(Replacement.Contracts.API.RequestLogFilter args)  {
+            using(var cmd = this.CreateCommand("[dbo].[RequestLogSelectAll]", CommandType.StoredProcedure)) {
+                this.AddParameterGuid(cmd, "@RequestLogId", args.RequestLogId);
+                this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
+                this.AddParameterString(cmd, "@ActivityId", SqlDbType.VarChar, 200, args.ActivityId);
+                this.AddParameterString(cmd, "@OperationName", SqlDbType.VarChar, 100, args.OperationName);
+                this.AddParameterString(cmd, "@EntityType", SqlDbType.VarChar, 50, args.EntityType);
+                this.AddParameterString(cmd, "@EntityId", SqlDbType.NVarChar, 100, args.EntityId);
+                this.AddParameterString(cmd, "@Argument", SqlDbType.NVarChar, -1, args.Argument);
+                this.AddParameterGuid(cmd, "@UserId", args.UserId);
+                this.AddParameterDateTimeOffset(cmd, "@CreatedAtLow", args.CreatedAtLow);
+                this.AddParameterDateTimeOffset(cmd, "@CreatedAtHigh", args.CreatedAtHigh);
+                return await this.CommandQueryAsync<Replacement.Contracts.Entity.RequestLogEntity>(cmd, ReadRecordRequestLogSelectAll);
+            }
+        } 
+
+        protected Replacement.Contracts.Entity.RequestLogEntity ReadRecordRequestLogSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new Replacement.Contracts.Entity.RequestLogEntity(
+                @RequestLogId: this.ReadGuid(reader, 0),
+                @OperationId: this.ReadGuid(reader, 1),
+                @ActivityId: this.ReadString(reader, 2),
+                @OperationName: this.ReadString(reader, 3),
+                @EntityType: this.ReadString(reader, 4),
+                @EntityId: this.ReadString(reader, 5),
+                @Argument: this.ReadString(reader, 6),
+                @CreatedAt: this.ReadDateTimeOffset(reader, 7),
+                @UserId: this.ReadGuidQ(reader, 8),
+                @EntityVersion: this.ReadInt64(reader, 9)
+            );
+            return result;
         } 
 
         public async Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.Entity.ToDoEntity args)  {
@@ -490,12 +548,14 @@ namespace Replacement.Repository.Service {
     }
     partial interface ISqlAccess {
         Task<Replacement.Contracts.Entity.OperationEntity> ExecuteOperationInsertAsync(Replacement.Contracts.Entity.OperationEntity args);
+        Task<List<Replacement.Contracts.Entity.OperationEntity>> ExecuteOperationSelectAllAsync(Replacement.Contracts.API.OperationFilter args);
         Task<Replacement.Contracts.Entity.OperationEntity?> ExecuteOperationSelectPKAsync(Replacement.Contracts.API.OperationPK args);
         Task<List<Replacement.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(Replacement.Contracts.Entity.ProjectEntity args);
         Task<List<Replacement.Contracts.Entity.ProjectEntity>> ExecuteProjectSelectAllAsync();
         Task<Replacement.Contracts.Entity.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.API.ProjectPK args);
         Task<Replacement.Contracts.Entity.ProjectManipulationResult> ExecuteProjectUpsertAsync(Replacement.Contracts.Entity.ProjectEntity args);
         Task ExecuteRequestLogInsertAsync(Replacement.Contracts.Entity.RequestLogEntity args);
+        Task<List<Replacement.Contracts.Entity.RequestLogEntity>> ExecuteRequestLogSelectAllAsync(Replacement.Contracts.API.RequestLogFilter args);
         Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.Entity.ToDoEntity args);
         Task<List<Replacement.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectAllAsync();
         Task<Replacement.Contracts.Entity.ToDoEntity?> ExecuteToDoSelectPKAsync(Replacement.Contracts.API.ToDoPK args);

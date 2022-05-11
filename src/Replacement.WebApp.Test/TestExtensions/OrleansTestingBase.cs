@@ -1,5 +1,6 @@
 ﻿namespace Replacement.TestExtensions;
 
+[ExcludeFromCodeCoverage]
 public abstract class OrleansTestingBase {
     private static readonly SafeRandom safeRandom = new SafeRandom();
     protected static readonly Random random = new Random();

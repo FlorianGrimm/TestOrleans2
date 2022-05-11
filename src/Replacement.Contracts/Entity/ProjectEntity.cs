@@ -1,27 +1,4 @@
 ﻿namespace Replacement.Contracts.Entity;
-/*
-    public partial class Project {
-        public Project() {
-            this.ToDo = new HashSet<ToDo>();
-        }
-
-        [Key]
-        public Guid Id { get; set; }
-        [StringLength(50)]
-        public string Title { get; set; } = null!;
-        public Guid? OperationId { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
-        public DateTimeOffset ModifiedAt { get; set; }
-        public long DataVersion { get; set; }
-
-        [ForeignKey("ModifiedAt,OperationId")]
-        [InverseProperty("Project")]
-        public virtual Operation? Operation { get; set; }
-        [InverseProperty("Project")]
-        public virtual ICollection<ToDo> ToDo { get; set; }
-    }
-*/
-
 
 public record class ProjectEntity(
     // [property: Key]

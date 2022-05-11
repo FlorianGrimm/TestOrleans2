@@ -15,3 +15,5 @@ global using Brimborium.RowVersion.API;
 global using Brimborium.RowVersion.Entity;
 global using Brimborium.RowVersion.TimeRanged;
 global using Brimborium.RowVersion.Extensions;
+
+[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

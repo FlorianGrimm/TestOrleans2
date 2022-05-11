@@ -17,3 +17,4 @@ global using Microsoft.Extensions.Hosting;
 global using Replacement.Contracts.API;
 global using Replacement.Contracts.Entity;
 
+[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

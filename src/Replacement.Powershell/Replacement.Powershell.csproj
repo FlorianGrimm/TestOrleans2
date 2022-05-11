@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<AssemblyName>Replacement.Powershell</AssemblyName>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Management.Automation" Version="7.2.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\external\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
+		<ProjectReference Include="..\Replacement.Client\Replacement.Client.csproj" />
+		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

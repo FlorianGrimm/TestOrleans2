@@ -7,10 +7,12 @@ using System.Text.Encodings.Web;
 
 namespace Replacement.TestExtensions;
 
+[ExcludeFromCodeCoverage]
 public class TestAuthenticationDefaults {
     public const string AuthenticationScheme = "Test";
 }
 
+[ExcludeFromCodeCoverage]
 public class TestAuthenticationSchemeOptions : AuthenticationSchemeOptions {
     public TestAuthenticationSchemeOptions() {
         this.TestUsersClaims = new Dictionary<string, System.Security.Claims.Claim[]>();
@@ -30,6 +32,7 @@ public class TestAuthenticationSchemeOptions : AuthenticationSchemeOptions {
     }
 }
 
+[ExcludeFromCodeCoverage]
 public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticationSchemeOptions> {
 
     public TestAuthenticationHandler(IOptionsMonitor<TestAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock)
@@ -69,6 +72,7 @@ public class TestAuthenticationHandler : AuthenticationHandler<TestAuthenticatio
     }
 }
 
+[ExcludeFromCodeCoverage]
 public static class TestAuthenticationHandlerExtensions {
 
     public static AuthenticationBuilder AddTestAuthentication(this AuthenticationBuilder builder)

@@ -158,5 +158,13 @@ public class RequestLogServiceTests {
         public Task<List<UserEntity>> ExecuteUserSelectAllAsync() {
             throw new NotImplementedException();
         }
+
+        public Task<List<OperationEntity>> ExecuteOperationSelectAllAsync(OperationFilter args) {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<RequestLogEntity>> ExecuteRequestLogSelectAllAsync(RequestLogFilter args) {
+            throw new NotImplementedException();
+        }
     }
 }

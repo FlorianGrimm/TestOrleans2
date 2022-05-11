@@ -1,6 +1,4 @@
-﻿using Replacement.Contracts.Entity;
-
-namespace Replacement.WebApp.Controllers;
+﻿namespace Replacement.WebApp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

@@ -112,6 +112,8 @@
     <Build Include="dbo\StoredProcedures\dbo.RequestLogSelectPK.sql" />
     <Build Include="dbo\StoredProcedures\dbo.RequestLogInsert.sql" />
     <Build Include="dbo\StoredProcedures\dbo.UserSelectAll.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.RequestLogSelectAll.sql" />
+    <Build Include="dbo\StoredProcedures\dbo.OperationSelectAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />

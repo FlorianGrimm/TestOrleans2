@@ -78,10 +78,20 @@ public static partial class Program {
                     ExecutionMode.QuerySingleOrDefault,
                     CSTypeDefinition.TypeOf<OperationEntity>(isList:false, isAsync: true)),
 
+                 new StoredProcedureDefintion("dbo", "OperationSelectAll", 
+                     CSTypeDefinition.TypeOf<OperationFilter>(), 
+                     ExecutionMode.Query,
+                     CSTypeDefinition.TypeOf<OperationEntity>(isList:true, isAsync: true)),
+
                 new StoredProcedureDefintion("dbo", "RequestLogInsert", 
                     CSTypeDefinition.TypeOf<RequestLogEntity>(), 
                     ExecutionMode.ExecuteNonQuery, 
                     CSTypeDefinition.VoidAsync),
+
+                new StoredProcedureDefintion("dbo", "RequestLogSelectAll", 
+                    CSTypeDefinition.TypeOf<RequestLogFilter>(), 
+                    ExecutionMode.Query,
+                    CSTypeDefinition.TypeOf<RequestLogEntity>(isList:true, isAsync: true)),
 
                 new StoredProcedureDefintion("dbo", "ProjectDeletePK",
                     CSTypeDefinition.TypeOf<ProjectEntity>(),

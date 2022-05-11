@@ -1,12 +1,11 @@
-﻿
-
-using Microsoft.Extensions.FileProviders;
+﻿using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 
 using System.IO;
 
 namespace Replacement.TestExtensions;
 
+[ExcludeFromCodeCoverage]
 public class TestDefaultConfiguration {
     private static TestDefaultConfiguration? _Instance;
 

@@ -1,5 +1,6 @@
 namespace Replacement.TestExtensions;
 
+[ExcludeFromCodeCoverage]
 public abstract class  TestClusterTestingBase : OrleansTestingBase {
     public BaseClusterFixture Fixture { get; private set; }
     public TestCluster HostedCluster => this.Fixture.HostedCluster ?? throw new InvalidOperationException("this.Fixture.HostedCluster is null");

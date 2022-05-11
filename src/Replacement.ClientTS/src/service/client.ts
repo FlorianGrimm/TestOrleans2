@@ -19,6 +19,55 @@ export class Client {
     }
 
     /**
+     * @param body (optional) 
+     * @return Success
+     */
+    diagnosticsRequestLogFiltered(body: RequestLogFilter | undefined): Promise<RequestLog[]> {
+        let url_ = this.baseUrl + "/api/Diagnostics/RequestLog";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: RequestInit = {
+            body: content_,
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            }
+        };
+
+        return this.http.fetch(url_, options_).then((_response: Response) => {
+            return this.processDiagnosticsRequestLogFiltered(_response);
+        });
+    }
+
+    protected processDiagnosticsRequestLogFiltered(response: Response): Promise<RequestLog[]> {
+        const status = response.status;
+        let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
+        if (status === 200) {
+            return response.text().then((_responseText) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(RequestLog.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return result200;
+            });
+        } else if (status !== 200 && status !== 204) {
+            return response.text().then((_responseText) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            });
+        }
+        return Promise.resolve<RequestLog[]>(null as any);
+    }
+
+    /**
      * @return Success
      */
     meUserGetOne(): Promise<User> {
@@ -782,7 +831,7 @@ export class Project implements IProject {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    dataVersion?: number;
+    dataVersion?: string | undefined;
 
     constructor(data?: IProject) {
         if (data) {
@@ -835,7 +884,151 @@ export interface IProject {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    dataVersion?: number;
+    dataVersion?: string | undefined;
+}
+
+export class RequestLog implements IRequestLog {
+    requestLogId?: string;
+    operationId?: string;
+    activityId?: string | undefined;
+    operationName?: string | undefined;
+    entityType?: string | undefined;
+    entityId?: string | undefined;
+    argument?: string | undefined;
+    userId?: string | undefined;
+    createdAt?: Date;
+    dataVersion?: string | undefined;
+
+    constructor(data?: IRequestLog) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.requestLogId = _data["requestLogId"];
+            this.operationId = _data["operationId"];
+            this.activityId = _data["activityId"];
+            this.operationName = _data["operationName"];
+            this.entityType = _data["entityType"];
+            this.entityId = _data["entityId"];
+            this.argument = _data["argument"];
+            this.userId = _data["userId"];
+            this.createdAt = _data["createdAt"] ? new Date(_data["createdAt"].toString()) : <any>undefined;
+            this.dataVersion = _data["dataVersion"];
+        }
+    }
+
+    static fromJS(data: any): RequestLog {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestLog();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["requestLogId"] = this.requestLogId;
+        data["operationId"] = this.operationId;
+        data["activityId"] = this.activityId;
+        data["operationName"] = this.operationName;
+        data["entityType"] = this.entityType;
+        data["entityId"] = this.entityId;
+        data["argument"] = this.argument;
+        data["userId"] = this.userId;
+        data["createdAt"] = this.createdAt ? this.createdAt.toISOString() : <any>undefined;
+        data["dataVersion"] = this.dataVersion;
+        return data;
+    }
+}
+
+export interface IRequestLog {
+    requestLogId?: string;
+    operationId?: string;
+    activityId?: string | undefined;
+    operationName?: string | undefined;
+    entityType?: string | undefined;
+    entityId?: string | undefined;
+    argument?: string | undefined;
+    userId?: string | undefined;
+    createdAt?: Date;
+    dataVersion?: string | undefined;
+}
+
+export class RequestLogFilter implements IRequestLogFilter {
+    requestLogId?: string;
+    operationId?: string;
+    activityId?: string | undefined;
+    operationName?: string | undefined;
+    entityType?: string | undefined;
+    entityId?: string | undefined;
+    argument?: string | undefined;
+    userId?: string | undefined;
+    createdAtLow?: Date | undefined;
+    createdAtHigh?: Date | undefined;
+
+    constructor(data?: IRequestLogFilter) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.requestLogId = _data["requestLogId"];
+            this.operationId = _data["operationId"];
+            this.activityId = _data["activityId"];
+            this.operationName = _data["operationName"];
+            this.entityType = _data["entityType"];
+            this.entityId = _data["entityId"];
+            this.argument = _data["argument"];
+            this.userId = _data["userId"];
+            this.createdAtLow = _data["createdAtLow"] ? new Date(_data["createdAtLow"].toString()) : <any>undefined;
+            this.createdAtHigh = _data["createdAtHigh"] ? new Date(_data["createdAtHigh"].toString()) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): RequestLogFilter {
+        data = typeof data === 'object' ? data : {};
+        let result = new RequestLogFilter();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["requestLogId"] = this.requestLogId;
+        data["operationId"] = this.operationId;
+        data["activityId"] = this.activityId;
+        data["operationName"] = this.operationName;
+        data["entityType"] = this.entityType;
+        data["entityId"] = this.entityId;
+        data["argument"] = this.argument;
+        data["userId"] = this.userId;
+        data["createdAtLow"] = this.createdAtLow ? this.createdAtLow.toISOString() : <any>undefined;
+        data["createdAtHigh"] = this.createdAtHigh ? this.createdAtHigh.toISOString() : <any>undefined;
+        return data;
+    }
+}
+
+export interface IRequestLogFilter {
+    requestLogId?: string;
+    operationId?: string;
+    activityId?: string | undefined;
+    operationName?: string | undefined;
+    entityType?: string | undefined;
+    entityId?: string | undefined;
+    argument?: string | undefined;
+    userId?: string | undefined;
+    createdAtLow?: Date | undefined;
+    createdAtHigh?: Date | undefined;
 }
 
 export class ToDo implements IToDo {
@@ -849,7 +1042,7 @@ export class ToDo implements IToDo {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    dataVersion?: number;
+    dataVersion?: string | undefined;
 
     constructor(data?: IToDo) {
         if (data) {
@@ -911,7 +1104,7 @@ export interface IToDo {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    dataVersion?: number;
+    dataVersion?: string | undefined;
 }
 
 export class User implements IUser {
@@ -922,7 +1115,7 @@ export class User implements IUser {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    dataVersion?: number;
+    dataVersion?: string | undefined;
 
     constructor(data?: IUser) {
         if (data) {
@@ -975,7 +1168,7 @@ export interface IUser {
     createdBy?: string | undefined;
     modifiedAt?: Date;
     modifiedBy?: string | undefined;
-    dataVersion?: number;
+    dataVersion?: string | undefined;
 }
 
 export class ApiException extends Error {

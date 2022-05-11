@@ -14,9 +14,13 @@ public class OperationCollectionGrain : Grain, IOperationCollectionGrain {
         this._DBContext = dBContext;
     }
 
-#warning HERE
-    public Task<List<OperationEntity>> GetAllOperation(OperationFilter filter, OperationEntity operation) {
-        throw new NotImplementedException();
+    public async Task<List<OperationEntity>> GetAllOperation(OperationFilter filter, OperationEntity operation) {
+        List<OperationEntity> result;
+        using (var dataAccess = await this._DBContext.GetDataAccessAsync()) {
+            result = await dataAccess.ExecuteOperationSelectAllAsync(filter);
+        }
+        return result;
+
     }
 
 #warning HERE

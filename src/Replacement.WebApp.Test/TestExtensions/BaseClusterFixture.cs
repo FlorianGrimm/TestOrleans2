@@ -1,5 +1,7 @@
 namespace Replacement.TestExtensions;
 
+
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 public class BaseClusterFixture : Xunit.IAsyncLifetime {
     public TestServer WebTestServer => _WebTestServer ?? throw new ObjectDisposedException("WebTestServer");
 

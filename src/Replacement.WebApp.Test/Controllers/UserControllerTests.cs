@@ -1,4 +1,5 @@
 ﻿namespace Replacement.WebApp.Controllers;
+
 [Collection("DefaultClusterFixture")]
 public class UserControllerTests : HostedTestClusterEnsureDefaultStarted {
 
@@ -61,14 +62,4 @@ public class UserControllerTests : HostedTestClusterEnsureDefaultStarted {
             await replacementClient.UserDeleteOneAsync(userPostOne1.UserId);
         }
     }
-
-    //[Fact()]
-    //public void Put_Test() {
-
-    //}
-
-    //[Fact()]
-    //public void Delete_Test() {
-
-    //}
 }

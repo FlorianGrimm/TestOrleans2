@@ -31,3 +31,5 @@ global using Replacement.Repository.Service;
 
 global using Xunit;
 
+
+[assembly: System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]

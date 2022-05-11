@@ -5,6 +5,64 @@
     "version": "v1"
   },
   "paths": {
+    "/api/Diagnostics/RequestLog": {
+      "get": {
+        "tags": [
+          "Diagnostics"
+        ],
+        "operationId": "DiagnosticsRequestLogFiltered",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestLogFilter"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestLogFilter"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestLogFilter"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RequestLog"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RequestLog"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RequestLog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Me": {
       "get": {
         "tags": [
@@ -800,8 +858,104 @@
             "nullable": true
           },
           "dataVersion": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestLog": {
+        "type": "object",
+        "properties": {
+          "requestLogId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "activityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "operationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityType": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "argument": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dataVersion": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestLogFilter": {
+        "type": "object",
+        "properties": {
+          "requestLogId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "operationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "activityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "operationName": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityType": {
+            "type": "string",
+            "nullable": true
+          },
+          "entityId": {
+            "type": "string",
+            "nullable": true
+          },
+          "argument": {
+            "type": "string",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "createdAtLow": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAtHigh": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -851,8 +1005,8 @@
             "nullable": true
           },
           "dataVersion": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -891,8 +1045,8 @@
             "nullable": true
           },
           "dataVersion": {
-            "type": "integer",
-            "format": "int64"
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false

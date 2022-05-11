@@ -1,4 +1,6 @@
 ﻿namespace Replacement.TestExtensions;
+
+[ExcludeFromCodeCoverage]
 [Brimborium.Registrator.Singleton]
 public class TestRequestLogService : IRequestLogService {
     private readonly ITestOutputHelper? _Output;
