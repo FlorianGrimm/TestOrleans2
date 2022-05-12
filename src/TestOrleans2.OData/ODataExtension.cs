@@ -1,4 +1,4 @@
-﻿namespace Replacement.OData;
+﻿namespace TestOrleans2.OData;
 public class ODataExtension
 {
     public void AddAppOData(IMvcBuilder mvcBuilderControllers) {

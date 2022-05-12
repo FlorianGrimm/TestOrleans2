@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Contracts\TestOrleans2.Contracts.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Condition="!Exists('..\..\external\Brimborium.Net')">

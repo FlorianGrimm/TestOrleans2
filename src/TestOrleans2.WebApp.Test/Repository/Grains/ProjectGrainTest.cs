@@ -1,4 +1,4 @@
-namespace Replacement.Repository.Grains;
+namespace TestOrleans2.Repository.Grains;
 
 [Collection("DefaultClusterFixture")]
 public class ProjectGrainTest

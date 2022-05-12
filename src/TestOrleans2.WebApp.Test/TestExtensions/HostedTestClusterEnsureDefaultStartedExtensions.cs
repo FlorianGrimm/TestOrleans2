@@ -1,4 +1,4 @@
-namespace Replacement.TestExtensions;
+namespace TestOrleans2.TestExtensions;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
 public static class HostedTestBaseClusterStartedExtensions {
     public static RequestOperation CreateRequestOperation<PK, T>(

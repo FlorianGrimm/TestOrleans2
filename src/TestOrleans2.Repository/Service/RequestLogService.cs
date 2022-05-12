@@ -1,8 +1,8 @@
-﻿using Replacement.Contracts.Entity;
+﻿using TestOrleans2.Contracts.Entity;
 
 using System.Threading.Channels;
 
-namespace Replacement.Repository.Service;
+namespace TestOrleans2.Repository.Service;
 
 public interface IRequestLogService {
     Task InsertAsync(RequestLogEntity requestLog, bool canModifyState);

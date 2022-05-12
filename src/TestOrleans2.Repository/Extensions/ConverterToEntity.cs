@@ -1,6 +1,6 @@
 #if NOConverterToAPI
 #else
-namespace Replacement.Contracts.API;
+namespace TestOrleans2.Contracts.API;
 [ExcludeFromCodeCoverage]
 public static partial class ConverterToEntity {
     [return: NotNullIfNotNull("that")]

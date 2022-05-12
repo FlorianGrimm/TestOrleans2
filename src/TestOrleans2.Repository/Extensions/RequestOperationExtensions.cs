@@ -1,4 +1,4 @@
-namespace Replacement.Repository.Extensions;
+namespace TestOrleans2.Repository.Extensions;
 public static class RequestOperationExtensions {
     public static async Task<(OperationEntity operation, UserEntity? user)> InitializeOperation(
         this RequestOperation requestOperation,

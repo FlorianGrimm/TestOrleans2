@@ -1,4 +1,4 @@
-﻿namespace Replacement.Repository.Grains;
+﻿namespace TestOrleans2.Repository.Grains;
 
 public interface IUserCollectionGrain : IGrainWithGuidKey {
     Task<List<UserEntity>> GetAllUsers(OperationEntity operation);

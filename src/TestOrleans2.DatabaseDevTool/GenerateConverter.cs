@@ -1,4 +1,4 @@
-﻿namespace Replacement.DatabaseDevTool;
+﻿namespace TestOrleans2.DatabaseDevTool;
 
 public class GenerateConverter {
     public GenerateConverter() {
@@ -9,7 +9,7 @@ public class GenerateConverter {
         output.AppendLine("#if NOConverterToAPI");
         output.AppendLine("#else");
         //output.AppendLine("#if false");
-        output.AppendLine("namespace Replacement.Contracts.Entity;");
+        output.AppendLine("namespace TestOrleans2.Contracts.Entity;");
         output.AppendLine("[ExcludeFromCodeCoverage]");
         output.AppendLine("public static partial class ConverterToAPI {");
         foreach (var typeMapping in defineMapping.TypeMappings) {
@@ -57,7 +57,7 @@ public class GenerateConverter {
         output.AppendLine("#if NOConverterToAPI");
         output.AppendLine("#else");
         //output.AppendLine("#if false");
-        output.AppendLine("namespace Replacement.Contracts.API;");
+        output.AppendLine("namespace TestOrleans2.Contracts.API;");
         output.AppendLine("[ExcludeFromCodeCoverage]");
         output.AppendLine("public static partial class ConverterToEntity {");
         foreach (var typeMapping in defineMapping.TypeMappings) {

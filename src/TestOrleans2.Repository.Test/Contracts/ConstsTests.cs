@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts;
+﻿namespace TestOrleans2.Contracts;
 public class ConstsTests {
     [Fact]
     public void Consts_1_Test() {

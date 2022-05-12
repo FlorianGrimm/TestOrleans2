@@ -1,10 +1,10 @@
 ﻿/*
- import-module ".\bin\Debug\net6.0\Replacement.Powershell.dll"
+ import-module ".\bin\Debug\net6.0\TestOrleans2.Powershell.dll"
  */
 
 
 
-namespace Replacement.Powershell;
+namespace TestOrleans2.Powershell;
 
 [Cmdlet(VerbsCommon.New, "ReplacementConnection")]
 [OutputType(typeof(ReplacementConnection))]
@@ -62,7 +62,7 @@ public class ReplacementConnection {
     public string Url { get; set; }
     public bool UseDefaultCredentials { get; set; }
 
-    public Replacement.Client.ReplacementClient GetClient(bool create) {
+    public TestOrleans2.Client.ReplacementClient GetClient(bool create) {
         if (!create && (this._Client is not null)) {
             return this._Client;
         }
@@ -73,7 +73,7 @@ public class ReplacementConnection {
         System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient(
             handler
             );
-        var result = new Replacement.Client.ReplacementClient(this.Url, httpClient);
+        var result = new TestOrleans2.Client.ReplacementClient(this.Url, httpClient);
         this._Client = result;
         return result;
     }

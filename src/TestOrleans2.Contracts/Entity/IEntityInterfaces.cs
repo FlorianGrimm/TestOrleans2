@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.Entity;
+﻿namespace TestOrleans2.Contracts.Entity;
 
 public interface IDataEntity  : Brimborium.RowVersion.Entity.IEntityWithVersion {
     // long EntityVersion { get; init; }

@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Pages {
+﻿namespace TestOrleans2.WebApp.Pages {
     public class PrivacyModel : PageModel
     {
         private readonly ILogger<PrivacyModel> _logger;

@@ -1,4 +1,4 @@
-﻿namespace Replacement.TestExtensions;
+﻿namespace TestOrleans2.TestExtensions;
 
 [CollectionDefinition("DefaultClusterFixture")]
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -16,7 +16,7 @@ public class DefaultClusterFixture : BaseClusterFixture {
         public void Configure(ISiloBuilder hostBuilder) {
 
             hostBuilder.ConfigureServices((Microsoft.Extensions.Hosting.HostBuilderContext hostBuilderContext, IServiceCollection services) => {
-                var startup = new Replacement.WebApp.Startup(hostBuilderContext.Configuration);
+                var startup = new TestOrleans2.WebApp.Startup(hostBuilderContext.Configuration);
 
                 startup.AddAppServicesWithRegistrator(services);
                 startup.AddAppAuthenticationOptions(services);

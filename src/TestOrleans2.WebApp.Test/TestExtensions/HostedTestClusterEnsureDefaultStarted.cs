@@ -1,4 +1,4 @@
-﻿namespace Replacement.TestExtensions;
+﻿namespace TestOrleans2.TestExtensions;
 
 /// <summary>
 /// Base class that ensures a silo cluster is started with the default configuration, and avoids restarting it if the previous test used the same default base.

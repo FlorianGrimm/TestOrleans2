@@ -1,6 +1,6 @@
-﻿using Replacement.Contracts.Entity;
+﻿using TestOrleans2.Contracts.Entity;
 
-namespace Replacement.Repository.Service;
+namespace TestOrleans2.Repository.Service;
 
 public sealed class TrackingSetOperation : TrackingSet<OperationPK, OperationEntity> {
     public TrackingSetOperation(DBContext context, ITrackingSetApplyChanges<OperationEntity> trackingApplyChanges)

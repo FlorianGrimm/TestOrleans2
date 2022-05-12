@@ -1,6 +1,6 @@
 #if true
 
-namespace Replacement.Contracts.API {
+namespace TestOrleans2.Contracts.API {
     public sealed partial record OperationPK (
         System.DateTimeOffset CreatedAt,
         Guid OperationId

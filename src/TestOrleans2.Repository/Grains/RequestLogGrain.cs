@@ -1,6 +1,6 @@
 ﻿using Orleans.Concurrency;
 
-namespace Replacement.Repository.Grains;
+namespace TestOrleans2.Repository.Grains;
 public interface IRequestLogCollectionGrain : IGrainWithGuidKey {
     Task<List<RequestLogEntity>> GetAllRequestLogs(RequestLogFilter filter, OperationEntity operation);
 }

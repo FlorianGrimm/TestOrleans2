@@ -68,7 +68,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "../Replacement.ClientTS/src/service/client.ts",
+      "output": "../TestOrleans2.ClientTS/src/service/client.ts",
       "newLineBehavior": "Auto"
     },
     "openApiToCSharpClient": {
@@ -117,7 +117,7 @@
       "wrapResponseMethods": [],
       "generateResponseClasses": true,
       "responseClass": "SwaggerResponse",
-      "namespace": "Replacement.Client",
+      "namespace": "TestOrleans2.Client",
       "requiredPropertiesMustBeDefined": true,
       "dateType": "System.DateTimeOffset",
       "jsonConverters": null,

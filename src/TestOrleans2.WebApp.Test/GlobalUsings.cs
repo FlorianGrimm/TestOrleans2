@@ -27,19 +27,19 @@ global using Orleans.Configuration.Overrides;
 
 global using Brimborium.Registrator;
 
-global using Replacement.Contracts.API;
-global using Replacement.Contracts.Entity;
+global using TestOrleans2.Contracts.API;
+global using TestOrleans2.Contracts.Entity;
 
-global using Replacement.Repository.Grains;
-global using Replacement.Repository.Service;
-global using Replacement.Repository.Extensions;
+global using TestOrleans2.Repository.Grains;
+global using TestOrleans2.Repository.Service;
+global using TestOrleans2.Repository.Extensions;
 
-global using Replacement.WebApp.Swagger;
-global using Replacement.WebApp.Services;
-global using Replacement.WebApp.Controllers;
-global using Replacement.WebApp.Extensions;
+global using TestOrleans2.WebApp.Swagger;
+global using TestOrleans2.WebApp.Services;
+global using TestOrleans2.WebApp.Controllers;
+global using TestOrleans2.WebApp.Extensions;
 
-global using Replacement.TestExtensions;
+global using TestOrleans2.TestExtensions;
 
 global using Xunit;
 global using Xunit.Abstractions;

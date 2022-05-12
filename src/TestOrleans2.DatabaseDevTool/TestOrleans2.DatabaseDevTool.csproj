@@ -34,16 +34,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Include="..\Replacement.Contracts\API\*.cs">
-			<Link>External\Replacement.Contracts\API\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		<Compile Include="..\TestOrleans2.Contracts\API\*.cs">
+			<Link>External\TestOrleans2.Contracts\API\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Compile>
-		<Compile Include="..\Replacement.Contracts\Entity\*.cs">
-			<Link>External\Replacement.Contracts\Entity\%(RecursiveDir)%(Filename)%(Extension)</Link>
+		<Compile Include="..\TestOrleans2.Contracts\Entity\*.cs">
+			<Link>External\TestOrleans2.Contracts\Entity\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Compile>
-		<Compile Remove="..\Replacement.Contracts\Entity\RequestOperationEntity.cs" />
+		<Compile Remove="..\TestOrleans2.Contracts\Entity\RequestOperationEntity.cs" />
 		
-		<Compile Include="..\Replacement.Repository\Service\SqlAccessLocation.cs" Link="External\Replacement.Repository\Service\SqlAccessLocation.cs" />
-		<None Include="..\Replacement.Repository\Service\SqlAccess.Generated.cs" Link="Generated\Service\SqlAccess.Generated.cs" />
+		<Compile Include="..\TestOrleans2.Repository\Service\SqlAccessLocation.cs" Link="External\TestOrleans2.Repository\Service\SqlAccessLocation.cs" />
+		<None Include="..\TestOrleans2.Repository\Service\SqlAccess.Generated.cs" Link="Generated\Service\SqlAccess.Generated.cs" />
 	</ItemGroup>
 
 </Project>

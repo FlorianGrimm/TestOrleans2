@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<RootNamespace>Replacement.WebApp</RootNamespace>
+		<RootNamespace>TestOrleans2.WebApp</RootNamespace>
 		<UserSecretsId>48e49a0b-31db-4fd6-b23b-5f3582f721ef</UserSecretsId>
 	</PropertyGroup>
 
@@ -41,8 +41,8 @@
   -->
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
-	  <ProjectReference Include="..\Replacement.Repository\Replacement.Repository.csproj" />
+	  <ProjectReference Include="..\TestOrleans2.Contracts\TestOrleans2.Contracts.csproj" />
+	  <ProjectReference Include="..\TestOrleans2.Repository\TestOrleans2.Repository.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -55,9 +55,9 @@
 
 	<Target Name="SwaggerGenerate">
 		<PropertyGroup>
-			<SwaggerOutputPath>$(MSBuildProjectDirectory)\..\Replacement.Client\openapi.json</SwaggerOutputPath>
+			<SwaggerOutputPath>$(MSBuildProjectDirectory)\..\TestOrleans2.Client\openapi.json</SwaggerOutputPath>
 			<SwaggerCommand>dotnet run -- --Swagger:Generate=true --Swagger:OutputPath="$(SwaggerOutputPath)"</SwaggerCommand>
-			<ClientProjectPath>$(MSBuildProjectDirectory)\..\Replacement.Client\Replacement.Client.csproj</ClientProjectPath>
+			<ClientProjectPath>$(MSBuildProjectDirectory)\..\TestOrleans2.Client\TestOrleans2.Client.csproj</ClientProjectPath>
 		</PropertyGroup>
 		<Message Text="$(ProjectPriFileName)" Importance="high" />
 		<Exec Command="$(SwaggerCommand)" ContinueOnError="true"></Exec>

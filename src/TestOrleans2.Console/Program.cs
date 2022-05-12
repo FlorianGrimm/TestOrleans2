@@ -1,8 +1,8 @@
-﻿using Replacement.Contracts.API;
+﻿using TestOrleans2.Contracts.API;
 
 using System.Net.Http;
 
-namespace Replacement.Console;
+namespace TestOrleans2.Console;
 
 public static class Program {
     private static int cntProjectRead = 0;
@@ -25,7 +25,7 @@ public static class Program {
 #endif
 
     public static async Task<int> Main(string[] args) {
-        System.Console.Out.WriteLine("Replacement.Console!");
+        System.Console.Out.WriteLine("TestOrleans2.Console!");
         var configuration = ConfigureApp(args);
         var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
         ConfigureService(configuration, services);
@@ -95,12 +95,12 @@ public static class Program {
         .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
         .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
 #endif
-        //services.AddHttpClient<Replacement.Client.IReplacementClient, Replacement.Client.ReplacementClient>();
+        //services.AddHttpClient<TestOrleans2.Client.IReplacementClient, TestOrleans2.Client.ReplacementClient>();
 
-        services.AddHttpClient<Replacement.Client.IReplacementClient, Replacement.Client.ReplacementClient>(
+        services.AddHttpClient<TestOrleans2.Client.IReplacementClient, TestOrleans2.Client.ReplacementClient>(
             (HttpClient httpClient, IServiceProvider sp) => {
                 //httpClient.BaseAddress = new Uri(server);
-                return new Replacement.Client.ReplacementClient(server, httpClient);
+                return new TestOrleans2.Client.ReplacementClient(server, httpClient);
             })
             .ConfigureHttpClient((sp, httpClient) => {
                 httpClient.BaseAddress = new Uri(server);

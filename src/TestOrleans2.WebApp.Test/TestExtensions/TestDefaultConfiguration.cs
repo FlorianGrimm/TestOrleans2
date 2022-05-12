@@ -3,7 +3,7 @@ using Microsoft.Extensions.Primitives;
 
 using System.IO;
 
-namespace Replacement.TestExtensions;
+namespace TestOrleans2.TestExtensions;
 
 [ExcludeFromCodeCoverage]
 public class TestDefaultConfiguration {

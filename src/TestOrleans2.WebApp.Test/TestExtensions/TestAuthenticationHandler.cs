@@ -5,7 +5,7 @@ using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
 using System.Text.Encodings.Web;
 
-namespace Replacement.TestExtensions;
+namespace TestOrleans2.TestExtensions;
 
 [ExcludeFromCodeCoverage]
 public class TestAuthenticationDefaults {

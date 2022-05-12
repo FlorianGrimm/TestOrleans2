@@ -29,16 +29,16 @@
 
 	<!--
 	<ImportGroup>
-		<Import Condition="Exists('C:\secure\Replacement.Database.$(SqlServerVersion).targets')" Project="C:\secure\Replacement.Database.$(SqlServerVersion).targets" />
+		<Import Condition="Exists('C:\secure\TestOrleans2.Database.$(SqlServerVersion).targets')" Project="C:\secure\TestOrleans2.Database.$(SqlServerVersion).targets" />
 	</ImportGroup>
 	-->
 	<ItemGroup>
-		<Content Include="..\Replacement.Database\**\*.sql">
+		<Content Include="..\TestOrleans2.Database\**\*.sql">
 			<Link>\%(RecursiveDir)\%(FileName)%(extension)</Link>
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PostDeploy Include="..\Replacement.Database\Post-Deployment\Script.PostDeployment.sql">
+		<PostDeploy Include="..\TestOrleans2.Database\Post-Deployment\Script.PostDeployment.sql">
 			<Link>Post-Deployment\Script.PostDeployment.sql</Link>
 		</PostDeploy>
 	</ItemGroup>
@@ -48,9 +48,9 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Content Remove="..\Replacement.Database\snippets.sql" />
+	  <Content Remove="..\TestOrleans2.Database\snippets.sql" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Include="..\Replacement.Database\snippets.sql" />
+	  <None Include="..\TestOrleans2.Database\snippets.sql" />
 	</ItemGroup>
 </Project>

@@ -2,9 +2,9 @@
 #nullable enable
 
 
-namespace Replacement.Repository.Service {
+namespace TestOrleans2.Repository.Service {
     partial class SqlAccess {
-        public async Task<Replacement.Contracts.Entity.OperationEntity> ExecuteOperationInsertAsync(Replacement.Contracts.Entity.OperationEntity args)  {
+        public async Task<TestOrleans2.Contracts.Entity.OperationEntity> ExecuteOperationInsertAsync(TestOrleans2.Contracts.Entity.OperationEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[OperationInsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterString(cmd, "@OperationName", SqlDbType.VarChar, 100, args.OperationName);
@@ -12,12 +12,12 @@ namespace Replacement.Repository.Service {
                 this.AddParameterString(cmd, "@EntityId", SqlDbType.NVarChar, 100, args.EntityId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
-                return await this.CommandQuerySingleAsync<Replacement.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationInsert);
+                return await this.CommandQuerySingleAsync<TestOrleans2.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationInsert);
             }
         } 
 
-        protected Replacement.Contracts.Entity.OperationEntity ReadRecordOperationInsert(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.OperationEntity(
+        protected TestOrleans2.Contracts.Entity.OperationEntity ReadRecordOperationInsert(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.OperationEntity(
                 @OperationId: this.ReadGuid(reader, 0),
                 @OperationName: this.ReadString(reader, 1),
                 @EntityType: this.ReadString(reader, 2),
@@ -29,7 +29,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.Entity.OperationEntity>> ExecuteOperationSelectAllAsync(Replacement.Contracts.API.OperationFilter args)  {
+        public async Task<List<TestOrleans2.Contracts.Entity.OperationEntity>> ExecuteOperationSelectAllAsync(TestOrleans2.Contracts.API.OperationFilter args)  {
             using(var cmd = this.CreateCommand("[dbo].[OperationSelectAll]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterString(cmd, "@OperationName", SqlDbType.VarChar, 100, args.OperationName);
@@ -38,12 +38,12 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAtLow", args.CreatedAtLow);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAtHigh", args.CreatedAtHigh);
-                return await this.CommandQueryAsync<Replacement.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationSelectAll);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.Entity.OperationEntity ReadRecordOperationSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.OperationEntity(
+        protected TestOrleans2.Contracts.Entity.OperationEntity ReadRecordOperationSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.OperationEntity(
                 @OperationId: this.ReadGuid(reader, 0),
                 @OperationName: this.ReadString(reader, 1),
                 @EntityType: this.ReadString(reader, 2),
@@ -55,16 +55,16 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.OperationEntity?> ExecuteOperationSelectPKAsync(Replacement.Contracts.API.OperationPK args)  {
+        public async Task<TestOrleans2.Contracts.Entity.OperationEntity?> ExecuteOperationSelectPKAsync(TestOrleans2.Contracts.API.OperationPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[OperationSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAt", args.CreatedAt);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationSelectPK);
+                return await this.CommandQuerySingleOrDefaultAsync<TestOrleans2.Contracts.Entity.OperationEntity>(cmd, ReadRecordOperationSelectPK);
             }
         } 
 
-        protected Replacement.Contracts.Entity.OperationEntity ReadRecordOperationSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.OperationEntity(
+        protected TestOrleans2.Contracts.Entity.OperationEntity ReadRecordOperationSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.OperationEntity(
                 @OperationId: this.ReadGuid(reader, 0),
                 @OperationName: this.ReadString(reader, 1),
                 @EntityType: this.ReadString(reader, 2),
@@ -76,32 +76,32 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(Replacement.Contracts.Entity.ProjectEntity args)  {
+        public async Task<List<TestOrleans2.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(TestOrleans2.Contracts.Entity.ProjectEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectDeletePK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.ProjectPK>(cmd, ReadRecordProjectDeletePK);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.API.ProjectPK>(cmd, ReadRecordProjectDeletePK);
             }
         } 
 
-        protected Replacement.Contracts.API.ProjectPK ReadRecordProjectDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ProjectPK(
+        protected TestOrleans2.Contracts.API.ProjectPK ReadRecordProjectDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.API.ProjectPK(
                 @ProjectId: this.ReadGuid(reader, 0)
             );
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.Entity.ProjectEntity>> ExecuteProjectSelectAllAsync()  {
+        public async Task<List<TestOrleans2.Contracts.Entity.ProjectEntity>> ExecuteProjectSelectAllAsync()  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectSelectAll]", CommandType.StoredProcedure)) {
-                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ProjectEntity>(cmd, ReadRecordProjectSelectAll);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.Entity.ProjectEntity>(cmd, ReadRecordProjectSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.Entity.ProjectEntity ReadRecordProjectSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ProjectEntity(
+        protected TestOrleans2.Contracts.Entity.ProjectEntity ReadRecordProjectSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ProjectEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -114,20 +114,20 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.API.ProjectPK args)  {
+        public async Task<TestOrleans2.Contracts.Entity.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(TestOrleans2.Contracts.API.ProjectPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
-                System.Collections.Generic.List<Replacement.Contracts.Entity.ProjectEntity> result_Projects = new System.Collections.Generic.List<Replacement.Contracts.Entity.ProjectEntity>();
-                System.Collections.Generic.List<Replacement.Contracts.Entity.ToDoEntity> result_ToDos = new System.Collections.Generic.List<Replacement.Contracts.Entity.ToDoEntity>();
+                System.Collections.Generic.List<TestOrleans2.Contracts.Entity.ProjectEntity> result_Projects = new System.Collections.Generic.List<TestOrleans2.Contracts.Entity.ProjectEntity>();
+                System.Collections.Generic.List<TestOrleans2.Contracts.Entity.ToDoEntity> result_ToDos = new System.Collections.Generic.List<TestOrleans2.Contracts.Entity.ToDoEntity>();
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_Projects = await this.CommandReadQueryAsync<Replacement.Contracts.Entity.ProjectEntity>(reader, ReadRecordProjectSelectPK_0);
+                        result_Projects = await this.CommandReadQueryAsync<TestOrleans2.Contracts.Entity.ProjectEntity>(reader, ReadRecordProjectSelectPK_0);
                     }
                     if (idx == 1) {
-                        result_ToDos = await this.CommandReadQueryAsync<Replacement.Contracts.Entity.ToDoEntity>(reader, ReadRecordProjectSelectPK_1);
+                        result_ToDos = await this.CommandReadQueryAsync<TestOrleans2.Contracts.Entity.ToDoEntity>(reader, ReadRecordProjectSelectPK_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.Entity.ProjectSelectPKResult(
+                var result = new TestOrleans2.Contracts.Entity.ProjectSelectPKResult(
                     Projects: result_Projects,
                     ToDos: result_ToDos
                 );
@@ -135,8 +135,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.Entity.ProjectEntity ReadRecordProjectSelectPK_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ProjectEntity(
+        protected TestOrleans2.Contracts.Entity.ProjectEntity ReadRecordProjectSelectPK_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ProjectEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -149,8 +149,8 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.Entity.ToDoEntity ReadRecordProjectSelectPK_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ToDoEntity(
+        protected TestOrleans2.Contracts.Entity.ToDoEntity ReadRecordProjectSelectPK_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ToDoEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -166,7 +166,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.ProjectManipulationResult> ExecuteProjectUpsertAsync(Replacement.Contracts.Entity.ProjectEntity args)  {
+        public async Task<TestOrleans2.Contracts.Entity.ProjectManipulationResult> ExecuteProjectUpsertAsync(TestOrleans2.Contracts.Entity.ProjectEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[ProjectUpsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterString(cmd, "@Title", SqlDbType.NVarChar, 50, args.Title);
@@ -176,17 +176,17 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
-                Replacement.Contracts.Entity.ProjectEntity result_DataResult = default!;
-                Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
+                TestOrleans2.Contracts.Entity.ProjectEntity result_DataResult = default!;
+                TestOrleans2.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_DataResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.Entity.ProjectEntity>(reader, ReadRecordProjectUpsert_0);
+                        result_DataResult = await this.CommandReadQuerySingleAsync<TestOrleans2.Contracts.Entity.ProjectEntity>(reader, ReadRecordProjectUpsert_0);
                     }
                     if (idx == 1) {
-                        result_OperationResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.Entity.OperationResult>(reader, ReadRecordProjectUpsert_1);
+                        result_OperationResult = await this.CommandReadQuerySingleAsync<TestOrleans2.Contracts.Entity.OperationResult>(reader, ReadRecordProjectUpsert_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.Entity.ProjectManipulationResult(
+                var result = new TestOrleans2.Contracts.Entity.ProjectManipulationResult(
                     DataResult: result_DataResult,
                     OperationResult: result_OperationResult
                 );
@@ -194,8 +194,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.Entity.ProjectEntity ReadRecordProjectUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ProjectEntity(
+        protected TestOrleans2.Contracts.Entity.ProjectEntity ReadRecordProjectUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ProjectEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @Title: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -208,16 +208,16 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.Entity.OperationResult ReadRecordProjectUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.OperationResult(
-                @resultValue: (Replacement.Contracts.Entity.ResultValue) (this.ReadInt32(reader, 0))
+        protected TestOrleans2.Contracts.Entity.OperationResult ReadRecordProjectUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.OperationResult(
+                @resultValue: (TestOrleans2.Contracts.Entity.ResultValue) (this.ReadInt32(reader, 0))
             ) {
                 Message = this.ReadString(reader, 1)
             } ;
             return result;
         } 
 
-        public async Task ExecuteRequestLogInsertAsync(Replacement.Contracts.Entity.RequestLogEntity args)  {
+        public async Task ExecuteRequestLogInsertAsync(TestOrleans2.Contracts.Entity.RequestLogEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[RequestLogInsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@RequestLogId", args.RequestLogId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
@@ -233,7 +233,7 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        public async Task<List<Replacement.Contracts.Entity.RequestLogEntity>> ExecuteRequestLogSelectAllAsync(Replacement.Contracts.API.RequestLogFilter args)  {
+        public async Task<List<TestOrleans2.Contracts.Entity.RequestLogEntity>> ExecuteRequestLogSelectAllAsync(TestOrleans2.Contracts.API.RequestLogFilter args)  {
             using(var cmd = this.CreateCommand("[dbo].[RequestLogSelectAll]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@RequestLogId", args.RequestLogId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
@@ -245,12 +245,12 @@ namespace Replacement.Repository.Service {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAtLow", args.CreatedAtLow);
                 this.AddParameterDateTimeOffset(cmd, "@CreatedAtHigh", args.CreatedAtHigh);
-                return await this.CommandQueryAsync<Replacement.Contracts.Entity.RequestLogEntity>(cmd, ReadRecordRequestLogSelectAll);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.Entity.RequestLogEntity>(cmd, ReadRecordRequestLogSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.Entity.RequestLogEntity ReadRecordRequestLogSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.RequestLogEntity(
+        protected TestOrleans2.Contracts.Entity.RequestLogEntity ReadRecordRequestLogSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.RequestLogEntity(
                 @RequestLogId: this.ReadGuid(reader, 0),
                 @OperationId: this.ReadGuid(reader, 1),
                 @ActivityId: this.ReadString(reader, 2),
@@ -265,7 +265,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.Entity.ToDoEntity args)  {
+        public async Task<List<TestOrleans2.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(TestOrleans2.Contracts.Entity.ToDoEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoDeletePK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
@@ -273,26 +273,26 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.ToDoPK>(cmd, ReadRecordToDoDeletePK);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.API.ToDoPK>(cmd, ReadRecordToDoDeletePK);
             }
         } 
 
-        protected Replacement.Contracts.API.ToDoPK ReadRecordToDoDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.ToDoPK(
+        protected TestOrleans2.Contracts.API.ToDoPK ReadRecordToDoDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.API.ToDoPK(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1)
             );
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectAllAsync()  {
+        public async Task<List<TestOrleans2.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectAllAsync()  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectAll]", CommandType.StoredProcedure)) {
-                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ToDoEntity>(cmd, ReadRecordToDoSelectAll);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.Entity.ToDoEntity>(cmd, ReadRecordToDoSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.Entity.ToDoEntity ReadRecordToDoSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ToDoEntity(
+        protected TestOrleans2.Contracts.Entity.ToDoEntity ReadRecordToDoSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ToDoEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -308,16 +308,16 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.ToDoEntity?> ExecuteToDoSelectPKAsync(Replacement.Contracts.API.ToDoPK args)  {
+        public async Task<TestOrleans2.Contracts.Entity.ToDoEntity?> ExecuteToDoSelectPKAsync(TestOrleans2.Contracts.API.ToDoPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.ToDoEntity>(cmd, ReadRecordToDoSelectPK);
+                return await this.CommandQuerySingleOrDefaultAsync<TestOrleans2.Contracts.Entity.ToDoEntity>(cmd, ReadRecordToDoSelectPK);
             }
         } 
 
-        protected Replacement.Contracts.Entity.ToDoEntity ReadRecordToDoSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ToDoEntity(
+        protected TestOrleans2.Contracts.Entity.ToDoEntity ReadRecordToDoSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ToDoEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -333,15 +333,15 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.API.ToDoPK args)  {
+        public async Task<List<TestOrleans2.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectProjectAsync(TestOrleans2.Contracts.API.ToDoPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoSelectProject]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
-                return await this.CommandQueryAsync<Replacement.Contracts.Entity.ToDoEntity>(cmd, ReadRecordToDoSelectProject);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.Entity.ToDoEntity>(cmd, ReadRecordToDoSelectProject);
             }
         } 
 
-        protected Replacement.Contracts.Entity.ToDoEntity ReadRecordToDoSelectProject(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ToDoEntity(
+        protected TestOrleans2.Contracts.Entity.ToDoEntity ReadRecordToDoSelectProject(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ToDoEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -357,7 +357,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.ToDoManipulationResult> ExecuteToDoUpsertAsync(Replacement.Contracts.Entity.ToDoEntity args)  {
+        public async Task<TestOrleans2.Contracts.Entity.ToDoManipulationResult> ExecuteToDoUpsertAsync(TestOrleans2.Contracts.Entity.ToDoEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[ToDoUpsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@ProjectId", args.ProjectId);
                 this.AddParameterGuid(cmd, "@ToDoId", args.ToDoId);
@@ -370,17 +370,17 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
-                Replacement.Contracts.Entity.ToDoEntity result_DataResult = default!;
-                Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
+                TestOrleans2.Contracts.Entity.ToDoEntity result_DataResult = default!;
+                TestOrleans2.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_DataResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.Entity.ToDoEntity>(reader, ReadRecordToDoUpsert_0);
+                        result_DataResult = await this.CommandReadQuerySingleAsync<TestOrleans2.Contracts.Entity.ToDoEntity>(reader, ReadRecordToDoUpsert_0);
                     }
                     if (idx == 1) {
-                        result_OperationResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.Entity.OperationResult>(reader, ReadRecordToDoUpsert_1);
+                        result_OperationResult = await this.CommandReadQuerySingleAsync<TestOrleans2.Contracts.Entity.OperationResult>(reader, ReadRecordToDoUpsert_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.Entity.ToDoManipulationResult(
+                var result = new TestOrleans2.Contracts.Entity.ToDoManipulationResult(
                     DataResult: result_DataResult,
                     OperationResult: result_OperationResult
                 );
@@ -388,8 +388,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.Entity.ToDoEntity ReadRecordToDoUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.ToDoEntity(
+        protected TestOrleans2.Contracts.Entity.ToDoEntity ReadRecordToDoUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.ToDoEntity(
                 @ProjectId: this.ReadGuid(reader, 0),
                 @ToDoId: this.ReadGuid(reader, 1),
                 @UserId: this.ReadGuid(reader, 2),
@@ -405,41 +405,41 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.Entity.OperationResult ReadRecordToDoUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.OperationResult(
-                @resultValue: (Replacement.Contracts.Entity.ResultValue) (this.ReadInt32(reader, 0))
+        protected TestOrleans2.Contracts.Entity.OperationResult ReadRecordToDoUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.OperationResult(
+                @resultValue: (TestOrleans2.Contracts.Entity.ResultValue) (this.ReadInt32(reader, 0))
             ) {
                 Message = this.ReadString(reader, 1)
             } ;
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(Replacement.Contracts.Entity.UserEntity args)  {
+        public async Task<List<TestOrleans2.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(TestOrleans2.Contracts.Entity.UserEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserDeletePK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterGuid(cmd, "@OperationId", args.OperationId);
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
-                return await this.CommandQueryAsync<Replacement.Contracts.API.UserPK>(cmd, ReadRecordUserDeletePK);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.API.UserPK>(cmd, ReadRecordUserDeletePK);
             }
         } 
 
-        protected Replacement.Contracts.API.UserPK ReadRecordUserDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.API.UserPK(
+        protected TestOrleans2.Contracts.API.UserPK ReadRecordUserDeletePK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.API.UserPK(
                 @UserId: this.ReadGuid(reader, 0)
             );
             return result;
         } 
 
-        public async Task<List<Replacement.Contracts.Entity.UserEntity>> ExecuteUserSelectAllAsync()  {
+        public async Task<List<TestOrleans2.Contracts.Entity.UserEntity>> ExecuteUserSelectAllAsync()  {
             using(var cmd = this.CreateCommand("[dbo].[UserSelectAll]", CommandType.StoredProcedure)) {
-                return await this.CommandQueryAsync<Replacement.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectAll);
+                return await this.CommandQueryAsync<TestOrleans2.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectAll);
             }
         } 
 
-        protected Replacement.Contracts.Entity.UserEntity ReadRecordUserSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.UserEntity(
+        protected TestOrleans2.Contracts.Entity.UserEntity ReadRecordUserSelectAll(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.UserEntity(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -452,15 +452,15 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectByUserNameAsync(Replacement.Contracts.Entity.UserSelectByUserNameArg args)  {
+        public async Task<TestOrleans2.Contracts.Entity.UserEntity?> ExecuteUserSelectByUserNameAsync(TestOrleans2.Contracts.Entity.UserSelectByUserNameArg args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserSelectByUserName]", CommandType.StoredProcedure)) {
                 this.AddParameterString(cmd, "@UserName", SqlDbType.NVarChar, 50, args.UserName);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectByUserName);
+                return await this.CommandQuerySingleOrDefaultAsync<TestOrleans2.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectByUserName);
             }
         } 
 
-        protected Replacement.Contracts.Entity.UserEntity ReadRecordUserSelectByUserName(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.UserEntity(
+        protected TestOrleans2.Contracts.Entity.UserEntity ReadRecordUserSelectByUserName(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.UserEntity(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -473,15 +473,15 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectPKAsync(Replacement.Contracts.API.UserPK args)  {
+        public async Task<TestOrleans2.Contracts.Entity.UserEntity?> ExecuteUserSelectPKAsync(TestOrleans2.Contracts.API.UserPK args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserSelectPK]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
-                return await this.CommandQuerySingleOrDefaultAsync<Replacement.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectPK);
+                return await this.CommandQuerySingleOrDefaultAsync<TestOrleans2.Contracts.Entity.UserEntity>(cmd, ReadRecordUserSelectPK);
             }
         } 
 
-        protected Replacement.Contracts.Entity.UserEntity ReadRecordUserSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.UserEntity(
+        protected TestOrleans2.Contracts.Entity.UserEntity ReadRecordUserSelectPK(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.UserEntity(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -494,7 +494,7 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        public async Task<Replacement.Contracts.Entity.UserManipulationResult> ExecuteUserUpsertAsync(Replacement.Contracts.Entity.UserEntity args)  {
+        public async Task<TestOrleans2.Contracts.Entity.UserManipulationResult> ExecuteUserUpsertAsync(TestOrleans2.Contracts.Entity.UserEntity args)  {
             using(var cmd = this.CreateCommand("[dbo].[UserUpsert]", CommandType.StoredProcedure)) {
                 this.AddParameterGuid(cmd, "@UserId", args.UserId);
                 this.AddParameterString(cmd, "@UserName", SqlDbType.NVarChar, 50, args.UserName);
@@ -504,17 +504,17 @@ namespace Replacement.Repository.Service {
                 this.AddParameterDateTimeOffset(cmd, "@ModifiedAt", args.ModifiedAt);
                 this.AddParameterGuid(cmd, "@ModifiedBy", args.ModifiedBy);
                 this.AddParameterLong(cmd, "@EntityVersion", args.EntityVersion);
-                Replacement.Contracts.Entity.UserEntity result_DataResult = default!;
-                Replacement.Contracts.Entity.OperationResult result_OperationResult = default!;
+                TestOrleans2.Contracts.Entity.UserEntity result_DataResult = default!;
+                TestOrleans2.Contracts.Entity.OperationResult result_OperationResult = default!;
                 await this.CommandQueryMultipleAsync(cmd, async (idx, reader) => {
                     if (idx == 0) {
-                        result_DataResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.Entity.UserEntity>(reader, ReadRecordUserUpsert_0);
+                        result_DataResult = await this.CommandReadQuerySingleAsync<TestOrleans2.Contracts.Entity.UserEntity>(reader, ReadRecordUserUpsert_0);
                     }
                     if (idx == 1) {
-                        result_OperationResult = await this.CommandReadQuerySingleAsync<Replacement.Contracts.Entity.OperationResult>(reader, ReadRecordUserUpsert_1);
+                        result_OperationResult = await this.CommandReadQuerySingleAsync<TestOrleans2.Contracts.Entity.OperationResult>(reader, ReadRecordUserUpsert_1);
                     }
                 } , 2);
-                var result = new Replacement.Contracts.Entity.UserManipulationResult(
+                var result = new TestOrleans2.Contracts.Entity.UserManipulationResult(
                     DataResult: result_DataResult,
                     OperationResult: result_OperationResult
                 );
@@ -522,8 +522,8 @@ namespace Replacement.Repository.Service {
             }
         } 
 
-        protected Replacement.Contracts.Entity.UserEntity ReadRecordUserUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.UserEntity(
+        protected TestOrleans2.Contracts.Entity.UserEntity ReadRecordUserUpsert_0(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.UserEntity(
                 @UserId: this.ReadGuid(reader, 0),
                 @UserName: this.ReadString(reader, 1),
                 @OperationId: this.ReadGuid(reader, 2),
@@ -536,9 +536,9 @@ namespace Replacement.Repository.Service {
             return result;
         } 
 
-        protected Replacement.Contracts.Entity.OperationResult ReadRecordUserUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
-            var result = new Replacement.Contracts.Entity.OperationResult(
-                @resultValue: (Replacement.Contracts.Entity.ResultValue) (this.ReadInt32(reader, 0))
+        protected TestOrleans2.Contracts.Entity.OperationResult ReadRecordUserUpsert_1(Microsoft.Data.SqlClient.SqlDataReader reader) {
+            var result = new TestOrleans2.Contracts.Entity.OperationResult(
+                @resultValue: (TestOrleans2.Contracts.Entity.ResultValue) (this.ReadInt32(reader, 0))
             ) {
                 Message = this.ReadString(reader, 1)
             } ;
@@ -547,25 +547,25 @@ namespace Replacement.Repository.Service {
 
     }
     partial interface ISqlAccess {
-        Task<Replacement.Contracts.Entity.OperationEntity> ExecuteOperationInsertAsync(Replacement.Contracts.Entity.OperationEntity args);
-        Task<List<Replacement.Contracts.Entity.OperationEntity>> ExecuteOperationSelectAllAsync(Replacement.Contracts.API.OperationFilter args);
-        Task<Replacement.Contracts.Entity.OperationEntity?> ExecuteOperationSelectPKAsync(Replacement.Contracts.API.OperationPK args);
-        Task<List<Replacement.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(Replacement.Contracts.Entity.ProjectEntity args);
-        Task<List<Replacement.Contracts.Entity.ProjectEntity>> ExecuteProjectSelectAllAsync();
-        Task<Replacement.Contracts.Entity.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(Replacement.Contracts.API.ProjectPK args);
-        Task<Replacement.Contracts.Entity.ProjectManipulationResult> ExecuteProjectUpsertAsync(Replacement.Contracts.Entity.ProjectEntity args);
-        Task ExecuteRequestLogInsertAsync(Replacement.Contracts.Entity.RequestLogEntity args);
-        Task<List<Replacement.Contracts.Entity.RequestLogEntity>> ExecuteRequestLogSelectAllAsync(Replacement.Contracts.API.RequestLogFilter args);
-        Task<List<Replacement.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(Replacement.Contracts.Entity.ToDoEntity args);
-        Task<List<Replacement.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectAllAsync();
-        Task<Replacement.Contracts.Entity.ToDoEntity?> ExecuteToDoSelectPKAsync(Replacement.Contracts.API.ToDoPK args);
-        Task<List<Replacement.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectProjectAsync(Replacement.Contracts.API.ToDoPK args);
-        Task<Replacement.Contracts.Entity.ToDoManipulationResult> ExecuteToDoUpsertAsync(Replacement.Contracts.Entity.ToDoEntity args);
-        Task<List<Replacement.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(Replacement.Contracts.Entity.UserEntity args);
-        Task<List<Replacement.Contracts.Entity.UserEntity>> ExecuteUserSelectAllAsync();
-        Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectByUserNameAsync(Replacement.Contracts.Entity.UserSelectByUserNameArg args);
-        Task<Replacement.Contracts.Entity.UserEntity?> ExecuteUserSelectPKAsync(Replacement.Contracts.API.UserPK args);
-        Task<Replacement.Contracts.Entity.UserManipulationResult> ExecuteUserUpsertAsync(Replacement.Contracts.Entity.UserEntity args);
+        Task<TestOrleans2.Contracts.Entity.OperationEntity> ExecuteOperationInsertAsync(TestOrleans2.Contracts.Entity.OperationEntity args);
+        Task<List<TestOrleans2.Contracts.Entity.OperationEntity>> ExecuteOperationSelectAllAsync(TestOrleans2.Contracts.API.OperationFilter args);
+        Task<TestOrleans2.Contracts.Entity.OperationEntity?> ExecuteOperationSelectPKAsync(TestOrleans2.Contracts.API.OperationPK args);
+        Task<List<TestOrleans2.Contracts.API.ProjectPK>> ExecuteProjectDeletePKAsync(TestOrleans2.Contracts.Entity.ProjectEntity args);
+        Task<List<TestOrleans2.Contracts.Entity.ProjectEntity>> ExecuteProjectSelectAllAsync();
+        Task<TestOrleans2.Contracts.Entity.ProjectSelectPKResult> ExecuteProjectSelectPKAsync(TestOrleans2.Contracts.API.ProjectPK args);
+        Task<TestOrleans2.Contracts.Entity.ProjectManipulationResult> ExecuteProjectUpsertAsync(TestOrleans2.Contracts.Entity.ProjectEntity args);
+        Task ExecuteRequestLogInsertAsync(TestOrleans2.Contracts.Entity.RequestLogEntity args);
+        Task<List<TestOrleans2.Contracts.Entity.RequestLogEntity>> ExecuteRequestLogSelectAllAsync(TestOrleans2.Contracts.API.RequestLogFilter args);
+        Task<List<TestOrleans2.Contracts.API.ToDoPK>> ExecuteToDoDeletePKAsync(TestOrleans2.Contracts.Entity.ToDoEntity args);
+        Task<List<TestOrleans2.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectAllAsync();
+        Task<TestOrleans2.Contracts.Entity.ToDoEntity?> ExecuteToDoSelectPKAsync(TestOrleans2.Contracts.API.ToDoPK args);
+        Task<List<TestOrleans2.Contracts.Entity.ToDoEntity>> ExecuteToDoSelectProjectAsync(TestOrleans2.Contracts.API.ToDoPK args);
+        Task<TestOrleans2.Contracts.Entity.ToDoManipulationResult> ExecuteToDoUpsertAsync(TestOrleans2.Contracts.Entity.ToDoEntity args);
+        Task<List<TestOrleans2.Contracts.API.UserPK>> ExecuteUserDeletePKAsync(TestOrleans2.Contracts.Entity.UserEntity args);
+        Task<List<TestOrleans2.Contracts.Entity.UserEntity>> ExecuteUserSelectAllAsync();
+        Task<TestOrleans2.Contracts.Entity.UserEntity?> ExecuteUserSelectByUserNameAsync(TestOrleans2.Contracts.Entity.UserSelectByUserNameArg args);
+        Task<TestOrleans2.Contracts.Entity.UserEntity?> ExecuteUserSelectPKAsync(TestOrleans2.Contracts.API.UserPK args);
+        Task<TestOrleans2.Contracts.Entity.UserManipulationResult> ExecuteUserUpsertAsync(TestOrleans2.Contracts.Entity.UserEntity args);
     }
 }
 

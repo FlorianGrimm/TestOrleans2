@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Controllers;
+﻿namespace TestOrleans2.WebApp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

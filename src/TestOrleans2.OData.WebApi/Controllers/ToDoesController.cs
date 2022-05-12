@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-using Replacement.OData;
+using TestOrleans2.OData;
 
-namespace Replacement.OData.Controllers {
+namespace TestOrleans2.OData.Controllers {
     [Route("api/[controller]")]
     [ApiController]
     public class ToDoesController : ControllerBase {

@@ -21,8 +21,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Replacement.Client\Replacement.Client.csproj" />
-		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Client\TestOrleans2.Client.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Contracts\TestOrleans2.Contracts.csproj" />
 	</ItemGroup>
 
 </Project>

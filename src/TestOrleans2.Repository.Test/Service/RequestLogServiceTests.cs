@@ -1,4 +1,4 @@
-﻿namespace Replacement.Repository.Service;
+﻿namespace TestOrleans2.Repository.Service;
 
 public class RequestLogServiceTests {
     [Fact]

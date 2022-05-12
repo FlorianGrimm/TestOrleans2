@@ -1,8 +1,8 @@
 ﻿using Brimborium.TypedStoredProcedure;
 
-using Replacement.Contracts.Entity;
+using TestOrleans2.Contracts.Entity;
 
-namespace Replacement.DatabaseDevTool;
+namespace TestOrleans2.DatabaseDevTool;
 public static partial class Program {
     private static void AddNativeTypeConverter() {
         SQLUtility.AddDefaultTypeConverter();

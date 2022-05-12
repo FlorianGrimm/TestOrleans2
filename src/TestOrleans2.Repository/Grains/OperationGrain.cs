@@ -1,4 +1,4 @@
-﻿namespace Replacement.Repository.Grains;
+﻿namespace TestOrleans2.Repository.Grains;
 
 public interface IOperationCollectionGrain : IGrainWithGuidKey {
     Task<List<OperationEntity>> GetAllOperation(OperationFilter filter, OperationEntity operation);

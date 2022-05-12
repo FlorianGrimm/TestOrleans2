@@ -1,4 +1,4 @@
-namespace Replacement.WebApp.Pages {
+namespace TestOrleans2.WebApp.Pages {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
     public class ErrorModel : PageModel

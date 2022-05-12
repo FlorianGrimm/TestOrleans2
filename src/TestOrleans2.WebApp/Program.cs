@@ -1,11 +1,11 @@
-namespace Replacement.WebApp;
+namespace TestOrleans2.WebApp;
 
 [ExcludeFromCodeCoverage]
 public static class Program {
     public static async Task<int> Main(string[] args) {
         try {
             var hostBuilder = CreateHostBuilder(args);
-            if (global::Replacement.WebApp.Swagger.SwaggerGenerator.Generate(
+            if (global::TestOrleans2.WebApp.Swagger.SwaggerGenerator.Generate(
                 args: args,
                 hostBuilder: hostBuilder,
                 swaggerOptions: Startup.GetSwaggerOptions(),
@@ -19,7 +19,7 @@ public static class Program {
                 return 0;
             }
         } catch (Exception error) {
-            Replacement.WebApp.Utility.ExceptionExtensions.WriteError(error);
+            TestOrleans2.WebApp.Utility.ExceptionExtensions.WriteError(error);
             return 1;
         }
     }

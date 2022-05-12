@@ -25,9 +25,9 @@ global using Brimborium.Registrator;
 global using Brimborium.Tracking;
 global using Brimborium.SqlAccess;
 
-global using Replacement.Contracts.API;
-global using Replacement.Contracts.Entity;
-global using Replacement.Repository.Service;
+global using TestOrleans2.Contracts.API;
+global using TestOrleans2.Contracts.Entity;
+global using TestOrleans2.Repository.Service;
 
 global using Xunit;
 global using Moq;

@@ -14,6 +14,6 @@ global using Brimborium.RowVersion.API;
 global using Brimborium.RowVersion.Entity;
 global using Brimborium.RowVersion.Extensions;
 
-global using Replacement.Contracts.API;
-global using Replacement.Contracts.Entity;
+global using TestOrleans2.Contracts.API;
+global using TestOrleans2.Contracts.Entity;
 

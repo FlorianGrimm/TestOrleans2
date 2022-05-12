@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 
-namespace Replacement.Client;
+namespace TestOrleans2.Client;
 
 //public partial interface IReplacementClient { }
 

@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Controllers;
+﻿namespace TestOrleans2.WebApp.Controllers;
 
 [Collection("DefaultClusterFixture")]
 public class UserControllerTests : HostedTestClusterEnsureDefaultStarted {
@@ -25,7 +25,7 @@ public class UserControllerTests : HostedTestClusterEnsureDefaultStarted {
         Assert.Equal(userOne.UserName, user1st.UserName);
         /*
         dotnet test --filter "FullyQualifiedName~UserController_UserAllAsync_Test" 
-        dotnet test --filter "FullyQualifiedName=Replacement.WebApp.Controllers.UserControllerTests.UserController_UserAllAsync_Test" --diag "test.log"
+        dotnet test --filter "FullyQualifiedName=TestOrleans2.WebApp.Controllers.UserControllerTests.UserController_UserAllAsync_Test" --diag "test.log"
         */
     }
 

@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<AssemblyName>Replacement.Powershell</AssemblyName>
+		<AssemblyName>TestOrleans2.Powershell</AssemblyName>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
@@ -11,8 +11,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Replacement.Client\Replacement.Client.csproj" />
-		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Client\TestOrleans2.Client.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Contracts\TestOrleans2.Contracts.csproj" />
 	</ItemGroup>
 	<ItemGroup Condition="!Exists('..\..\external\Brimborium.Net')">
 		<PackageReference Include="Brimborium.RowVersion.Contracts" Version="1.0.115-beta-g0d2f442b29" />

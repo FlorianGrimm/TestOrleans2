@@ -1,7 +1,7 @@
-﻿namespace Replacement.WebApp.Swagger {
+﻿namespace TestOrleans2.WebApp.Swagger {
     /*
-dotnet run -- --Swagger:Generate=true --Swagger:OutputPath=C:\github.com\FlorianGrimm\TestOrleans2\src\Replacement.Client\openapi.json
-<Exec Command="dotnet run -- --Swagger:Generate=true --Swagger:OutputPath=C:\github.com\FlorianGrimm\TestOrleans2\src\Replacement.Client\openapi.json" />
+dotnet run -- --Swagger:Generate=true --Swagger:OutputPath=C:\github.com\FlorianGrimm\TestOrleans2\src\TestOrleans2.Client\openapi.json
+<Exec Command="dotnet run -- --Swagger:Generate=true --Swagger:OutputPath=C:\github.com\FlorianGrimm\TestOrleans2\src\TestOrleans2.Client\openapi.json" />
 dotnet msbuild /t:SwaggerGenerate
 
         Swagger:Generate

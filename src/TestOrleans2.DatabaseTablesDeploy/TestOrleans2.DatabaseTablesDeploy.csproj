@@ -29,20 +29,20 @@
 
 	<!--
 	<ImportGroup>
-		<Import Condition="Exists('C:\secure\Replacement.Database.$(SqlServerVersion).targets')" Project="C:\secure\Replacement.Database.$(SqlServerVersion).targets" />
+		<Import Condition="Exists('C:\secure\TestOrleans2.Database.$(SqlServerVersion).targets')" Project="C:\secure\TestOrleans2.Database.$(SqlServerVersion).targets" />
 	</ImportGroup>
 	-->
 	<ItemGroup>
-		<Content Include="..\Replacement.Database\dbo\Tables\*.sql">
+		<Content Include="..\TestOrleans2.Database\dbo\Tables\*.sql">
 			<Link>\dbo\Tables\%(RecursiveDir)\%(FileName)%(extension)</Link>
 		</Content>
-		<Content Include="..\Replacement.Database\history\Tables\*.sql">
+		<Content Include="..\TestOrleans2.Database\history\Tables\*.sql">
 			<Link>\history\Tables\%(RecursiveDir)\%(FileName)%(extension)</Link>
 		</Content>
-    <Content Include="..\Replacement.Database\Orleans\Tables\*.sql">
+    <Content Include="..\TestOrleans2.Database\Orleans\Tables\*.sql">
       <Link>\Orleans\Tables\%(RecursiveDir)\%(FileName)%(extension)</Link>
     </Content>
-    <Content Include="..\Replacement.Database\Security\*.sql">
+    <Content Include="..\TestOrleans2.Database\Security\*.sql">
 			<Link>\Security\%(RecursiveDir)\%(FileName)%(extension)</Link>
 		</Content>
 	</ItemGroup>

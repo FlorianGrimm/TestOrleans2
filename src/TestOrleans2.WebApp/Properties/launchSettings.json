@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Replacement.WebApp": {
+    "TestOrleans2.WebApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

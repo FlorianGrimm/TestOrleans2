@@ -1,4 +1,4 @@
-﻿namespace Replacement.Repository.Model;
+﻿namespace TestOrleans2.Repository.Model;
 public class Class1 {
 
 }

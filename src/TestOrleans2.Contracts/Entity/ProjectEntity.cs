@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.Entity;
+﻿namespace TestOrleans2.Contracts.Entity;
 
 public record class ProjectEntity(
     // [property: Key]

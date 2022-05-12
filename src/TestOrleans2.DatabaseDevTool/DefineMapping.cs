@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Replacement.DatabaseDevTool;
+namespace TestOrleans2.DatabaseDevTool;
 
 public class DefineMapping {
     public TypeMapping[] TypeMappings { get; }

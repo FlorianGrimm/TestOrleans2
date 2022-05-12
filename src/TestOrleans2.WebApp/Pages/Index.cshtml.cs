@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Pages {
+﻿namespace TestOrleans2.WebApp.Pages {
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Replacement.OData", "Replacement.OData.csproj", "{84C9FA2E-58B6-4127-86EE-ACE719562E2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestOrleans2.OData", "TestOrleans2.OData.csproj", "{84C9FA2E-58B6-4127-86EE-ACE719562E2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

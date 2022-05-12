@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Replacement.OData": {
+    "TestOrleans2.OData": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

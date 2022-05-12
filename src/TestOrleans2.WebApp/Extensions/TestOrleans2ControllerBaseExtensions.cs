@@ -1,4 +1,4 @@
-namespace Replacement.WebApp.Extensions;
+namespace TestOrleans2.WebApp.Extensions;
 public static class ReplacementControllerBaseExtensions {
     public static RequestOperation CreateRequestOperation<PK, T>(
         this ReplacementControllerBase that,

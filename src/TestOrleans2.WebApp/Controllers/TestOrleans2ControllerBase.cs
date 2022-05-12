@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Controllers;
+﻿namespace TestOrleans2.WebApp.Controllers;
 
 public class ReplacementControllerBase : ControllerBase {
     public readonly IClusterClient Client;

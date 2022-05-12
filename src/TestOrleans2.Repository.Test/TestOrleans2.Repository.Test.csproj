@@ -6,7 +6,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>Replacement.Repository</RootNamespace>
+    <RootNamespace>TestOrleans2.Repository</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
-    <ProjectReference Include="..\Replacement.Repository\Replacement.Repository.csproj" />
+    <ProjectReference Include="..\TestOrleans2.Contracts\TestOrleans2.Contracts.csproj" />
+    <ProjectReference Include="..\TestOrleans2.Repository\TestOrleans2.Repository.csproj" />
   </ItemGroup>
 
 </Project>

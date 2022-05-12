@@ -1,4 +1,4 @@
-namespace Replacement.Contracts.API;
+namespace TestOrleans2.Contracts.API;
 
 public interface IDataAPI : Brimborium.RowVersion.API.IDataAPIWithVersion {
     //string DataVersion { get; init; }

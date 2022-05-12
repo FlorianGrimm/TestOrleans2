@@ -1,4 +1,4 @@
-namespace Replacement.OData;
+namespace TestOrleans2.OData;
 public class Program {
     public static void Main(string[] args) {
         CreateHostBuilder(args).Build().Run();
@@ -14,7 +14,7 @@ public class Program {
 
 #if false
 
-Scaffold-DbContext "Data Source=.;Initial Catalog=TodoDB;Integrated Security=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -Namespace Replacement.OData - NoPluralize - OutputDir Record
+Scaffold-DbContext "Data Source=.;Initial Catalog=TodoDB;Integrated Security=true;TrustServerCertificate=True;" Microsoft.EntityFrameworkCore.SqlServer -Namespace TestOrleans2.OData - NoPluralize - OutputDir Record
 
 dotnet tool install --global dotnet-ef
 
@@ -24,7 +24,7 @@ dotnet user-secrets set Database "Data Source=.;Initial Catalog=TodoDB;Integrate
 
 dotnet user-secrets set Database "Data Source=parado.dev.solvin.local;Initial Catalog=TodoDB;Integrated Security=true;TrustServerCertificate=True;"
 
-dotnet ef dbcontext scaffold Name=Database Microsoft.EntityFrameworkCore.SqlServer --namespace Replacement.OData --no-pluralize --output-dir OData --force
+dotnet ef dbcontext scaffold Name=Database Microsoft.EntityFrameworkCore.SqlServer --namespace TestOrleans2.OData --no-pluralize --output-dir OData --force
 
 
 curl -X 'GET' \

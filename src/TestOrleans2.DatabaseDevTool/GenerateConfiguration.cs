@@ -1,6 +1,6 @@
 ﻿using Brimborium.GenerateStoredProcedure;
 
-namespace Replacement.DatabaseDevTool;
+namespace TestOrleans2.DatabaseDevTool;
 
 public class GenerateConfiguration : Configuration {
     // public readonly RenderTemplate<TableInfo> SelectColumnsParameterTempate;

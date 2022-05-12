@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Services;
+﻿namespace TestOrleans2.WebApp.Services;
 
 public class RequestLogHostedService
     : BackgroundService {

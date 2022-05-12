@@ -1,6 +1,6 @@
-﻿using Replacement.Contracts.Entity;
+﻿using TestOrleans2.Contracts.Entity;
 
-namespace Replacement.Repository.Service;
+namespace TestOrleans2.Repository.Service;
 
 public interface IDBContext : ITrackingContext {
     ITrackingSet<OperationPK, OperationEntity> Operation { get; }

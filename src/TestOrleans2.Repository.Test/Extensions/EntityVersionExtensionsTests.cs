@@ -1,6 +1,6 @@
-﻿using Replacement.Repository.Grains;
+﻿using TestOrleans2.Repository.Grains;
 
-namespace Replacement.Repository.Extensions;
+namespace TestOrleans2.Repository.Extensions;
 public class RequestOperationExtensionsTests {
     [Fact()]
     public async Task InitializeOperation_Test() {

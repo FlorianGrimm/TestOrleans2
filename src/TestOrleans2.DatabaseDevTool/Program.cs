@@ -1,6 +1,6 @@
 ﻿using Brimborium.TypedStoredProcedure;
 
-namespace Replacement.DatabaseDevTool;
+namespace TestOrleans2.DatabaseDevTool;
 
 public static partial class Program {
 
@@ -57,19 +57,19 @@ public static partial class Program {
             var upperDirectoryPath = GetUpperDirectoryPath();
 
             if (string.IsNullOrEmpty(outputFolder)) {
-                outputFolder = "Replacement.Database"; // change this
+                outputFolder = "TestOrleans2.Database"; // change this
             }
             if (string.IsNullOrEmpty(sqlProjectName)) {
-                sqlProjectName = "Replacement.DatabaseDeploy"; // change this
+                sqlProjectName = "TestOrleans2.DatabaseDeploy"; // change this
             }
             if (string.IsNullOrEmpty(sqlProjectTablesName)) {
-                sqlProjectTablesName = "Replacement.DatabaseTablesDeploy"; // change this
+                sqlProjectTablesName = "TestOrleans2.DatabaseTablesDeploy"; // change this
             }
             if (string.IsNullOrEmpty(sqlProjectDatabaseDevTool)) {
-                sqlProjectDatabaseDevTool = "Replacement.DatabaseDevTool"; // change this
+                sqlProjectDatabaseDevTool = "TestOrleans2.DatabaseDevTool"; // change this
             }
             if (string.IsNullOrEmpty(csProjectRepositoryName)) {
-                csProjectRepositoryName = "Replacement.Repository"; // change this
+                csProjectRepositoryName = "TestOrleans2.Repository"; // change this
             }
 
 
@@ -146,7 +146,7 @@ public static partial class Program {
             AddNativeTypeConverter();
             if (conditionRunStep(4, hsSteps)) {
                 {
-                    var (outputPath, outputNamespace) = Replacement.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
+                    var (outputPath, outputNamespace) = TestOrleans2.Contracts.API.PrimaryKeyLocation.GetPrimaryKeyOutputInfo();
                     var subResult = MainGeneratePrimaryKey(connectionString, outputPath, outputNamespace);
                     if (subResult) {
 
@@ -180,7 +180,7 @@ public static partial class Program {
             if (conditionRunStep(5, hsSteps)) {
                 var defintions = GetDefintion();
 
-                var (outputPath, outputNamespace, outputClassName) = Replacement.Repository.Service.SqlAccessLocation.GetPrimaryKeyOutputInfo();
+                var (outputPath, outputNamespace, outputClassName) = TestOrleans2.Repository.Service.SqlAccessLocation.GetPrimaryKeyOutputInfo();
 
                 MainGenerateSqlAccess(connectionString, defintions, outputPath, outputNamespace, outputClassName, isForce);
             }
@@ -369,8 +369,8 @@ public static partial class Program {
         string outputClassName,
         bool isForce
         ) {
-        var refTypeAPI = typeof(Replacement.Contracts.API.PrimaryKeyLocation);
-        var refTypeEntity = typeof(Replacement.Contracts.Entity.ProjectEntity);
+        var refTypeAPI = typeof(TestOrleans2.Contracts.API.PrimaryKeyLocation);
+        var refTypeEntity = typeof(TestOrleans2.Contracts.Entity.ProjectEntity);
         var refTypeAPINamespace = refTypeAPI.Namespace;
         var refTypeEntityNamespace = refTypeEntity.Namespace;
         var types = refTypeEntity.Assembly.GetTypes()

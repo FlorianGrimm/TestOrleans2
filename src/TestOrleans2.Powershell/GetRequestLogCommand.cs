@@ -1,4 +1,4 @@
-﻿namespace Replacement.Powershell;
+﻿namespace TestOrleans2.Powershell;
 
 [Cmdlet(VerbsCommon.Get, "RequestLog")]
 [OutputType(typeof(RequestLog[]))]

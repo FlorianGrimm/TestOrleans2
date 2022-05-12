@@ -1,4 +1,4 @@
-namespace Replacement.TestExtensions;
+namespace TestOrleans2.TestExtensions;
 
 
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
@@ -72,7 +72,7 @@ public class BaseClusterFixture : Xunit.IAsyncLifetime {
         });
         hostBuilder.ConfigureWebHostDefaults(webBuilder => {
             webBuilder.UseTestServer();
-            webBuilder.UseStartup<Replacement.WebApp.Startup>();
+            webBuilder.UseStartup<TestOrleans2.WebApp.Startup>();
         });
     }
 
@@ -97,11 +97,11 @@ public class BaseClusterFixture : Xunit.IAsyncLifetime {
 
     public System.Net.Http.HttpClient CreateWebClient() => this.WebTestServer.CreateClient();
 
-    public Replacement.Client.ReplacementClient CreateReplacementClient(string? username = default) {
+    public TestOrleans2.Client.ReplacementClient CreateReplacementClient(string? username = default) {
         TestServer webTestServer = this.WebTestServer;
         var client = webTestServer.CreateClient();
         var baseAddress = webTestServer.BaseAddress!;
-        var replacementClient = new Replacement.Client.ReplacementClient(baseAddress.ToString(), client);
+        var replacementClient = new TestOrleans2.Client.ReplacementClient(baseAddress.ToString(), client);
         if (!string.IsNullOrEmpty(username)) {
             replacementClient.OnGetAuthorizationHeader = (_, _, _) => {
                 return TestAuthenticationHandlerExtensions.CreateAuthorizationHeader(@"unittest\otto");

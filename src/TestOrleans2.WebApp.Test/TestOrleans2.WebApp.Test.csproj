@@ -32,10 +32,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Replacement.Client\Replacement.Client.csproj" />
-		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
-		<ProjectReference Include="..\Replacement.Repository\Replacement.Repository.csproj" />
-		<ProjectReference Include="..\Replacement.WebApp\Replacement.WebApp.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Client\TestOrleans2.Client.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Contracts\TestOrleans2.Contracts.csproj" />
+		<ProjectReference Include="..\TestOrleans2.Repository\TestOrleans2.Repository.csproj" />
+		<ProjectReference Include="..\TestOrleans2.WebApp\TestOrleans2.WebApp.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

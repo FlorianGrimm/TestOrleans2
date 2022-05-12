@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.Entity;
+﻿namespace TestOrleans2.Contracts.Entity;
 public record class OperationEntity(
     Guid OperationId,
     string OperationName,

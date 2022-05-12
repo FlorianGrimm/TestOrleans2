@@ -1,4 +1,4 @@
-namespace Replacement.WebApp;
+namespace TestOrleans2.WebApp;
 
 public class Startup {
     private static SwaggerOptions? _SwaggerOptions;
@@ -6,7 +6,7 @@ public class Startup {
         => _SwaggerOptions ??= new SwaggerOptions() {
             DocumentName = "v1",
             OpenApiInfo = new OpenApiInfo {
-                Title = "Replacement.WebApp",
+                Title = "TestOrleans2.WebApp",
                 Version = "v1"
             }
         };

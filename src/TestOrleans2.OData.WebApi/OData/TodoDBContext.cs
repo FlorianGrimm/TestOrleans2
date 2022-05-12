@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Replacement.OData
+namespace TestOrleans2.OData
 {
     public partial class TodoDBContext : DbContext
     {

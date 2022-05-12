@@ -7,8 +7,8 @@ global using System.Linq;
 global using System.Text;
 global using System.Threading.Tasks;
 
-global using Replacement.Contracts.API;
-global using Replacement.Contracts.Entity;
+global using TestOrleans2.Contracts.API;
+global using TestOrleans2.Contracts.Entity;
 
 
 global using Brimborium.RowVersion.API;

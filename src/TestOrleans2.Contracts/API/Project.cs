@@ -1,6 +1,6 @@
 ﻿using Brimborium.RowVersion.Extensions;
 
-namespace Replacement.Contracts.API;
+namespace TestOrleans2.Contracts.API;
 public record class Project(
     Guid ProjectId,
     string Title,

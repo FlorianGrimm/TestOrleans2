@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace TestOrleans2.Contracts.API;
 
 public record class OperationFilter(
     Guid? OperationId,

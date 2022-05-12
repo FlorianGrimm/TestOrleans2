@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.API;
+﻿namespace TestOrleans2.Contracts.API;
 
 internal static class PrimaryKeyLocation {
     internal static (string outputPath, string outputNamespace) GetPrimaryKeyOutputInfo()

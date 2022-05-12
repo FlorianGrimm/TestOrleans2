@@ -1,4 +1,4 @@
-﻿namespace Replacement.TestExtensions;
+﻿namespace TestOrleans2.TestExtensions;
 
 [ExcludeFromCodeCoverage]
 [Brimborium.Registrator.Singleton]

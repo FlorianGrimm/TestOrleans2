@@ -1,4 +1,4 @@
-namespace Replacement.OData;
+namespace TestOrleans2.OData;
 public class Startup {
     public Startup(IConfiguration configuration) {
         this.Configuration = configuration;
@@ -16,7 +16,7 @@ public class Startup {
                 oDataOptions.AddRouteComponents("odata", GetEdmModel(serviceProvider));
             });
         services.AddSwaggerGen(c => {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "Replacement.OData", Version = "v1" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "TestOrleans2.OData", Version = "v1" });
         });
 
         services.AddDbContext<TodoDBContext>(options => {
@@ -44,7 +44,7 @@ public class Startup {
         if (env.IsDevelopment()) {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Replacement.OData v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TestOrleans2.OData v1"));
         }
 
         app.UseHttpsRedirection();

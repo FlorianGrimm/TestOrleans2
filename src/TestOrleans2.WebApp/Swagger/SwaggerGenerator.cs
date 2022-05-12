@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Swagger {
+﻿namespace TestOrleans2.WebApp.Swagger {
     using Microsoft.OpenApi.Writers;
     using Swashbuckle.AspNetCore.Swagger;
 

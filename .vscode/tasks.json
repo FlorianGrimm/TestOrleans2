@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/src/Replacement.WebApp/Replacement.WebApp.csproj",
+                "${workspaceFolder}/src/TestOrleans2.WebApp/TestOrleans2.WebApp.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -23,7 +23,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/src/Replacement.WebApp/Replacement.WebApp.csproj",
+                "${workspaceFolder}/src/TestOrleans2.WebApp/TestOrleans2.WebApp.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -37,7 +37,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/src/Replacement.WebApp/Replacement.WebApp.csproj"
+                "${workspaceFolder}/src/TestOrleans2.WebApp/TestOrleans2.WebApp.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

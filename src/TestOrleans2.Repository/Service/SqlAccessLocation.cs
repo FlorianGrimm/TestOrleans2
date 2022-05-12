@@ -1,10 +1,10 @@
-﻿namespace Replacement.Repository.Service;
+﻿namespace TestOrleans2.Repository.Service;
 
 internal static class SqlAccessLocation {
     internal static (string outputPath, string outputNamespace, string outputClassName) GetPrimaryKeyOutputInfo()
     => (
         outputPath: System.IO.Path.Combine(GetDirectoryPath(), "SqlAccess.Generated.cs"),
-        outputNamespace: "Replacement.Repository.Service",  //typeof(SqlAccess).Namespace!,
+        outputNamespace: "TestOrleans2.Repository.Service",  //typeof(SqlAccess).Namespace!,
         outputClassName: "SqlAccess"
     );
 

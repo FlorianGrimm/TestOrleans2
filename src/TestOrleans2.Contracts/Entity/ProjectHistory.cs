@@ -1,4 +1,4 @@
-﻿namespace Replacement.Contracts.Entity;
+﻿namespace TestOrleans2.Contracts.Entity;
 /*
     [Table("ProjectHistory", Schema = "history")]
     public partial class ProjectHistory {

@@ -1,6 +1,6 @@
 ﻿
 
-namespace Replacement.WebApp.Utility {
+namespace TestOrleans2.WebApp.Utility {
     public static class HostExtensions {
         /// <summary>
         /// Attempts to gracefully stop the host with the given timeout.

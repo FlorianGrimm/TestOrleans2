@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Utility {
+﻿namespace TestOrleans2.WebApp.Utility {
     public static class ExceptionExtensions
     {
         public static bool WriteError(Exception error)

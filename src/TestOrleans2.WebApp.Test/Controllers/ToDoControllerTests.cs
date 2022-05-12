@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Controllers;
+﻿namespace TestOrleans2.WebApp.Controllers;
 
 [Collection("DefaultClusterFixture")]
 public class ToDoControllerTests : HostedTestClusterEnsureDefaultStarted {

@@ -1,4 +1,4 @@
-﻿namespace Replacement.WebApp.Services {
+﻿namespace TestOrleans2.WebApp.Services {
     [Brimborium.Registrator.Singleton]
     public class AppPolicies {
         //private static AppPolicies? _Instance;

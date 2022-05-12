@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "Replacement.WebApp",
+    "title": "TestOrleans2.WebApp",
     "version": "v1"
   },
   "paths": {

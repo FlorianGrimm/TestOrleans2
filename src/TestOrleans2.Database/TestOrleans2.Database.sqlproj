@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>Replacement.Database</Name>
+    <Name>TestOrleans2.Database</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{fbdae3cb-e5d6-4cdd-884f-3e3c32780136}</ProjectGuid>
@@ -11,8 +11,8 @@
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>Replacement.Database</RootNamespace>
-    <AssemblyName>Replacement.Database</AssemblyName>
+    <RootNamespace>TestOrleans2.Database</RootNamespace>
+    <AssemblyName>TestOrleans2.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -119,7 +119,7 @@
     <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <RefactorLog Include="Replacement.Database.refactorlog" />
+    <RefactorLog Include="TestOrleans2.Database.refactorlog" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Pre-Deployment\Script.PreDeployment.sql" />

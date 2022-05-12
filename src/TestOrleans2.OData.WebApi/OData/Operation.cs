@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Replacement.OData
+namespace TestOrleans2.OData
 {
     public partial class Operation
     {
