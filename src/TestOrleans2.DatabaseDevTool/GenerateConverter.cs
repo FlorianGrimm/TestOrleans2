@@ -6,9 +6,7 @@ public class GenerateConverter {
 
     public bool GenerateConverterToAPI(DefineMapping defineMapping, string outputPathConverterToAPI) {
         var output = new StringBuilder();
-        output.AppendLine("#if NOConverterToAPI");
-        output.AppendLine("#else");
-        //output.AppendLine("#if false");
+
         output.AppendLine("namespace TestOrleans2.Contracts.Entity;");
         output.AppendLine("[ExcludeFromCodeCoverage]");
         output.AppendLine("public static partial class ConverterToAPI {");
@@ -46,7 +44,6 @@ public class GenerateConverter {
             output.AppendLine("");
         }
         output.AppendLine("}");
-        output.AppendLine("#endif");
 
         return this.WriteFile(outputPathConverterToAPI, output.ToString());
     }
@@ -54,9 +51,6 @@ public class GenerateConverter {
     public bool GenerateConverterToEntity(DefineMapping defineMapping, string outputPathConverterToEntity) {
         var output = new StringBuilder();
 
-        output.AppendLine("#if NOConverterToAPI");
-        output.AppendLine("#else");
-        //output.AppendLine("#if false");
         output.AppendLine("namespace TestOrleans2.Contracts.API;");
         output.AppendLine("[ExcludeFromCodeCoverage]");
         output.AppendLine("public static partial class ConverterToEntity {");
@@ -94,7 +88,6 @@ public class GenerateConverter {
             output.AppendLine("");
         }
         output.AppendLine("}");
-        output.AppendLine("#endif");
 
         return this.WriteFile(outputPathConverterToEntity, output.ToString());
     }

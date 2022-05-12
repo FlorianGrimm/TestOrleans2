@@ -1,20 +1,10 @@
 namespace TestOrleans2.Repository.Grains;
-#if false
-public interface IUserToDoCollectionGrain : IGrainWithGuidKey {
-}
-#endif
+
 
 public interface IUserToDoGrain : IGrainWithGuidKey {
     Task<List<ToDoEntity>> GetUsersToDos(OperationEntity operation);
     Task<List<ToDoEntity>> GetAllToDos(OperationEntity operation);
 }
-
-#if false
-public class UserToDoCollectionGrain : Grain, IUserToDoCollectionGrain {
-    public UserToDoCollectionGrain() : base() {
-    }
-}
-#endif
 
 public class UserToDoGrain : GrainBase<UserEntity>, IUserToDoGrain, IProjectGrainObserver {
     private CachedValue<List<ToDoEntity>> _GetAllToDos;
@@ -80,13 +70,6 @@ public class UserToDoGrain : GrainBase<UserEntity>, IUserToDoGrain, IProjectGrai
 //
 
 public static partial class GrainExtensions {
-#if false
-    public static IUserToDoCollectionGrain GetUserToDoCollectionGrain(this /*IClusterClient*/ IGrainFactory client) {
-        var grain = client.GetGrain<IUserToDoCollectionGrain>(Guid.Empty);
-        return grain;
-    }
-#endif
-
     public static IUserToDoGrain GetUserToDoGrain(this /*IClusterClient*/ IGrainFactory client, Guid id) {
         var grain = client.GetGrain<IUserToDoGrain>(id);
         return grain;

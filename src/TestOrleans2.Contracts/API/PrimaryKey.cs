@@ -1,5 +1,3 @@
-#if true
-
 namespace TestOrleans2.Contracts.API {
     public sealed partial record OperationPK (
         System.DateTimeOffset CreatedAt,
@@ -67,5 +65,3 @@ namespace TestOrleans2.Contracts.API {
         ) : IPrimaryKey;
 
 }
-
-#endif

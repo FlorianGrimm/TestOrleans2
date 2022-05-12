@@ -1,4 +1,3 @@
-#if true
 #nullable enable
 
 
@@ -568,5 +567,3 @@ namespace TestOrleans2.Repository.Service {
         Task<TestOrleans2.Contracts.Entity.UserManipulationResult> ExecuteUserUpsertAsync(TestOrleans2.Contracts.Entity.UserEntity args);
     }
 }
-
-#endif

@@ -10,19 +10,20 @@ public static class Program {
     private static int cntProjectUpdate = 0;
     private static TimeSpan tsTotal=TimeSpan.Zero;
 
-#if true
+/**/
     private static int cntThreads = 10;
     private static int cntOuter = 200;
     private static int cntInnerWrite = 10;
     private static int cntInnerRead = 40;
     private static int cntInnerUpdate = 10;
-#else
+/**/
+/*
     private static int cntThreads = 1;
     private static int cntOuter = 1;
     private static int cntInnerWrite = 1;
     private static int cntInnerRead = 1;
     private static int cntInnerUpdate = 1;
-#endif
+*/
 
     public static async Task<int> Main(string[] args) {
         System.Console.Out.WriteLine("TestOrleans2.Console!");
@@ -35,15 +36,12 @@ public static class Program {
         try {
             var dtStart = System.DateTime.UtcNow;
             System.Console.Out.WriteLine($"dtStart : {dtStart}");
-#if true
             var tasks = System.Linq.Enumerable.Range(0, cntThreads).Select(
                 _ => Run(appServiceProvider)
                 ).ToArray();
             var results = await Task.WhenAll(tasks);
             result = results.Max();
-#else
-            result = await Run(appServiceProvider);
-#endif
+            //result = await Run(appServiceProvider);
 
             var dtEnd = System.DateTime.UtcNow;
             var tsDuration = dtEnd.Subtract(dtStart);
@@ -78,23 +76,21 @@ public static class Program {
         var server = configuration.GetValue<string>("Server");
         System.Console.Out.WriteLine($"server: {server}");
 
-#if false
-    services.AddHttpClient<TypedClient>()
-        .ConfigureHttpClient((sp, httpClient) =>
-        {
-            var options = sp.GetRequiredService<IOptions<SomeOptions>>().Value;
-            httpClient.BaseAddress = options.Url;
-            httpClient.Timeout = options.RequestTimeout;
-        })
-        .SetHandlerLifetime(TimeSpan.FromMinutes(5))
-        .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() 
-        {
-            AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-        })
-        .AddHttpMessageHandler(sp => sp.GetService<SomeCustomHandler>().CreateAuthHandler())
-        .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
-        .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
-#endif
+    // services.AddHttpClient<TypedClient>()
+    //     .ConfigureHttpClient((sp, httpClient) =>
+    //     {
+    //         var options = sp.GetRequiredService<IOptions<SomeOptions>>().Value;
+    //         httpClient.BaseAddress = options.Url;
+    //         httpClient.Timeout = options.RequestTimeout;
+    //     })
+    //     .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+    //     .ConfigurePrimaryHttpMessageHandler(x => new HttpClientHandler() 
+    //     {
+    //         AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+    //     })
+    //     .AddHttpMessageHandler(sp => sp.GetService<SomeCustomHandler>().CreateAuthHandler())
+    //     .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpRetry)
+    //     .AddPolicyHandlerFromRegistry(PollyPolicyName.HttpCircuitBreaker);
         //services.AddHttpClient<TestOrleans2.Client.IReplacementClient, TestOrleans2.Client.ReplacementClient>();
 
         services.AddHttpClient<TestOrleans2.Client.IReplacementClient, TestOrleans2.Client.ReplacementClient>(

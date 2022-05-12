@@ -113,50 +113,12 @@ public class ProjectController : ReplacementControllerBase {
             return this.Forbid();
         }
         {
-#if false
-            Project? project = null;
-            for (int iWatchDog = 2; iWatchDog >= 0; iWatchDog--) {
-                try {
-                    project = await grain.UpsertProject(value, user, operation);
-                    // when ((uint)sqlException.ErrorCode == 0x80131904)
-                    //} catch (Microsoft.Data.SqlClient.SqlException sqlException)  {
-                } catch (System.Exception exception) {
-                    if (!System.Diagnostics.Debugger.IsAttached) {
-                        System.Diagnostics.Debugger.Launch();
-                    }
-                    System.Diagnostics.Debugger.Break();
-                    if (exception is not null) {
-                        throw exception;
-                    }
-                    //System.Console.Out.WriteLine($"ErrorCode:{sqlException.ErrorCode}; Number:{sqlException.Number};");
-
-                    await Task.Delay(50);
-                    //} catch (Microsoft.Data.SqlClient.SqlException sqlException) {
-                    //    await Task.Delay(50);
-                }
-            }
-#endif
-#if true
             var grain = this.Client.GetProjectGrain(value.ProjectId);
             var result = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
             if (result is null) {
                 return this.Conflict();
             }
             return result.ToProject();
-
-#endif
-
-#if false
-            var grain = this.Client.GetProjectGrain(value.ProjectId);
-            var project = await this._AppPolicies.ControllerToGrainPolicy.ExecuteAsync(async () => await grain.UpsertProject(value.ToProjectEntity(), user, operation));
-
-            //var project = await grain.UpsertProject(value.ToProjectEntity(), user, operation);
-            if (project is not null) {
-                return project.ToProject();
-            } else {
-                return this.Conflict();
-            }
-#endif
         }
     }
 

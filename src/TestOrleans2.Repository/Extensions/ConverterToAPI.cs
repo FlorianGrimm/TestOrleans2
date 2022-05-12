@@ -1,5 +1,3 @@
-#if NOConverterToAPI
-#else
 namespace TestOrleans2.Contracts.Entity;
 [ExcludeFromCodeCoverage]
 public static partial class ConverterToAPI {
@@ -225,4 +223,3 @@ public static partial class ConverterToAPI {
     }
 
 }
-#endif
