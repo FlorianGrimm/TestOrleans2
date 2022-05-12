@@ -12,7 +12,11 @@
 		<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.3.1" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="!Exists('..\..\external\Brimborium.Net')">
+		<PackageReference Include="Brimborium.RowVersion.Contracts" Version="1.0.115-beta-g0d2f442b29" />
+	</ItemGroup>
+
+	<ItemGroup Condition="Exists('..\..\external\Brimborium.Net')">
 	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
 	</ItemGroup>
 

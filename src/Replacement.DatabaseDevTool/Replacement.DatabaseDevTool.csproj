@@ -16,6 +16,17 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+	</ItemGroup>
+
+	<ItemGroup Condition="!Exists('..\..\external\Brimborium.Net')">
+		<PackageReference Include="Brimborium.GenerateStoredProcedure" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.RowVersion.Contracts" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.Tracking" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.TypedStoredProcedure" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.SqlAccess" Version="1.0.115-beta-g0d2f442b29" />
+	</ItemGroup>
+
+	<ItemGroup Condition="Exists('..\..\external\Brimborium.Net')">
 		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
 		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.GenerateStoredProcedure\Brimborium.GenerateStoredProcedure.csproj" />
 		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
@@ -30,10 +41,6 @@
 			<Link>External\Replacement.Contracts\Entity\%(RecursiveDir)%(Filename)%(Extension)</Link>
 		</Compile>
 		<Compile Remove="..\Replacement.Contracts\Entity\RequestOperationEntity.cs" />
-<!--
-		<Compile Include="..\Replacement.Contracts\API\PrimaryKey.cs" Link="Generated\API\PrimaryKey.cs" />
-		<Compile Include="..\Replacement.Contracts\API\PrimaryKeyLocation.cs" Link="External\API\PrimaryKeyLocation.cs" />
--->
 		
 		<Compile Include="..\Replacement.Repository\Service\SqlAccessLocation.cs" Link="External\Replacement.Repository\Service\SqlAccessLocation.cs" />
 		<None Include="..\Replacement.Repository\Service\SqlAccess.Generated.cs" Link="Generated\Service\SqlAccess.Generated.cs" />

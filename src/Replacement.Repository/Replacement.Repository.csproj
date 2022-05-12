@@ -8,9 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Contracts\**" />
-	  <EmbeddedResource Remove="Contracts\**" />
-	  <None Remove="Contracts\**" />
+		<Compile Remove="Contracts\**" />
+		<EmbeddedResource Remove="Contracts\**" />
+		<None Remove="Contracts\**" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -28,15 +28,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
-	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj" />
-	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
-	  <ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
-	  <ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
+		<ProjectReference Include="..\Replacement.Contracts\Replacement.Contracts.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="!Exists('..\..\external\Brimborium.Net')">
+		<PackageReference Include="Brimborium.RowVersion.Contracts" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.RowVersion" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.SqlAccess" Version="1.0.115-beta-g0d2f442b29" />
+		<PackageReference Include="Brimborium.Tracking" Version="1.0.115-beta-g0d2f442b29" />
+	</ItemGroup>
+
+	<ItemGroup Condition="Exists('..\..\external\Brimborium.Net')">
+		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion.Contracts\Brimborium.RowVersion.Contracts.csproj" />
+		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.RowVersion\Brimborium.RowVersion\Brimborium.RowVersion.csproj" />
+		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.SqlAccess\Brimborium.SqlAccess.csproj" />
+		<ProjectReference Include="..\..\external\Brimborium.Net\Brimborium.TypedSql\Brimborium.Tracking\Brimborium.Tracking.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Orleans_CodeGenInputs Remove="Grains\GrainBase.cs" />
+		<Orleans_CodeGenInputs Remove="Grains\GrainBase.cs" />
 	</ItemGroup>
 
 	<!--
